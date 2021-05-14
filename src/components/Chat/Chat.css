@@ -1,0 +1,18 @@
+.Chat {
+  padding: 10px;
+  height: calc(100% - 20px);
+  width: 40%;
+  background: #efefef;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.Chat form {
+  display: flex;
+}
+
+.Chat input {
+  min-width: 0;
+  flex-grow: 1;
+}

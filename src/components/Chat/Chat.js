@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
+import Message from '../Message/Message.js';
+
 import firebase from 'firebase/app';
 
 import './Chat.css';
@@ -23,18 +25,16 @@ function Chat() {
 
   return (
     <div className="Chat">
+      <div className="message-list">
+        {
+          messages &&
+          messages.map((m, i) => <Message key={`message-${i}`} data={m} />)
+        }
+      </div>
       <form onSubmit={sendMessage}>
         <input value={text} onChange={e => setText(e.target.value)} required />
         <button type="submit">Send</button>
       </form>
-      <div className="message-list">
-        {
-          messages &&
-          messages.map((m, i) =>
-            <p key={`message-${i}`}>{m.text}</p>
-          )
-        }
-      </div>
     </div>
   );
 }
