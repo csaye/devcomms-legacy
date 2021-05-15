@@ -1,5 +1,6 @@
 {
   "name": "devcomms",
+  "homepage": "/devcomms/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
