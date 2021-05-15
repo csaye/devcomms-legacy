@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 
+import logo from '../../img/logo.png';
 import './SignIn.css';
 
 function SignIn() {
@@ -10,7 +11,12 @@ function SignIn() {
 
   return (
     <div className="SignIn">
-      <button onClick={signInWithGoogle}>Sign in with Google</button>
+      <div className="center-box">
+        <img src={logo} alt="logo" />
+        <h1>DevComms</h1>
+        <hr />
+        <button onClick={signInWithGoogle}>Sign in with Google</button>
+      </div>
     </div>
   );
 }
