@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import Popup from 'reactjs-popup';
 import EditIcon from '@material-ui/icons/Edit';
 import SendIcon from '@material-ui/icons/Send';
+import ChatIcon from '@material-ui/icons/Chat';
 
 import firebase from 'firebase/app';
 
@@ -28,9 +29,11 @@ function Chat() {
   const [hovering, setHovering] = useState(undefined);
   const [deleting, setDeleting] = useState(false);
 
-  const messagesQuery = chatsRef.orderBy('timestamp', 'desc').limit(maxMessages);
+  // get messages
+  const messagesQuery = chatsRef.orderBy('timestamp').limitToLast(maxMessages);
   const [messages] = useCollectionData(messagesQuery, { idField: 'id' });
-  if (messages) messages.reverse(); // reverse messages
+
+  const messagesEnd = useRef();
 
   // sends current message to firebase
   async function addMessage(e) {
@@ -79,8 +82,17 @@ function Chat() {
     else return dateTime.toLocaleDateString();
   }
 
+  // scroll to end of messages when messages update
+  useEffect(() => {
+    messagesEnd.current.scrollIntoView();
+  }, [messages]);
+
   return (
     <div className="Chat">
+      <div className="chat-header">
+        <h1><ChatIcon /> Chat</h1>
+      </div>
+      <span className="flex-grow" />
       <div className="message-list">
         {
           messages ?
@@ -177,6 +189,7 @@ function Chat() {
           </> :
           <p className="info-text">Loading messages...</p>
         }
+        <span ref={messagesEnd} />
       </div>
       <form onSubmit={addMessage}>
         <input

@@ -1,4 +1,11 @@
 .Goal {
   background: #efefef;
   margin: 10px;
+  overflow: auto;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.Goal p {
+  margin: 5px 0;
 }

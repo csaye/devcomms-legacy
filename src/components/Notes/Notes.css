@@ -1,10 +1,11 @@
 .Notes {
-  background: #bbb;
+  background: #ccc;
   height: 50%;
   width: 250px;
   text-align: center;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 .Notes h1 {

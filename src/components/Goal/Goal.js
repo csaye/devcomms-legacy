@@ -1,4 +1,4 @@
-import DeleteIcon from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
 
 import firebase from 'firebase/app';
 
@@ -20,7 +20,7 @@ function Goal(props) {
       <p>{text}</p>
       <p>{`${endDate.toLocaleDateString()}, ${endDate.toLocaleTimeString()}`}</p>
       <button onClick={deleteGoal}>
-        <DeleteIcon />
+        <CheckIcon />
       </button>
     </div>
   );

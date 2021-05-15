@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 import Goal from '../Goal/Goal.js';
+import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
+import AddIcon from '@material-ui/icons/Add';
 
 import firebase from 'firebase/app';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -36,9 +38,11 @@ function Goals() {
 
   return (
     <div className="Goals">
-      <h1>Goals</h1>
+      <h1><LibraryAddCheckIcon /> Goals</h1>
       <form onSubmit={addGoal}>
         <input
+          placeholder="title"
+          className="title-input"
           value={text}
           onChange={e => setText(e.target.value)}
           required
@@ -55,7 +59,9 @@ function Goals() {
           onChange={e => setEndTime(e.target.value)}
           required
         />
-        <button type="submit">Create</button>
+        <button type="submit" className="create-button">
+          <AddIcon />
+        </button>
       </form>
       <div className="goal-list">
       {

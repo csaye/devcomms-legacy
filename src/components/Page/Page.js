@@ -1,6 +1,7 @@
 import Chat from '../Chat/Chat.js';
 import Header from '../Header/Header.js';
 import Notes from '../Notes/Notes.js';
+import Goals from '../Goals/Goals.js';
 
 import './Page.css';
 
@@ -10,7 +11,10 @@ function Page() {
       <Header />
       <div className="page-content flex-grow">
         <Chat />
-        <Notes />
+        <div>
+          <Notes />
+          <Goals />
+        </div>
       </div>
     </div>
   );

@@ -7,5 +7,18 @@
 }
 
 .Goals h1 {
-  margin: 10px 0 0 0;
+  margin: 10px 0;
+}
+
+.Goals input {
+  width: 80%;
+}
+
+.Goals .title-input {
+  padding: 1px 1px 1px 0;
+}
+
+.Goals .create-button {
+  display: block;
+  margin: 10px auto;
 }

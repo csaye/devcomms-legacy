@@ -1,5 +1,5 @@
 .Header {
-  height: 60px;
+  min-height: 60px;
   background: #999;
   display: flex;
   align-items: center;

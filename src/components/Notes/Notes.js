@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import DescriptionIcon from '@material-ui/icons/Description';
+
 import firebase from 'firebase/app';
 
 import './Notes.css';
@@ -33,7 +35,7 @@ function Notes() {
 
   return (
     <div className="Notes">
-      <h1>Notes</h1>
+      <h1><DescriptionIcon /> Notes</h1>
       <textarea
         placeholder={placeholder}
         value={text}

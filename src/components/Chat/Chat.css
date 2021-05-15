@@ -7,6 +7,15 @@
   justify-content: flex-end;
 }
 
+.Chat .chat-header {
+  background: #bbb;
+  text-align: center;
+}
+
+.Chat .chat-header h1 {
+  margin: 10px 0;
+}
+
 .Chat .message-list {
   overflow: scroll;
   padding-bottom: 10px;
