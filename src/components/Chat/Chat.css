@@ -8,13 +8,46 @@
   justify-content: flex-end;
 }
 
+.Chat .message-header {
+  margin: 10px 0;
+}
+
+.Chat .sender-name {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
 .Chat .timestamp {
   color: #555;
   font-size: 12px;
 }
 
 .Chat .message-text {
-  margin: 5px 0;
+  margin: 0;
+  padding: 2px;
+}
+
+.Chat .message-text:hover {
+  background: #dedede;
+}
+
+.Chat .edit-button {
+  margin: 0;
+  padding: 0;
+  height: 20px;
+  float: right;
+  background: transparent;
+  border: 0;
+  height: fit-content;
+  border-radius: 10px;
+}
+
+.Chat .edit-button:hover {
+  background: #bbb;
+}
+
+.Chat .edit-icon {
+  height: 15px;
 }
 
 .Chat form {
@@ -24,4 +57,5 @@
 .Chat input {
   min-width: 0;
   flex-grow: 1;
+  margin-top: 10px;
 }

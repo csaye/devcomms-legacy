@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
+import EditIcon from '@material-ui/icons/Edit';
+
 import firebase from 'firebase/app';
 
 import './Chat.css';
@@ -67,10 +69,17 @@ function Chat() {
             <div key={`message-${i}`} className="message">
               {
                 (i === 0 || m.timestamp - messages[i - 1].timestamp > timestampOffset) &&
-                <p className="timestamp">{getDateTimeString(m.timestamp.toDate())}</p>
+                <p className="message-header">
+                  <span className="sender-name">{m.senderName}</span>
+                  <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
+                </p>
               }
-              <p className="message-text">{m.text}</p>
-              <button onClick={() => deleteMessage(m.id)} className="edit-button">X</button>
+              <p className="message-text">
+                {m.text}
+                <button onClick={() => deleteMessage(m.id)} className="edit-button">
+                  <EditIcon className="edit-icon" />
+                </button>
+              </p>
             </div>
           )
         }
@@ -84,3 +93,5 @@ function Chat() {
 }
 
 export default Chat;
+
+//<button onClick={() => deleteMessage(m.id)} className="edit-button">X</button>
