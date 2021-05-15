@@ -1,0 +1,19 @@
+.Header {
+  height: 60px;
+  background: #999;
+  display: flex;
+  align-items: center;
+}
+
+.Header h1 {
+  margin: 0 10px;
+}
+
+.Header .logo-img {
+  height: 40px;
+}
+
+.Header .sign-out-button {
+  margin: 0 10px;
+  height: 40px;
+}
