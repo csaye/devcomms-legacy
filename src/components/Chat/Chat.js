@@ -7,7 +7,6 @@ import SendIcon from '@material-ui/icons/Send';
 
 import firebase from 'firebase/app';
 
-import 'reactjs-popup/dist/index.css';
 import './Chat.css';
 
 // delay in seconds before a new
@@ -25,17 +24,20 @@ function Chat() {
   const uid = firebase.auth().currentUser.uid;
 
   const [text, setText] = useState('');
-  const [messages] = useCollectionData(chatsRef.orderBy('timestamp'), { idField: 'id' });
+  const [newText, setNewText] = useState('');
   const [hovering, setHovering] = useState(undefined);
+  const [deleting, setDeleting] = useState(false);
+
+  const [messages] = useCollectionData(chatsRef.orderBy('timestamp', 'desc').limit(100), { idField: 'id' });
 
   // sends current message to firebase
-  function addMessage(e) {
+  async function addMessage(e) {
     e.preventDefault();
     const messageText = text;
     setText('');
 
     // add message in firebase
-    chatsRef.add({
+    await chatsRef.add({
       text: messageText,
       timestamp: new Date(),
       senderName: firebase.auth().currentUser.displayName,
@@ -43,8 +45,19 @@ function Chat() {
     });
   }
 
-  function deleteMessage(id) {
-    chatsRef.doc(id).delete();
+  // deletes a message from firebase by id
+  async function deleteMessage(id) {
+    await chatsRef.doc(id).delete();
+  }
+
+  // updates message of id with new text
+  async function updateMessage(e, id) {
+    e.preventDefault();
+
+    // update firebase document
+    await chatsRef.doc(id).update({
+      text: newText
+    })
   }
 
   // returns a datetime string for given datetime
@@ -70,7 +83,7 @@ function Chat() {
           <>
             {
               messages.length > 0 ?
-              messages.map((m, i) =>
+              messages.reverse().map((m, i) =>
                 <div key={`message-${i}`} className="message">
                   {
                     (
@@ -99,27 +112,47 @@ function Chat() {
                           </button>
                         }
                         modal
-                        onOpen={() => setHovering(undefined)}
+                        onOpen={() => {
+                          setNewText(m.text);
+                          setHovering(undefined);
+                        }}
                       >
                         {
                           close => (
                             <div className="modal">
                               <button className="close" onClick={close}>&times;</button>
                               <div className="header">Editing Message</div>
-                              <div className="content">{m.text}</div>
-                              <div className="actions">
+                              <div className="content">
+                                <form onSubmit={e => updateMessage(e, m.id)}>
+                                  <input
+                                    value={newText}
+                                    onChange={e => setNewText(e.target.value)}
+                                    required
+                                  />
+                                  <button type="submit">update</button>
+                                </form>
+                              </div>
+                              {
+                                deleting ?
+                                <>
+                                  <p className="delete-text">Delete message?</p>
+                                  <button onClick={() => setDeleting(false)}>
+                                    cancel
+                                  </button>
+                                  <button onClick={() => {
+                                    deleteMessage(m.id);
+                                    close();
+                                    setDeleting(false);
+                                  }}>
+                                    delete
+                                  </button>
+                                </> :
                                 <button className="button" onClick={() => {
-                                  deleteMessage(m.id);
-                                  close();
+                                  setDeleting(true)
                                 }}>
                                   delete
                                 </button>
-                                <button className="button" onClick={() => {
-                                  close();
-                                }}>
-                                  save
-                                </button>
-                              </div>
+                              }
                             </div>
                           )
                         }
