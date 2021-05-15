@@ -26,6 +26,11 @@
   font-size: 12px;
 }
 
+.Chat .info-text {
+  margin: 0 10px;
+  padding: 2px;
+}
+
 .Chat .message-text {
   margin: 0 10px;
   padding: 2px;
@@ -48,7 +53,7 @@
 }
 
 .Chat .edit-button:hover {
-  background: #bbb;
+  background: #aaa;
 }
 
 .Chat .edit-icon {

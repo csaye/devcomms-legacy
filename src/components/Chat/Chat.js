@@ -68,51 +68,66 @@ function Chat() {
       <div className="message-list">
         {
           messages ?
-          messages.map((m, i) =>
-            <div key={`message-${i}`} className="message">
-              {
-                (i === 0 || m.timestamp - messages[i - 1].timestamp > timestampOffset) &&
-                <p className="message-header">
-                  <span className="sender-name">{m.senderName}</span>
-                  <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
-                </p>
-              }
-              <p className="message-text">
-                {m.text}
-                <Popup
-                  trigger={
-                    <button className="edit-button">
-                      <EditIcon className="edit-icon" />
-                    </button>
-                  }
-                  modal
-                >
+          <>
+            {
+              messages.length > 0 ?
+              messages.map((m, i) =>
+                <div key={`message-${i}`} className="message">
                   {
-                    close => (
-                      <div className="modal">
-                        <button className="close" onClick={close}>&times;</button>
-                        <div className="header">Editing Message</div>
-                        <div className="content">{m.text}</div>
-                        <div className="actions">
-                          <button className="button" onClick={() => {
-                            deleteMessage(m.id);
-                            close();
-                          }}>
-                            delete
-                          </button>
-                        </div>
-                      </div>
-                    )
+                    (
+                      i === 0 || // first message
+                      m.senderUid !== messages[i - 1].senderUid || // different sender
+                      m.timestamp - messages[i - 1].timestamp > timestampOffset // time since last sender
+                    ) &&
+                    <p className="message-header">
+                      <span className="sender-name">{m.senderName}</span>
+                      <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
+                    </p>
                   }
-                </Popup>
-              </p>
-            </div>
-          ) :
-          <p className="message-text">Loading messages...</p>
+                  <p className="message-text">
+                    {m.text}
+                    <Popup
+                      trigger={
+                        <button className="edit-button">
+                          <EditIcon className="edit-icon" />
+                        </button>
+                      }
+                      modal
+                    >
+                      {
+                        close => (
+                          <div className="modal">
+                            <button className="close" onClick={close}>&times;</button>
+                            <div className="header">Editing Message</div>
+                            <div className="content">{m.text}</div>
+                            <div className="actions">
+                              <button className="button" onClick={() => {
+                                deleteMessage(m.id);
+                                close();
+                              }}>
+                                delete
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      }
+                    </Popup>
+                  </p>
+                </div>
+              ) :
+              <p className="info-text">No messages yet. Send one below!</p>
+            }
+          </> :
+          <p className="info-text">Loading messages...</p>
         }
       </div>
       <form onSubmit={addMessage}>
-        <input value={text} onChange={e => setText(e.target.value)} required />
+        <input
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder="message"
+          required
+        />
         <button type="submit">
           <SendIcon />
         </button>
