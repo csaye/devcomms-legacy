@@ -1,0 +1,79 @@
+import React, { useState } from 'react';
+
+import Goal from '../Goal/Goal.js';
+
+import firebase from 'firebase/app';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+
+import './Goals.css';
+
+function Goals() {
+  const [text, setText] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  // get goals
+  const goalsRef = firebase.firestore().collection('goals');
+  const goalsQuery = goalsRef.orderBy('endAt');
+  const [goals] = useCollectionData(goalsQuery, { idField: 'id' });
+
+  // creates a goal document in firebase
+  function addGoal(e) {
+    e.preventDefault();
+    const goalText = text;
+    setText('');
+    const endDateTime = new Date(`${endDate} ${endTime}`);
+    setEndDate('');
+    setEndTime('');
+
+    // add document to firebase
+    goalsRef.add({
+      creatorUid: firebase.auth().currentUser.uid,
+      endAt: endDateTime,
+      text: goalText
+    });
+  }
+
+  return (
+    <div className="Goals">
+      <h1>Goals</h1>
+      <form onSubmit={addGoal}>
+        <input
+          value={text}
+          onChange={e => setText(e.target.value)}
+          required
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={e => setEndDate(e.target.value)}
+          required
+        />
+        <input
+          type="time"
+          value={endTime}
+          onChange={e => setEndTime(e.target.value)}
+          required
+        />
+        <button type="submit">Create</button>
+      </form>
+      <div className="goal-list">
+      {
+        goals ?
+        <>
+          {
+            goals.length > 0 ?
+            goals.map((g, i) =>
+              <Goal key={`goal-${i}`} data={g} />
+            ) :
+            <p>No goals yet.</p>
+          }
+        </> :
+        <p>Loading goals...</p>
+      }
+      </div>
+    </div>
+  );
+}
+
+export default Goals;

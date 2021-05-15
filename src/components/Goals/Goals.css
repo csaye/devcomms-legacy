@@ -1,0 +1,11 @@
+.Goals {
+  background: #999;
+  height: 50%;
+  width: 250px;
+  text-align: center;
+  overflow: auto;
+}
+
+.Goals h1 {
+  margin: 10px 0 0 0;
+}
