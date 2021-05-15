@@ -3,6 +3,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import Popup from 'reactjs-popup';
 import EditIcon from '@material-ui/icons/Edit';
+import SendIcon from '@material-ui/icons/Send';
 
 import firebase from 'firebase/app';
 
@@ -112,7 +113,9 @@ function Chat() {
       </div>
       <form onSubmit={addMessage}>
         <input value={text} onChange={e => setText(e.target.value)} required />
-        <button type="submit">Send</button>
+        <button type="submit">
+          <SendIcon />
+        </button>
       </form>
     </div>
   );

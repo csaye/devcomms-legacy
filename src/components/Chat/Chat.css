@@ -1,19 +1,23 @@
 .Chat {
-  padding: 10px;
-  height: calc(100% - 20px);
-  width: 40%;
-  background: #efefef;
+  height: 100%;
+  width: 450px;
+  background: #ddd;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 
+.Chat .message-list {
+  overflow: scroll;
+  padding-bottom: 10px;
+}
+
 .Chat .message-header {
-  margin: 10px 0;
+  margin: 10px;
 }
 
 .Chat .sender-name {
-  margin-right: 10px;
+  margin-right: 8px;
   font-weight: bold;
 }
 
@@ -23,12 +27,13 @@
 }
 
 .Chat .message-text {
-  margin: 0;
+  margin: 0 10px;
   padding: 2px;
+  border-radius: 2px;
 }
 
 .Chat .message-text:hover {
-  background: #dedede;
+  background: #ccc;
 }
 
 .Chat .edit-button {
@@ -53,10 +58,21 @@
 .Chat form {
   display: flex;
   align-items: flex-end;
+  padding: 10px;
+  background: #bbb;
+}
+
+.Chat form button {
+  height: 30px;
 }
 
 .Chat input {
   min-width: 0;
   flex-grow: 1;
-  margin-top: 10px;
+  border: 0;
+  margin-right: 10px;
+  outline: none;
+  padding: 5px;
+  border-radius: 10px;
+  height: 20px;
 }
