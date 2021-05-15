@@ -8,6 +8,15 @@
   justify-content: flex-end;
 }
 
+.Chat .timestamp {
+  color: #555;
+  font-size: 12px;
+}
+
+.Chat .message-text {
+  margin: 5px 0;
+}
+
 .Chat form {
   display: flex;
 }

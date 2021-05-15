@@ -1,26 +1,61 @@
 import React, { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-import Message from '../Message/Message.js';
-
 import firebase from 'firebase/app';
 
 import './Chat.css';
 
+// delay in seconds before a new
+const timestampOffset = 120;
+
+const now = new Date();
+const nowDay = now.getDate();
+const nowMonth = now.getMonth();
+const nowYear = now.getFullYear();
+const today = new Date(nowYear, nowMonth, nowDay).setHours(0, 0, 0, 0);
+const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
+
 function Chat() {
-  const chatsRef = firebase.firestore().collection('chats')
+  const chatsRef = firebase.firestore().collection('chats');
+  const uid = firebase.auth().currentUser.uid;
 
   const [text, setText] = useState('');
-  const [messages] = useCollectionData(chatsRef.orderBy('timestamp'));
+  const [messages] = useCollectionData(
+    firebase.firestore().collection('chats').orderBy('timestamp'),
+  { idField: 'id' });
 
-  function sendMessage(e) {
+  // sends current message to firebase
+  function addMessage(e) {
     e.preventDefault();
     const messageText = text;
     setText('');
-    firebase.firestore().collection('chats').add({
+
+    // add message in firebase
+    chatsRef.add({
       text: messageText,
-      timestamp: new Date()
+      timestamp: new Date(),
+      senderName: firebase.auth().currentUser.displayName,
+      senderUid: uid
     });
+  }
+
+  function deleteMessage(id) {
+    chatsRef.doc(id).delete();
+  }
+
+  // returns a datetime string for given datetime
+  function getDateTimeString(dateTime) {
+
+    // separate time and date
+    const time = dateTime.toLocaleTimeString([], { timeStyle: 'short' });
+    const date = dateTime.setHours(0, 0, 0, 0);
+
+    // today
+    if (date === today) return `${time} today`;
+    // yesterday
+    else if (date === yesterday) return `${time} yesterday`;
+    // past
+    else return date.toLocaleDateString();
   }
 
   return (
@@ -28,10 +63,19 @@ function Chat() {
       <div className="message-list">
         {
           messages &&
-          messages.map((m, i) => <Message key={`message-${i}`} data={m} />)
+          messages.map((m, i) =>
+            <div key={`message-${i}`} className="message">
+              {
+                (i === 0 || m.timestamp - messages[i - 1].timestamp > timestampOffset) &&
+                <p className="timestamp">{getDateTimeString(m.timestamp.toDate())}</p>
+              }
+              <p className="message-text">{m.text}</p>
+              <button onClick={() => deleteMessage(m.id)} className="edit-button">X</button>
+            </div>
+          )
         }
       </div>
-      <form onSubmit={sendMessage}>
+      <form onSubmit={addMessage}>
         <input value={text} onChange={e => setText(e.target.value)} required />
         <button type="submit">Send</button>
       </form>
