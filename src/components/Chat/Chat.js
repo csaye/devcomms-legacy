@@ -9,8 +9,8 @@ import firebase from 'firebase/app';
 
 import './Chat.css';
 
-// delay in seconds before a new
-const timestampOffset = 120;
+const timestampOffset = 120; // delay in seconds before a new header
+const maxMessages = 100; // maximum messages shown at one time
 
 const now = new Date();
 const nowDay = now.getDate();
@@ -28,7 +28,9 @@ function Chat() {
   const [hovering, setHovering] = useState(undefined);
   const [deleting, setDeleting] = useState(false);
 
-  const [messages] = useCollectionData(chatsRef.orderBy('timestamp', 'desc').limit(100), { idField: 'id' });
+  const messagesQuery = chatsRef.orderBy('timestamp', 'desc').limit(maxMessages);
+  const [messages] = useCollectionData(messagesQuery, { idField: 'id' });
+  if (messages) messages.reverse(); // reverse messages
 
   // sends current message to firebase
   async function addMessage(e) {
@@ -74,27 +76,24 @@ function Chat() {
     // yesterday
     else if (date === yesterday) return `${time} yesterday`;
     // past
-    else return date.toLocaleDateString();
+    else return dateTime.toLocaleDateString();
   }
-
-  const sortedMessages = messages ? messages.slice() : undefined;
-  if (sortedMessages) sortedMessages.reverse();
 
   return (
     <div className="Chat">
       <div className="message-list">
         {
-          sortedMessages ?
+          messages ?
           <>
             {
-              sortedMessages.length > 0 ?
-              sortedMessages.map((m, i) =>
+              messages.length > 0 ?
+              messages.map((m, i) =>
                 <div key={`message-${i}`} className="message">
                   {
                     (
                       i === 0 || // first message
-                      m.senderUid !== sortedMessages[i - 1].senderUid || // different sender
-                      m.timestamp - sortedMessages[i - 1].timestamp > timestampOffset // time since last sender
+                      m.senderUid !== messages[i - 1].senderUid || // different sender
+                      m.timestamp - messages[i - 1].timestamp > timestampOffset // time since last sender
                     ) &&
                     <p className="message-header">
                       <span className="sender-name">{m.senderName}</span>
