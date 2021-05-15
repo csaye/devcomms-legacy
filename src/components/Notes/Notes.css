@@ -1,0 +1,17 @@
+.Notes {
+  background: #bbb;
+  height: 50%;
+  width: 250px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.Notes h1 {
+  margin: 10px 0 0 0;
+}
+
+.Notes textarea {
+  flex-grow: 1;
+  margin: 10px;
+}
