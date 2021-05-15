@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App/App.js';
 import reportWebVitals from './reportWebVitals';
+import 'reactjs-popup/dist/index.css';
 
 ReactDOM.render(
   <React.StrictMode>
