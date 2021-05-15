@@ -25,9 +25,8 @@ function Chat() {
   const uid = firebase.auth().currentUser.uid;
 
   const [text, setText] = useState('');
-  const [messages] = useCollectionData(
-    firebase.firestore().collection('chats').orderBy('timestamp'),
-  { idField: 'id' });
+  const [messages] = useCollectionData(chatsRef.orderBy('timestamp'), { idField: 'id' });
+  const [hovering, setHovering] = useState(undefined);
 
   // sends current message to firebase
   function addMessage(e) {
@@ -84,34 +83,48 @@ function Chat() {
                       <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
                     </p>
                   }
-                  <p className="message-text">
+                  <p
+                  className="message-text"
+                  onMouseEnter={() => setHovering(m.id)}
+                  onMouseLeave={() => setHovering(undefined)}
+                  >
                     {m.text}
-                    <Popup
-                      trigger={
-                        <button className="edit-button">
-                          <EditIcon className="edit-icon" />
-                        </button>
-                      }
-                      modal
-                    >
-                      {
-                        close => (
-                          <div className="modal">
-                            <button className="close" onClick={close}>&times;</button>
-                            <div className="header">Editing Message</div>
-                            <div className="content">{m.text}</div>
-                            <div className="actions">
-                              <button className="button" onClick={() => {
-                                deleteMessage(m.id);
-                                close();
-                              }}>
-                                delete
-                              </button>
+                    {
+                      m.senderUid === uid &&
+                      <Popup
+                        trigger={
+                          hovering === m.id &&
+                          <button className="edit-button">
+                            <EditIcon className="edit-icon" />
+                          </button>
+                        }
+                        modal
+                        onOpen={() => setHovering(undefined)}
+                      >
+                        {
+                          close => (
+                            <div className="modal">
+                              <button className="close" onClick={close}>&times;</button>
+                              <div className="header">Editing Message</div>
+                              <div className="content">{m.text}</div>
+                              <div className="actions">
+                                <button className="button" onClick={() => {
+                                  deleteMessage(m.id);
+                                  close();
+                                }}>
+                                  delete
+                                </button>
+                                <button className="button" onClick={() => {
+                                  close();
+                                }}>
+                                  save
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        )
-                      }
-                    </Popup>
+                          )
+                        }
+                      </Popup>
+                    }
                   </p>
                 </div>
               ) :
