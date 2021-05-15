@@ -52,6 +52,7 @@
 
 .Chat form {
   display: flex;
+  align-items: flex-end;
 }
 
 .Chat input {

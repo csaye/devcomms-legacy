@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
+import Popup from 'reactjs-popup';
 import EditIcon from '@material-ui/icons/Edit';
 
 import firebase from 'firebase/app';
 
+import 'reactjs-popup/dist/index.css';
 import './Chat.css';
 
 // delay in seconds before a new
@@ -64,7 +66,7 @@ function Chat() {
     <div className="Chat">
       <div className="message-list">
         {
-          messages &&
+          messages ?
           messages.map((m, i) =>
             <div key={`message-${i}`} className="message">
               {
@@ -76,12 +78,36 @@ function Chat() {
               }
               <p className="message-text">
                 {m.text}
-                <button onClick={() => deleteMessage(m.id)} className="edit-button">
-                  <EditIcon className="edit-icon" />
-                </button>
+                <Popup
+                  trigger={
+                    <button className="edit-button">
+                      <EditIcon className="edit-icon" />
+                    </button>
+                  }
+                  modal
+                >
+                  {
+                    close => (
+                      <div className="modal">
+                        <button className="close" onClick={close}>&times;</button>
+                        <div className="header">Editing Message</div>
+                        <div className="content">{m.text}</div>
+                        <div className="actions">
+                          <button className="button" onClick={() => {
+                            deleteMessage(m.id);
+                            close();
+                          }}>
+                            delete
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  }
+                </Popup>
               </p>
             </div>
-          )
+          ) :
+          <p className="message-text">Loading messages...</p>
         }
       </div>
       <form onSubmit={addMessage}>
@@ -93,5 +119,3 @@ function Chat() {
 }
 
 export default Chat;
-
-//<button onClick={() => deleteMessage(m.id)} className="edit-button">X</button>
