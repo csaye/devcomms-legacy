@@ -38,6 +38,7 @@ function Chat() {
 
     // add message in firebase
     await chatsRef.add({
+      edited: false,
       text: messageText,
       timestamp: new Date(),
       senderName: firebase.auth().currentUser.displayName,
@@ -56,8 +57,9 @@ function Chat() {
 
     // update firebase document
     await chatsRef.doc(id).update({
+      edited: true,
       text: newText
-    })
+    });
   }
 
   // returns a datetime string for given datetime
@@ -75,21 +77,24 @@ function Chat() {
     else return date.toLocaleDateString();
   }
 
+  const sortedMessages = messages ? messages.slice() : undefined;
+  if (sortedMessages) sortedMessages.reverse();
+
   return (
     <div className="Chat">
       <div className="message-list">
         {
-          messages ?
+          sortedMessages ?
           <>
             {
-              messages.length > 0 ?
-              messages.reverse().map((m, i) =>
+              sortedMessages.length > 0 ?
+              sortedMessages.map((m, i) =>
                 <div key={`message-${i}`} className="message">
                   {
                     (
                       i === 0 || // first message
-                      m.senderUid !== messages[i - 1].senderUid || // different sender
-                      m.timestamp - messages[i - 1].timestamp > timestampOffset // time since last sender
+                      m.senderUid !== sortedMessages[i - 1].senderUid || // different sender
+                      m.timestamp - sortedMessages[i - 1].timestamp > timestampOffset // time since last sender
                     ) &&
                     <p className="message-header">
                       <span className="sender-name">{m.senderName}</span>
@@ -102,6 +107,10 @@ function Chat() {
                   onMouseLeave={() => setHovering(undefined)}
                   >
                     {m.text}
+                    {
+                      m.edited &&
+                      <span className="edited-text">(edited)</span>
+                    }
                     {
                       m.senderUid === uid &&
                       <Popup
@@ -123,7 +132,10 @@ function Chat() {
                               <button className="close" onClick={close}>&times;</button>
                               <div className="header">Editing Message</div>
                               <div className="content">
-                                <form onSubmit={e => updateMessage(e, m.id)}>
+                                <form onSubmit={e => {
+                                  updateMessage(e, m.id);
+                                  close();
+                                }}>
                                   <input
                                     value={newText}
                                     onChange={e => setNewText(e.target.value)}
