@@ -1,11 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 import BrushIcon from '@material-ui/icons/Brush';
 
+import firebase from 'firebase/app';
+
 import './CanvasSketch.css';
 
-const width = 128;
-const height = 128;
+const width = 256;
+const height = 256;
 
 let lineColor = 'black';
 let lineWidth = 2;
@@ -17,9 +19,13 @@ let ctx;
 
 function CanvasSketch() {
 
+  const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef();
+  const downloadRef = useRef();
 
   function draw() {
+
+    // draw path
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
     ctx.lineTo(currX, currY);
@@ -29,15 +35,43 @@ function CanvasSketch() {
     ctx.closePath();
   }
 
-  function findxy(res, e) {
+  function sketch(operation, e) {
 
+    // if mouse down, start drawing
+    if (operation === 'down') drawing = true;
+
+    // if not drawing, return
+    if (!drawing) return;
+
+    // get previous and current mouse positions
     prevX = currX;
     prevY = currY;
     currX = e.clientX - canvas.offsetLeft;
     currY = e.clientY - canvas.offsetTop;
 
-    if (res === 'down') drawing = true;
-    else if (res === 'move' && drawing) draw();
+    // if moving mouse, draw
+    if (operation === 'move') draw();
+  }
+
+  // clears canvas
+  function clearCanvas() {
+    ctx.clearRect(0, 0, width, height);
+
+    // update sketch in firebase
+    updateSketch();
+  }
+
+  // downloads canvas as a png
+  function downloadCanvas() {
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('download', 'sketch.png');
+    canvas.toBlob(blob => {
+      let url = URL.createObjectURL(blob);
+      downloadLink.setAttribute('href', url);
+      downloadLink.click();
+    });
+  }
+
   }
 
   // get canvas and context on start
@@ -53,11 +87,21 @@ function CanvasSketch() {
         ref={canvasRef}
         width={width}
         height={height}
-        onMouseMove={e => findxy('move', e)}
-        onMouseDown={e => findxy('down', e)}
-        onMouseUp={e => {drawing = false;}}
-        onMouseLeave={e => {drawing = false;}}
+        onMouseMove={e => sketch('move', e)}
+        onMouseDown={e => sketch('down', e)}
+        onMouseUp={e => {drawing = false; updateSketch();}}
+        onMouseLeave={e => {drawing = false; updateSketch();}}
       />
+      {
+        loaded ?
+        <div>
+          <button onClick={clearCanvas}>Clear</button>
+          <button onClick={downloadCanvas} ref={downloadRef}>
+            Download
+          </button>
+        </div> :
+        <p>Loading sketch...</p>
+      }
     </div>
   );
 }
