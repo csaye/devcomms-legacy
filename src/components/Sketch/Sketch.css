@@ -1,0 +1,19 @@
+.Sketch {
+  background: #bbb;
+  height: 100%;
+  flex-grow: 1;
+  min-width: 250px;
+  text-align: center;
+  overflow: auto;
+}
+
+.Sketch h1 {
+  margin: 10px 0 0 0;
+}
+
+.Sketch .sketch-board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100px;
+  margin: 10px auto;
+}
