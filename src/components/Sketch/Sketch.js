@@ -7,12 +7,22 @@ import firebase from 'firebase/app';
 
 import './Sketch.css';
 
+const pixelCount = 400;
+
 function Sketch() {
   const sketchQuery = firebase.firestore().collection('sketches').doc('sketch');
   const [sketchData] = useDocumentData(sketchQuery);
 
   const pixels = [];
-  for (let i = 0; i < 100; i++) pixels.push(i);
+  for (let i = 0; i < pixelCount; i++) pixels.push(i);
+
+  async function clearSketch() {
+    let pixelList = '';
+    for (let i = 0; i < pixelCount; i++) pixelList += '0';
+    await sketchQuery.update({
+      pixels: pixelList
+    })
+  }
 
   return (
     <div className="Sketch">
@@ -32,6 +42,7 @@ function Sketch() {
         </div> :
         <p>Loading sketch...</p>
       }
+      <button onClick={clearSketch}>Clear</button>
     </div>
   );
 }

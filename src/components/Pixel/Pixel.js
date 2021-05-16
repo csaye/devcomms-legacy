@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import firebase from 'firebase/app';
 
@@ -28,6 +28,11 @@ function Pixel(props) {
       })
     });
   }
+
+  // update filled when props update
+  useEffect(() => {
+    setFilled(props.filled);
+  }, [props.filled]);
 
   // updates pixel fill
   function fillPixel(isFilled) {
