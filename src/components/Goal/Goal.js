@@ -31,7 +31,7 @@ function Goal(props) {
       setTimeLeft(endDate - new Date());
     }, 100);
     return () => clearInterval(interval);
-  }, [endAt]);
+  }, [endAt]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Goal">
