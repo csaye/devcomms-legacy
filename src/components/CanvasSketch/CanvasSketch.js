@@ -21,7 +21,16 @@ function CanvasSketch() {
 
   const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef();
-  const downloadRef = useRef();
+  const sketchRef = firebase.firestore().collection('sketches').doc('sketch');
+
+  // updates sketch in firebase
+  async function updateSketch() {
+    console.log('updating sketch');
+    const url = canvas.toDataURL();
+    await sketchRef.update({
+      data: url
+    })
+  }
 
   function draw() {
 
@@ -72,13 +81,25 @@ function CanvasSketch() {
     });
   }
 
+  // gets and sets canvas data
+  async function getData() {
+    canvas = canvasRef.current;
+    ctx = canvas.getContext('2d');
+
+    sketchRef.get().then(doc => {
+      const docData = doc.data();
+      const url = docData.data;
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0);
+      img.src = url;
+      setLoaded(true);
+    });
   }
 
   // get canvas and context on start
   useEffect(() => {
-    canvas = canvasRef.current;
-    ctx = canvas?.getContext('2d');
-  }, [])
+    getData();
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="CanvasSketch">
@@ -91,6 +112,7 @@ function CanvasSketch() {
         onMouseDown={e => sketch('down', e)}
         onMouseUp={e => {drawing = false; updateSketch();}}
         onMouseLeave={e => {drawing = false; updateSketch();}}
+        style={{"display": loaded ? "inline" : "none"}}
       />
       {
         loaded ?
