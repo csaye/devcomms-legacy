@@ -17,10 +17,18 @@
   border: 2px solid black;
 }
 
+.CanvasSketch .sketch-settings {
+  margin-top: 10px;
+}
+
+.CanvasSketch .sketch-settings p {
+  margin: 0;
+}
+
 .CanvasSketch .special-buttons {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
+  margin: 3px 0 10px 0;
 }
 
 .CanvasSketch .color-buttons {
@@ -43,10 +51,11 @@
   border: 2px solid black;
 }
 
-.CanvasSketch .canvas-button:first-of-type {
-   margin-right: 5px;
+.CanvasSketch .canvas-button {
+  margin-right: 5px;
+  padding: 1px 3px 0 3px;
 }
 
-.CanvasSketch .canvas-button {
-  padding: 1px 3px 0 3px;
+.CanvasSketch .canvas-button:last-of-type {
+  margin-right: 0;
 }

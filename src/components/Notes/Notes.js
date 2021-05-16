@@ -8,7 +8,7 @@ import './Notes.css';
 
 function Notes() {
   const [text, setText] = useState('');
-  const [placeholder, setPlaceholder] = useState('Loading notes...');
+  const [loaded, setLoaded] = useState(false);
 
   const noteRef = firebase.firestore().collection('notes').doc('note');
 
@@ -17,7 +17,7 @@ function Notes() {
     await noteRef.get().then(doc => {
       const docData = doc.data();
       setText(docData.text);
-      setPlaceholder('');
+      setLoaded(true);
     });
   }
 
@@ -36,16 +36,19 @@ function Notes() {
   return (
     <div className="Notes">
       <h1><DescriptionIcon /> Notes</h1>
-      <textarea
-        placeholder={placeholder}
-        value={text}
-        className="flex-grow"
-        onChange={e => {
-          const val = e.target.value;
-          setText(val);
-          updateText(val);
-        }}
-      />
+      {
+        loaded ?
+        <textarea
+          value={text}
+          className="flex-grow"
+          onChange={e => {
+            const val = e.target.value;
+            setText(val);
+            updateText(val);
+          }}
+        /> :
+        <p>Loading notes...</p>
+      }
     </div>
   );
 }

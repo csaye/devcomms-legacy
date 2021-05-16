@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 
 import BrushIcon from '@material-ui/icons/Brush';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import UndoIcon from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FormatColorResetIcon from '@material-ui/icons/FormatColorReset';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 import firebase from 'firebase/app';
 
@@ -12,7 +12,6 @@ import './CanvasSketch.css';
 const width = 256;
 const height = 256;
 
-let lineWidth = 2;
 let prevX = 0, prevY = 0, currX = 0, currY = 0;
 let drawing = false;
 
@@ -22,6 +21,8 @@ let ctx;
 const lineColors = ['red', 'orange', 'yellow', 'green', 'blue', 'black'];
 
 function CanvasSketch() {
+  const [lastCanvasUrl, setLastCanvasUrl] = useState(undefined);
+  const [lineWidth, setLineWidth] = useState(2);
   const [lineColor, setLineColor] = useState('black');
   const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef();
@@ -29,7 +30,11 @@ function CanvasSketch() {
 
   // updates sketch in firebase
   async function updateSketch() {
+
+    // get canvas url
     const url = canvas.toDataURL();
+
+    // update firebase document
     await sketchRef.update({
       data: url
     })
@@ -50,7 +55,13 @@ function CanvasSketch() {
   function sketch(operation, e) {
 
     // if mouse down, start drawing
-    if (operation === 'down') drawing = true;
+    if (operation === 'down') {
+
+      // get last canvas url
+      const url = canvas.toDataURL();
+      setLastCanvasUrl(url);
+      drawing = true;
+    }
 
     // if not drawing, return
     if (!drawing) return;
@@ -68,6 +79,10 @@ function CanvasSketch() {
   // clears canvas
   function clearCanvas() {
 
+    // get last canvas url
+    const url = canvas.toDataURL();
+    setLastCanvasUrl(url);
+
     // fill with white
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
@@ -77,6 +92,19 @@ function CanvasSketch() {
 
     // update sketch in firebase
     updateSketch();
+  }
+
+  // loads given url onto canvas
+  function loadUrl(url) {
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.src = url;
+  }
+
+  function undoCanvas() {
+    if (!lastCanvasUrl) return;
+    loadUrl(lastCanvasUrl);
+    setLastCanvasUrl(undefined);
   }
 
   // downloads canvas as a png
@@ -99,9 +127,7 @@ function CanvasSketch() {
     sketchRef.get().then(doc => {
       const docData = doc.data();
       const url = docData.data;
-      const img = new Image();
-      img.onload = () => ctx.drawImage(img, 0, 0);
-      img.src = url;
+      loadUrl(url);
       setLoaded(true);
     });
   }
@@ -127,6 +153,17 @@ function CanvasSketch() {
       {
         loaded ?
         <>
+          <div className="sketch-settings">
+            <p>Line width: {lineWidth}</p>
+            <input
+              value={lineWidth}
+              onChange={e => setLineWidth(e.target.value)}
+              min="1"
+              max="10"
+              step="0.1"
+              type="range"
+            />
+          </div>
           <div className="special-buttons">
             <button
               onClick={() => setLineColor("white")}
@@ -155,6 +192,11 @@ function CanvasSketch() {
             }
           </div>
           <div>
+            {
+              lastCanvasUrl ?
+              <button className="canvas-button" onClick={undoCanvas}><UndoIcon /></button> :
+              <button className="canvas-button" disabled><UndoIcon /></button>
+            }
             <button className="canvas-button" onClick={clearCanvas}><DeleteIcon /></button>
             <button className="canvas-button" onClick={downloadCanvas}><GetAppIcon /></button>
           </div>
