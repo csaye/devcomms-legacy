@@ -109,12 +109,16 @@ function Sketch() {
 
   // downloads canvas as a png
   function downloadCanvas() {
-    const downloadLink = document.createElement('a');
-    downloadLink.setAttribute('download', 'sketch.png');
+
+    // get object url
     canvas.toBlob(blob => {
       const url = URL.createObjectURL(blob);
-      downloadLink.setAttribute('href', url);
-      downloadLink.click();
+
+      // download from link element
+      const link = document.createElement('a');
+      link.download = 'sketch.png';
+      link.href = url;
+      link.click();
     });
   }
 

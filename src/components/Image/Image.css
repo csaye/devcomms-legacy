@@ -1,7 +1,8 @@
 .Image {
   background: #efefef;
   height: 100%;
-  min-width: 300px;
+  width: 276px;
+  min-width: 276px;
   text-align: center;
   overflow: auto;
 }
@@ -10,7 +11,25 @@
   margin: 10px 0 0 0;
 }
 
+.Image form {
+  margin: 10px 10px 0 10px;
+  text-align: center;
+}
+
+.Image form input {
+  width: 200px;
+  background: #bbb;
+  padding: 5px;
+  border-radius: 2px;
+  display: block;
+  margin: 0 auto 10px auto;
+}
+
 .Image img {
   max-width: calc(100% - 20px);
+  margin-top: 10px;
+}
+
+.Image .download-button {
   margin: 10px 0;
 }

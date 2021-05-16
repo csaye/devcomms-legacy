@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import ImageIcon from '@material-ui/icons/Image';
 import PublishIcon from '@material-ui/icons/Publish';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 import firebase from 'firebase/app';
 
@@ -27,6 +28,21 @@ function Image() {
     getImage();
   }
 
+  // downloads image
+  async function downloadImage() {
+
+    // get object url
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const url = await URL.createObjectURL(blob);
+
+    // download from link element
+    const link = document.createElement('a');
+    link.download = 'image';
+    link.href = url;
+    link.click();
+  }
+
   // get image on start
   useEffect(() => {
     getImage();
@@ -45,8 +61,17 @@ function Image() {
         <button type="submit"><PublishIcon /></button>
       </form>
       {
-        imageUrl &&
-        <img src={imageUrl} alt="" />
+        imageUrl ?
+        <>
+          <img src={imageUrl} alt="" />
+          <button
+            className="download-button"
+            onClick={downloadImage}
+          >
+            <GetAppIcon />
+          </button>
+        </> :
+        <p>Loading image...</p>
       }
     </div>
   );
