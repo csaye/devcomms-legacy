@@ -13,6 +13,40 @@
 
 .CanvasSketch canvas {
   background: #fff;
-  margin: 10px 0;
+  margin-top: 10px;
   border: 2px solid black;
+}
+
+.CanvasSketch .special-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.CanvasSketch .color-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.CanvasSketch .color-button {
+  border: 0;
+  height: 20px;
+  width: 20px;
+}
+
+.CanvasSketch .color-button.selected {
+  border: 2px solid white;
+}
+
+.CanvasSketch .color-button.white-selected {
+  border: 2px solid black;
+}
+
+.CanvasSketch .canvas-button:first-of-type {
+   margin-right: 5px;
+}
+
+.CanvasSketch .canvas-button {
+  padding: 1px 3px 0 3px;
 }
