@@ -1,0 +1,9 @@
+.Pixel {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+}
+
+.Pixel.filled {
+  background: #000;
+}
