@@ -7,7 +7,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 
 import firebase from 'firebase/app';
 
-import './CanvasSketch.css';
+import './Sketch.css';
 
 const width = 256;
 const height = 256;
@@ -20,7 +20,7 @@ let ctx;
 
 const lineColors = ['red', 'orange', 'yellow', 'green', 'blue', 'black'];
 
-function CanvasSketch() {
+function Sketch() {
   const [lastCanvasUrl, setLastCanvasUrl] = useState(undefined);
   const [lineWidth, setLineWidth] = useState(2);
   const [lineColor, setLineColor] = useState('black');
@@ -138,7 +138,7 @@ function CanvasSketch() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="CanvasSketch">
+    <div className="Sketch">
       <h1><BrushIcon /> Sketch</h1>
       <canvas
         ref={canvasRef}
@@ -207,4 +207,4 @@ function CanvasSketch() {
   );
 }
 
-export default CanvasSketch;
+export default Sketch;

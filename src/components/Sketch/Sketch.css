@@ -1,61 +1,61 @@
-.CanvasSketch {
+.Sketch {
   background: #bbb;
   height: 100%;
-  flex-grow: 1;
-  min-width: 250px;
+  min-width: 276px;
   text-align: center;
   overflow: auto;
 }
 
-.CanvasSketch h1 {
+.Sketch h1 {
   margin: 10px 0 0 0;
 }
 
-.CanvasSketch canvas {
+.Sketch canvas {
   background: #fff;
   margin-top: 10px;
   border: 2px solid black;
 }
 
-.CanvasSketch .sketch-settings {
+.Sketch .sketch-settings {
   margin-top: 10px;
 }
 
-.CanvasSketch .sketch-settings p {
+.Sketch .sketch-settings p {
   margin: 0;
 }
 
-.CanvasSketch .special-buttons {
+.Sketch .special-buttons {
   display: flex;
   justify-content: center;
   margin: 3px 0 10px 0;
 }
 
-.CanvasSketch .color-buttons {
+.Sketch .color-buttons {
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
 }
 
-.CanvasSketch .color-button {
+.Sketch .color-button {
   border: 0;
   height: 20px;
   width: 20px;
 }
 
-.CanvasSketch .color-button.selected {
+.Sketch .color-button.selected {
   border: 2px solid white;
 }
 
-.CanvasSketch .color-button.white-selected {
+.Sketch .color-button.white-selected {
   border: 2px solid black;
 }
 
-.CanvasSketch .canvas-button {
+.Sketch .canvas-button {
   margin-right: 5px;
   padding: 1px 3px 0 3px;
+  margin-bottom: 10px;
 }
 
-.CanvasSketch .canvas-button:last-of-type {
+.Sketch .canvas-button:last-of-type {
   margin-right: 0;
 }
