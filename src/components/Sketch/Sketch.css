@@ -14,6 +14,5 @@
 .Sketch .sketch-board {
   display: flex;
   flex-wrap: wrap;
-  width: 200px;
   margin: 10px auto;
 }

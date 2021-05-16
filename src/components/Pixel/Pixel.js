@@ -6,6 +6,7 @@ import './Pixel.css';
 
 function Pixel(props) {
   const id = props.id;
+  const size = props.pixelSize;
 
   const [filled, setFilled] = useState(props.filled);
 
@@ -44,8 +45,20 @@ function Pixel(props) {
     <>
       {
         filled ?
-        <div className="Pixel filled" onMouseDown={() => fillPixel(false)} /> :
-        <div className="Pixel" onMouseDown={() => fillPixel(true)} />
+        <div
+          className="Pixel filled"
+          onMouseEnter={() => {
+            if (props.mouseDown) fillPixel(false);
+          }}
+          style={{"width": `${size}px`, "height": `${size}px`}}
+        /> :
+        <div
+          className="Pixel"
+          onMouseEnter={() => {
+            if (props.mouseDown) fillPixel(true);
+          }}
+          style={{"width": `${size}px`, "height": `${size}px`}}
+        />
       }
     </>
   );
