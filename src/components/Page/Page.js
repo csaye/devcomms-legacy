@@ -2,7 +2,7 @@ import Chat from '../Chat/Chat.js';
 import Header from '../Header/Header.js';
 import Notes from '../Notes/Notes.js';
 import Goals from '../Goals/Goals.js';
-import Sketch from '../Sketch/Sketch.js';
+import CanvasSketch from '../CanvasSketch/CanvasSketch.js';
 
 import './Page.css';
 
@@ -16,7 +16,7 @@ function Page() {
           <Notes />
           <Goals />
         </div>
-        <Sketch />
+        <CanvasSketch />
       </div>
     </div>
   );
