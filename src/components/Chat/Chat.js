@@ -47,7 +47,7 @@ function Chat() {
 
     // add text message in firebase
     await chatsRef.add({
-      content: messageText,
+      text: messageText,
       edited: false,
       type: 'text',
       timestamp: new Date(),
@@ -75,6 +75,12 @@ function Chat() {
   // uploads file as message
   async function uploadFile() {
 
+    // if no file, return
+    if (!file) return;
+
+    // get whether file is image
+    const isImage = file.type.startsWith('image/');
+
     // put file in storage
     await firebase.storage().ref('chat-files/' + file.name).put(file).then(snapshot => {
 
@@ -83,9 +89,9 @@ function Chat() {
 
         // add image message
         chatsRef.add({
-          content: url,
-          edited: false,
-          type: 'image',
+          url: url,
+          type: isImage ? 'image' : 'file',
+          filename: file.name,
           timestamp: new Date(),
           senderName: firebase.auth().currentUser.displayName,
           senderUid: uid
@@ -152,24 +158,30 @@ function Chat() {
                     </p>
                   }
                   <p
-                  className="message-text"
-                  onMouseEnter={() => setHovering(m.id)}
-                  onMouseLeave={() => setHovering(undefined)}
+                    className="message-text"
+                    onMouseEnter={() => setHovering(m.id)}
+                    onMouseLeave={() => setHovering(undefined)}
                   >
                     {
                       m.type === 'text' ?
                       <>
-                        {m.content}
+                        {m.text}
                         {
                           m.edited &&
                           <span className="edited-text">(edited)</span>
                         }
                       </> :
-                      <img
-                        src={m.content}
-                        className="message-image"
-                        alt=""
-                      />
+                      <a href={m.url} target="_blank" rel="noreferrer">
+                        {
+                          m.type === 'image' ?
+                          <img
+                            src={m.url}
+                            className="message-image"
+                            alt=""
+                          /> :
+                          <>{m.filename}</>
+                        }
+                      </a>
                     }
                     {
                       m.senderUid === uid &&
@@ -182,7 +194,7 @@ function Chat() {
                         }
                         modal
                         onOpen={() => {
-                          if (m.type === 'text') setNewText(m.content);
+                          if (m.type === 'text') setNewText(m.text);
                           setHovering(undefined);
                         }}
                       >
@@ -193,7 +205,7 @@ function Chat() {
                               <div className="header">Editing Message</div>
                               <div className="content">
                                 {
-                                  m.type === 'text' &&
+                                  m.type === 'text' ?
                                   <form onSubmit={e => {
                                     updateMessage(e, m.id);
                                     close();
@@ -204,7 +216,10 @@ function Chat() {
                                       required
                                     />
                                     <button type="submit">update</button>
-                                  </form>
+                                  </form> :
+                                  <a href={m.url} target="_blank" rel="noreferrer">
+                                    {m.filename}
+                                  </a>
                                 }
                               </div>
                               {
