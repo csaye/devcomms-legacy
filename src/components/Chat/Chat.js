@@ -5,6 +5,7 @@ import Popup from 'reactjs-popup';
 import EditIcon from '@material-ui/icons/Edit';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
+import PublishIcon from '@material-ui/icons/Publish';
 
 import firebase from 'firebase/app';
 
@@ -27,6 +28,7 @@ function Chat() {
   const uid = firebase.auth().currentUser.uid;
 
   const [text, setText] = useState('');
+  const [file, setFile] = useState(undefined);
   const [newText, setNewText] = useState('');
   const [hovering, setHovering] = useState(undefined);
   const [deleting, setDeleting] = useState(false);
@@ -43,10 +45,11 @@ function Chat() {
     const messageText = text;
     setText('');
 
-    // add message in firebase
+    // add text message in firebase
     await chatsRef.add({
+      content: messageText,
       edited: false,
-      text: messageText,
+      type: 'text',
       timestamp: new Date(),
       senderName: firebase.auth().currentUser.displayName,
       senderUid: uid
@@ -66,6 +69,28 @@ function Chat() {
     await chatsRef.doc(id).update({
       edited: true,
       text: newText
+    });
+  }
+
+  // uploads file as message
+  async function uploadFile() {
+
+    // put file in storage
+    await firebase.storage().ref('chat-files/' + file.name).put(file).then(snapshot => {
+
+      // get file url
+      snapshot.ref.getDownloadURL().then(url => {
+
+        // add image message
+        chatsRef.add({
+          content: url,
+          edited: false,
+          type: 'image',
+          timestamp: new Date(),
+          senderName: firebase.auth().currentUser.displayName,
+          senderUid: uid
+        });
+      });
     });
   }
 
@@ -131,10 +156,20 @@ function Chat() {
                   onMouseEnter={() => setHovering(m.id)}
                   onMouseLeave={() => setHovering(undefined)}
                   >
-                    {m.text}
                     {
-                      m.edited &&
-                      <span className="edited-text">(edited)</span>
+                      m.type === 'text' ?
+                      <>
+                        {m.content}
+                        {
+                          m.edited &&
+                          <span className="edited-text">(edited)</span>
+                        }
+                      </> :
+                      <img
+                        src={m.content}
+                        className="message-image"
+                        alt=""
+                      />
                     }
                     {
                       m.senderUid === uid &&
@@ -147,7 +182,7 @@ function Chat() {
                         }
                         modal
                         onOpen={() => {
-                          setNewText(m.text);
+                          if (m.type === 'text') setNewText(m.content);
                           setHovering(undefined);
                         }}
                       >
@@ -157,17 +192,20 @@ function Chat() {
                               <button className="close" onClick={close}>&times;</button>
                               <div className="header">Editing Message</div>
                               <div className="content">
-                                <form onSubmit={e => {
-                                  updateMessage(e, m.id);
-                                  close();
-                                }}>
-                                  <input
-                                    value={newText}
-                                    onChange={e => setNewText(e.target.value)}
-                                    required
-                                  />
-                                  <button type="submit">update</button>
-                                </form>
+                                {
+                                  m.type === 'text' &&
+                                  <form onSubmit={e => {
+                                    updateMessage(e, m.id);
+                                    close();
+                                  }}>
+                                    <input
+                                      value={newText}
+                                      onChange={e => setNewText(e.target.value)}
+                                      required
+                                    />
+                                    <button type="submit">update</button>
+                                  </form>
+                                }
                               </div>
                               {
                                 deleting ?
@@ -206,8 +244,18 @@ function Chat() {
         <span ref={messagesEnd} />
       </div>
       <form onSubmit={addMessage}>
+        <label htmlFor="chat-fileinput" className="upload-button">
+          <PublishIcon />
+        </label>
+        <input
+          type="file"
+          id="chat-fileinput"
+          onChange={e => setFile(e.target.files[0])}
+          className="file-input"
+        />
         <input
           value={text}
+          className="text-input"
           onChange={e => setText(e.target.value)}
           placeholder="message"
           required
@@ -216,6 +264,29 @@ function Chat() {
           <SendIcon />
         </button>
       </form>
+      <Popup
+        open={file !== undefined}
+        onClose={() => setFile(undefined)}
+        modal
+      >
+        {
+          close => (
+            <div className="modal">
+              <button className="close" onClick={close}>&times;</button>
+              <div className="header">Uploading File</div>
+              <div className="content">
+                <p>{file ? file.name : 'Loading...'}</p>
+              </div>
+              <button onClick={() => {
+                uploadFile();
+                close();
+              }}>
+                <SendIcon />
+              </button>
+            </div>
+          )
+        }
+      </Popup>
     </div>
   );
 }

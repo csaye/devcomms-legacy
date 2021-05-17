@@ -24,6 +24,7 @@
   background: #fff;
   border-radius: 18px;
   border: 1px solid #bbb;
+  outline: none;
 }
 .modal input {
   margin-right: 5px;

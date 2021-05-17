@@ -41,6 +41,11 @@
   padding: 2px;
 }
 
+.Chat .message-image {
+  max-width: 100%;
+  margin-bottom: -3px;
+}
+
 .Chat .message-text {
   margin: 0 10px;
   padding: 2px;
@@ -90,11 +95,36 @@
   height: 30px;
 }
 
-.Chat input {
+.Chat .upload-button {
+  cursor: pointer;
+  background: rgb(239, 239, 239);
+  width: 38px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 2px;
+}
+
+.Chat .upload-button:hover {
+  background: rgb(229, 229, 229);
+  border: 1px solid rgb(79, 79, 79);
+}
+
+.Chat .upload-button:active {
+  border: 1px solid rgb(141, 141, 141);
+}
+
+.Chat .file-input {
+  display: none;
+}
+
+.Chat .text-input {
   min-width: 0;
   flex-grow: 1;
   border: 0;
-  margin-right: 10px;
+  margin: 0 10px;
   outline: none;
   padding: 5px;
   border-radius: 10px;
