@@ -1,7 +1,10 @@
 .GitHub {
   background: #ddd;
-  min-width: 276px;
+  min-width: 256px;
+  width: 256px;
   text-align: center;
+  overflow: auto;
+  padding: 0 10px;
 }
 
 .GitHub > h1 {
