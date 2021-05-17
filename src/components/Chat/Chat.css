@@ -45,6 +45,7 @@
   margin: 0 10px;
   padding: 2px;
   border-radius: 2px;
+  position: relative;
 }
 
 .Chat .message-text:hover {
@@ -58,14 +59,16 @@
 }
 
 .Chat .edit-button {
-  margin: 0;
+  margin: 2px;
   padding: 0;
   height: 20px;
-  float: right;
   background: transparent;
   border: 0;
   height: fit-content;
   border-radius: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .Chat .edit-button:hover {

@@ -2,18 +2,26 @@
   background: #efefef;
   margin: 10px;
   overflow: auto;
-  padding: 5px;
+  padding: 5px 5px 10px 5px;
   border-radius: 5px;
+  box-shadow: 0 0 3px #555;
 }
 
-.Goal h1 {
+.Goal > h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.Goal .end-date {
+  font-size: 14px;
   margin: 0;
 }
 
-.Goal p {
-  margin: 5px 0;
+.Goal .time-left {
+  font-size: 24px;
+  margin: 0 0 5px 0;
 }
 
 .Goal .time-icon {
-  font-size: 12px;
+  font-size: 14px;
 }

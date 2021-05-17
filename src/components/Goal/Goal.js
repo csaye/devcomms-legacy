@@ -36,7 +36,9 @@ function Goal(props) {
   return (
     <div className="Goal">
       <h1>{text}</h1>
-      <p>{`${endDate.toLocaleDateString()}, ${endDate.toLocaleTimeString()}`}</p>
+      <p className="end-date">
+        {`${endDate.toDateString()}, ${endDate.toLocaleTimeString()}`}
+      </p>
       <p className="time-left">
         {Math.floor(timeLeft / DAY_MS)}<span className="time-icon">d</span>
         {Math.floor(timeLeft % DAY_MS / HOUR_MS)}<span className="time-icon">h</span>

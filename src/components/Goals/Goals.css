@@ -6,7 +6,7 @@
   overflow: auto;
 }
 
-.Goals h1 {
+.Goals > h1 {
   margin: 10px 0;
 }
 
