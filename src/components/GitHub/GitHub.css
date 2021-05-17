@@ -19,3 +19,14 @@
 .GitHub .search-button {
   margin: 10px 0;
 }
+
+.GitHub .error-text {
+  color: red;
+}
+
+.GitHub .repo-data {
+  background: #efefef;
+  padding: 5px;
+  border-radius: 2px;
+  box-shadow: 0 0 2px #333;
+}
