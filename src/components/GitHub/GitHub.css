@@ -1,0 +1,18 @@
+.GitHub {
+  background: #ddd;
+  min-width: 276px;
+  text-align: center;
+}
+
+.GitHub > h1 {
+  margin: 10px 0;
+}
+
+.GitHub input {
+  width: 60px;
+  margin: 0 2px;
+}
+
+.GitHub .search-button {
+  margin: 10px 0;
+}

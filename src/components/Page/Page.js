@@ -3,6 +3,7 @@ import Header from '../Header/Header.js';
 import Notes from '../Notes/Notes.js';
 import Goals from '../Goals/Goals.js';
 import Sketch from '../Sketch/Sketch.js';
+import GitHub from '../GitHub/GitHub.js';
 
 import './Page.css';
 
@@ -17,6 +18,7 @@ function Page() {
           <Goals />
         </div>
         <Sketch />
+        <GitHub />
       </div>
     </div>
   );
