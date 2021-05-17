@@ -6,6 +6,10 @@
   border-radius: 5px;
 }
 
+.Goal h1 {
+  margin: 0;
+}
+
 .Goal p {
   margin: 5px 0;
 }

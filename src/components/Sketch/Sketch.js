@@ -5,6 +5,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Sketch.css';
@@ -27,6 +28,7 @@ function Sketch() {
   const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef();
   const sketchRef = firebase.firestore().collection('sketches').doc('sketch');
+  const [sketchData] = useDocumentData(sketchRef);
 
   // updates sketch in firebase
   async function updateSketch() {
@@ -105,6 +107,9 @@ function Sketch() {
     if (!lastCanvasUrl) return;
     loadUrl(lastCanvasUrl);
     setLastCanvasUrl(undefined);
+
+    // update sketch in firebase
+    updateSketch();
   }
 
   // downloads canvas as a png
@@ -124,22 +129,26 @@ function Sketch() {
 
   // gets and sets canvas data
   async function getData() {
-    canvas = canvasRef.current;
-    ctx = canvas.getContext('2d');
 
-    // get sketch from firebase and load
-    sketchRef.get().then(doc => {
-      const docData = doc.data();
-      const url = docData.data;
-      loadUrl(url);
-      setLoaded(true);
-    });
+    // if no sketch data, return
+    if (!sketchData) return;
+
+    // load sketch from firebase
+    const url = sketchData.data;
+    loadUrl(url);
+    setLoaded(true);
   }
 
   // get canvas and context on start
   useEffect(() => {
+    canvas = canvasRef.current;
+    ctx = canvas.getContext('2d');
+  }, []);
+
+  // get data when sketch changes
+  useEffect(() => {
     getData();
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sketchData]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Sketch">
@@ -158,7 +167,16 @@ function Sketch() {
         loaded ?
         <>
           <div className="sketch-settings">
-            <p>Line width: {lineWidth}</p>
+            <div className="indicator-container">
+              <div
+                className={
+                  lineColor === "white" ?
+                  "line-indicator white-selected" :
+                  "line-indicator"
+                }
+                style={{"height": `${lineWidth * 2}px`, "width": `${lineWidth * 2}px`, "background": `${lineColor}`}}
+              />
+            </div>
             <input
               value={lineWidth}
               onChange={e => setLineWidth(e.target.value)}

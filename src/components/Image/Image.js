@@ -4,12 +4,15 @@ import ImageIcon from '@material-ui/icons/Image';
 import PublishIcon from '@material-ui/icons/Publish';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Image.css';
 
 function Image() {
   const storageRef = firebase.storage().ref('images/image');
+  const imageRef = firebase.firestore().collection('images').doc('image');
+  const [imageData] = useDocumentData(imageRef);
 
   const [image, setImage] = useState(undefined);
   const [imageUrl, setImageUrl] = useState(undefined);
@@ -24,8 +27,14 @@ function Image() {
   async function updateImage(e) {
     e.preventDefault();
     if (!image) return;
+
+    // put image in storage
     await storageRef.put(image);
-    getImage();
+
+    // update image reference
+    await imageRef.update({
+      updatedAt: new Date()
+    });
   }
 
   // downloads image
@@ -43,10 +52,10 @@ function Image() {
     link.click();
   }
 
-  // get image on start
+  // get image when data updates
   useEffect(() => {
     getImage();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [imageData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Image">

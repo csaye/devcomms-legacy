@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import DescriptionIcon from '@material-ui/icons/Description';
 
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Notes.css';
@@ -11,6 +12,7 @@ function Notes() {
   const [loaded, setLoaded] = useState(false);
 
   const noteRef = firebase.firestore().collection('notes').doc('note');
+  const [noteData] = useDocumentData(noteRef);
 
   // gets text from firebase document
   async function getText() {
@@ -28,10 +30,10 @@ function Notes() {
     });
   }
 
-  // get text on start
+  // get text when note data changes
   useEffect(() => {
     getText();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [noteData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Notes">

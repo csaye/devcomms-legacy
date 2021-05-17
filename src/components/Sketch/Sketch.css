@@ -16,6 +16,26 @@
   border: 2px solid black;
 }
 
+.Sketch .indicator-container {
+  background: #fff;
+  width: 20px;
+  height: 20px;
+  margin: 0 auto 3px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Sketch .line-indicator {
+  border-radius: 50%;
+}
+
+.Sketch .line-indicator.white-selected {
+  border: 1px solid black;
+  max-height: 18px;
+  max-width: 18px;
+}
+
 .Sketch .sketch-settings {
   margin-top: 10px;
 }
