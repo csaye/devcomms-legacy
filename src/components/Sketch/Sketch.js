@@ -103,13 +103,17 @@ function Sketch() {
     img.src = url;
   }
 
-  function undoCanvas() {
+  async function undoCanvas() {
     if (!lastCanvasUrl) return;
     loadUrl(lastCanvasUrl);
-    setLastCanvasUrl(undefined);
 
-    // update sketch in firebase
-    updateSketch();
+    // update firebase document
+    await sketchRef.update({
+      data: lastCanvasUrl
+    })
+
+    // clear last canvas url
+    setLastCanvasUrl(undefined);
   }
 
   // downloads canvas as a png

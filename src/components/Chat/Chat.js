@@ -11,7 +11,7 @@ import firebase from 'firebase/app';
 import './Chat.css';
 
 const timestampOffset = 120; // delay in seconds before a new header
-const maxMessages = 100; // maximum messages shown at one time
+const maxMessages = 64; // maximum messages shown at one time
 
 const now = new Date();
 const nowDay = now.getDate();
@@ -19,6 +19,8 @@ const nowMonth = now.getMonth();
 const nowYear = now.getFullYear();
 const today = new Date(nowYear, nowMonth, nowDay).setHours(0, 0, 0, 0);
 const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
+
+let pageHidden = false; // whether page is hidden
 
 function Chat() {
   const chatsRef = firebase.firestore().collection('chats');
@@ -82,10 +84,22 @@ function Chat() {
     else return dateTime.toLocaleDateString();
   }
 
-  // scroll to end of messages when messages update
+  // when messages update
   useEffect(() => {
+    // scroll to end of messages
     messagesEnd.current.scrollIntoView();
+    // if hidden, set title
+    if (pageHidden) document.title = 'DevComms (new)'
   }, [messages]);
+
+  // create visibility listener on start
+  useEffect(() => {
+    document.addEventListener("visibilitychange", () => {
+      pageHidden = document.hidden;
+      // if page not hidden, reset title
+      if (!pageHidden) document.title = 'DevComms';
+    });
+  }, []);
 
   return (
     <div className="Chat">
