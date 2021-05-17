@@ -3,7 +3,6 @@ import Header from '../Header/Header.js';
 import Notes from '../Notes/Notes.js';
 import Goals from '../Goals/Goals.js';
 import Sketch from '../Sketch/Sketch.js';
-import Image from '../Image/Image.js';
 
 import './Page.css';
 
@@ -18,7 +17,6 @@ function Page() {
           <Goals />
         </div>
         <Sketch />
-        <Image />
       </div>
     </div>
   );

@@ -6,6 +6,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
 import PublishIcon from '@material-ui/icons/Publish';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
 
 import firebase from 'firebase/app';
 
@@ -98,6 +101,21 @@ function Chat() {
         });
       });
     });
+  }
+
+  // downloads file with given url
+  async function downloadFile(fileUrl, filename) {
+
+    // get object url
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+    const url = await URL.createObjectURL(blob);
+
+    // download from link element
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = url;
+    link.click();
   }
 
   // returns a datetime string for given datetime
@@ -213,9 +231,12 @@ function Chat() {
                                     <input
                                       value={newText}
                                       onChange={e => setNewText(e.target.value)}
+                                      style={{"marginRight": "10px"}}
                                       required
                                     />
-                                    <button type="submit">update</button>
+                                    <button type="submit">
+                                      <CheckIcon />
+                                    </button>
                                   </form> :
                                   <a href={m.url} target="_blank" rel="noreferrer">
                                     {m.filename}
@@ -223,10 +244,18 @@ function Chat() {
                                 }
                               </div>
                               {
+                                m.type !== 'text' &&
+                                <button
+                                  onClick={() => downloadFile(m.url, m.filename)}
+                                >
+                                  <GetAppIcon />
+                                </button>
+                              }
+                              {
                                 deleting ?
                                 <>
                                   <p className="delete-text">Delete message?</p>
-                                  <button onClick={() => setDeleting(false)}>
+                                  <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
                                     cancel
                                   </button>
                                   <button onClick={() => {
@@ -237,10 +266,13 @@ function Chat() {
                                     delete
                                   </button>
                                 </> :
-                                <button className="button" onClick={() => {
-                                  setDeleting(true)
-                                }}>
-                                  delete
+                                <button
+                                  className="button"
+                                  onClick={() => {
+                                    setDeleting(true);
+                                  }}
+                                >
+                                  <DeleteIcon />
                                 </button>
                               }
                             </div>
@@ -290,7 +322,7 @@ function Chat() {
               <button className="close" onClick={close}>&times;</button>
               <div className="header">Uploading File</div>
               <div className="content">
-                <p>{file ? file.name : 'Loading...'}</p>
+                <p>{file ? `${file.name} (${file.type})` : 'Loading...'}</p>
               </div>
               <button onClick={() => {
                 uploadFile();

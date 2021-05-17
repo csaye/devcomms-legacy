@@ -26,12 +26,9 @@
   border: 1px solid #bbb;
   outline: none;
 }
-.modal input {
-  margin-right: 5px;
-}
 .modal .delete-text {
   color: red;
-  margin: 0 0 5px 0;
+  margin: 5px 0;
 }
 
 @keyframes anvil {
