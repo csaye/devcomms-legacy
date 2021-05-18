@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import ReactMarkdown from 'react-markdown';
 
 import Popup from 'reactjs-popup';
 import EditIcon from '@material-ui/icons/Edit';
@@ -10,6 +10,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Chat.css';
@@ -119,23 +120,6 @@ function Chat() {
     link.click();
   }
 
-  function formatText(text) {
-    const res = [];
-    let str = '';
-    let italics = false;
-    for (let i = 0; i < text.length; i++) {
-      const char = text[i];
-      if (char === '*') {
-        if (italics) res.push(<i>{str}</i>);
-        else res.push(str);
-        italics = !italics;
-        str = '';
-      } else str += text[i];
-      if (i === text.length - 1) res.push(str);
-    }
-    return res;
-  }
-
   // returns a datetime string for given datetime
   function getDateTimeString(dateTime) {
 
@@ -193,7 +177,7 @@ function Chat() {
                       <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
                     </p>
                   }
-                  <p
+                  <div
                     className="message-text"
                     onMouseEnter={() => setHovering(m.id)}
                     onMouseLeave={() => setHovering(undefined)}
@@ -201,7 +185,9 @@ function Chat() {
                     {
                       m.type === 'text' ?
                       <>
-                        {formatText(m.text)}
+                        <ReactMarkdown className="markdown-text">
+                          {m.text}
+                        </ReactMarkdown>
                         {
                           m.edited &&
                           <span className="edited-text">(edited)</span>
@@ -301,7 +287,7 @@ function Chat() {
                         }
                       </Popup>
                     }
-                  </p>
+                  </div>
                 </div>
               ) :
               <p className="info-text">No messages yet. Send one below!</p>
