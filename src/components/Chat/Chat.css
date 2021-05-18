@@ -51,6 +51,7 @@
   padding: 2px;
   border-radius: 2px;
   position: relative;
+  white-space: pre-line;
 }
 
 .Chat .message-text:hover {
@@ -126,7 +127,7 @@
   border: 0;
   margin: 0 10px;
   outline: none;
-  padding: 5px;
+  padding: 6px 5px 4px 5px;
   border-radius: 10px;
   height: 20px;
 }

@@ -25,6 +25,7 @@ const today = new Date(nowYear, nowMonth, nowDay).setHours(0, 0, 0, 0);
 const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
 
 let pageHidden = false; // whether page is hidden
+let shiftDown = false; // whether shift key is down
 
 function Chat() {
   const chatsRef = firebase.firestore().collection('chats');
@@ -44,7 +45,7 @@ function Chat() {
 
   // sends current message to firebase
   async function addMessage(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const messageText = text;
     setText('');
 
@@ -118,6 +119,23 @@ function Chat() {
     link.click();
   }
 
+  function formatText(text) {
+    const res = [];
+    let str = '';
+    let italics = false;
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (char === '*') {
+        if (italics) res.push(<i>{str}</i>);
+        else res.push(str);
+        italics = !italics;
+        str = '';
+      } else str += text[i];
+      if (i === text.length - 1) res.push(str);
+    }
+    return res;
+  }
+
   // returns a datetime string for given datetime
   function getDateTimeString(dateTime) {
 
@@ -183,7 +201,7 @@ function Chat() {
                     {
                       m.type === 'text' ?
                       <>
-                        {m.text}
+                        {formatText(m.text)}
                         {
                           m.edited &&
                           <span className="edited-text">(edited)</span>
@@ -228,13 +246,16 @@ function Chat() {
                                     updateMessage(e, m.id);
                                     close();
                                   }}>
-                                    <input
+                                    <textarea
                                       value={newText}
                                       onChange={e => setNewText(e.target.value)}
                                       style={{"marginRight": "10px"}}
                                       required
                                     />
-                                    <button type="submit">
+                                    <button
+                                      type="submit"
+                                      style={{"position": "relative", "bottom": "8px", "height": "38px"}}
+                                    >
                                       <CheckIcon />
                                     </button>
                                   </form> :
@@ -300,10 +321,20 @@ function Chat() {
           onChange={e => setFile(e.target.files[0])}
           className="file-input"
         />
-        <input
+        <textarea
           value={text}
           className="text-input"
           onChange={e => setText(e.target.value)}
+          onKeyDown={e => {
+            if (e.keyCode === 16) shiftDown = true;
+            else if (e.keyCode === 13 && !shiftDown) {
+              e.preventDefault();
+              addMessage();
+            }
+          }}
+          onKeyUp={e => {
+            if (e.keyCode === 16) shiftDown = false;
+          }}
           placeholder="message"
           required
         />
