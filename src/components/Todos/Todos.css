@@ -1,0 +1,7 @@
+.Todos {
+  background: #ddd;
+  height: 100%;
+  width: 276px;
+  text-align: center;
+  overflow: auto;
+}
