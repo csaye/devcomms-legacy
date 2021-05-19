@@ -2,9 +2,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  width: fit-content;
+  min-width: 100%;
 }
 
 .Page .page-content {
   min-height: 0;
   display: flex;
+  flex-grow: 1;
 }

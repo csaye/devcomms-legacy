@@ -14,13 +14,11 @@ function Notes() {
   const noteRef = firebase.firestore().collection('notes').doc('note');
   const [noteData] = useDocumentData(noteRef);
 
-  // gets text from firebase document
+  // gets text from note data
   async function getText() {
-    await noteRef.get().then(doc => {
-      const docData = doc.data();
-      setText(docData.text);
-      setLoaded(true);
-    });
+    if (!noteData) return;
+    setText(noteData.text);
+    setLoaded(true);
   }
 
   // updates firebase document text
@@ -43,11 +41,7 @@ function Notes() {
         <textarea
           value={text}
           className="flex-grow"
-          onChange={e => {
-            const val = e.target.value;
-            setText(val);
-            updateText(val);
-          }}
+          onChange={e => updateText(e.target.value)}
         /> :
         <p>Loading notes...</p>
       }
