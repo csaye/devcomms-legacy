@@ -12,7 +12,9 @@ import './Todos.css';
 
 function Todos() {
   const todosRef = firebase.firestore().collection('todos');
-  const [todos] = useCollectionData(todosRef.orderBy('priority'));
+  const [todos] = useCollectionData(
+    todosRef.orderBy('priority'), { idField: 'id' }
+  );
 
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('0');
@@ -40,18 +42,24 @@ function Todos() {
     <div className="Todos">
       <h1><ListIcon /> Todos</h1>
       <form onSubmit={createTodo}>
+        <label htmlFor="todos-title">Title</label>
         <input
+          id="todos-title"
           value={title}
           onChange={e => setTitle(e.target.value)}
           required
         />
+        <label htmlFor="todos-priority">Priority</label>
         <input
+          id="todos-priority"
           type="number"
           value={priority}
           onChange={e => setPriority(e.target.value)}
           required
         />
-        <button type="submit"><AddIcon /></button>
+        <button type="submit" className="submit-button">
+          <AddIcon />
+        </button>
       </form>
       <div>
         {

@@ -45,8 +45,8 @@ function Goal(props) {
         {Math.floor(timeLeft % DAY_MS % HOUR_MS / MIN_MS)}<span className="time-icon">m</span>
         {Math.floor(timeLeft % DAY_MS % HOUR_MS % MIN_MS / SEC_MS)}<span className="time-icon">s</span>
       </p>
-      <button onClick={deleteGoal}>
-        <CheckIcon />
+      <button onClick={deleteGoal} className="delete-button">
+        <CheckIcon className="check-icon" />
       </button>
     </div>
   );

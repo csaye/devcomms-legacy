@@ -5,6 +5,7 @@
   padding: 5px 5px 10px 5px;
   border-radius: 5px;
   box-shadow: 0 0 3px #555;
+  position: relative;
 }
 
 .Goal > h1 {
@@ -24,4 +25,22 @@
 
 .Goal .time-icon {
   font-size: 14px;
+}
+
+.Goal .delete-button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  margin: 5px;
+  height: 16px;
+  width: 16px;
+}
+
+.Goal .check-icon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  left: -2px;
+  bottom: 1px;
 }

@@ -30,7 +30,6 @@ function Goals() {
 
     // add document to firebase
     goalsRef.add({
-      creatorUid: firebase.auth().currentUser.uid,
       endAt: endDateTime,
       text: goalText
     });
