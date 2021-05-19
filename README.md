@@ -1,8 +1,14 @@
 # DevComms
 
-Development communications.
+Team communication and coordination all in one place.
+
+## About
+
+DevComms aims to simplify and streamline team development. With a collection of helpful widgets, your team can chat, arrange notes, set goals and more all in one place.
 
 ## Available Scripts
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 In the project directory, you can run:
 
