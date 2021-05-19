@@ -5,3 +5,13 @@
   text-align: center;
   overflow: auto;
 }
+
+.Todos > h1 {
+  margin: 10px 0;
+}
+
+.Todos form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

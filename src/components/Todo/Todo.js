@@ -5,8 +5,8 @@ function Todo(props) {
 
   return (
     <div className="Todo">
-      <p>{title}</p>
-      <p>Priority {priority}</p>
+      <h1>{title}</h1>
+      <p className="priority-text">{priority}</p>
     </div>
   );
 }
