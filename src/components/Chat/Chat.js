@@ -135,10 +135,14 @@ function Chat() {
     else return dateTime.toLocaleDateString();
   }
 
+  // scroll to end of messages
+  function chatScroll() {
+    messagesEnd.current.scrollIntoView();
+  }
+
   // when messages update
   useEffect(() => {
-    // scroll to end of messages
-    messagesEnd.current.scrollIntoView();
+    chatScroll();
     // if hidden, set title
     if (pageHidden) document.title = 'DevComms (new)'
   }, [messages]);
@@ -200,6 +204,7 @@ function Chat() {
                             src={m.url}
                             className="message-image"
                             alt=""
+                            onLoad={chatScroll}
                           /> :
                           <>{m.filename}</>
                         }

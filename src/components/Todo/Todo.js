@@ -15,7 +15,7 @@ function Todo(props) {
   return (
     <div className="Todo">
       <h1>{title}</h1>
-      <p className="priority-text">{priority}</p>
+      <p className="priority-text">#{priority}</p>
       <button onClick={deleteTodo} className="delete-button">
         <CheckIcon className="check-icon" />
       </button>

@@ -64,9 +64,15 @@ function Todos() {
       <div>
         {
           todos ?
-          todos.map((t, i) =>
-            <Todo key={`todo-${i}`} data={t} />
-          ) :
+          <>
+            {
+              todos.length > 0 ?
+              todos.map((t, i) =>
+                <Todo key={`todo-${i}`} data={t} />
+              ) :
+              <p>No todos yet.</p>
+            }
+          </> :
           <p>Retrieving todos...</p>
         }
       </div>
