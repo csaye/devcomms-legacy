@@ -3,6 +3,7 @@ import Header from '../Header/Header.js';
 import Notes from '../Notes/Notes.js';
 import Goals from '../Goals/Goals.js';
 import Sketch from '../Sketch/Sketch.js';
+import Todos from '../Todos/Todos.js';
 
 import './Page.css';
 
@@ -10,13 +11,14 @@ function Page() {
   return (
     <div className="Page">
       <Header />
-      <div className="page-content flex-grow">
+      <div className="page-content">
         <Chat />
         <div>
           <Notes />
           <Goals />
         </div>
         <Sketch />
+        <Todos />
       </div>
     </div>
   );
