@@ -5,14 +5,23 @@ import firebase from 'firebase/app';
 import logo from '../../img/logo.png';
 import './Header.css';
 
-function Header() {
+function Header(props) {
+  // exists current group
+  async function exitGroup() {
+    const uid = firebase.auth().currentUser.uid;
+    // set current group to empty string
+    await firebase.firestore().collection('users').doc(uid).update({
+      currentGroup: ''
+    });
+  }
+
   return (
     <div className="Header">
       <h1>DevComms</h1>
       <img className="logo-img" src={logo} alt="logo" />
       <span className="flex-grow" />
-      <p>Signed in as {firebase.auth().currentUser.displayName}</p>
-      <button onClick={() => firebase.auth().signOut()} className="sign-out-button">
+      <p>{firebase.auth().currentUser.displayName} / Group {props.group}</p>
+      <button onClick={exitGroup} className="sign-out-button">
         <ExitToAppIcon />
       </button>
     </div>

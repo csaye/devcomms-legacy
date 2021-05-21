@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
@@ -39,11 +41,12 @@ function Groups() {
       name: groupName,
       owner: uid,
       members: [uid]
-    })
+    });
 
     // set current user group to this
     await firebase.firestore().collection('users').doc(uid).update({
-      currentGroup: groupName
+      currentGroup: groupName,
+      groups: firebase.firestore.FieldValue.arrayUnion(groupName)
     });
   }
 
@@ -61,11 +64,19 @@ function Groups() {
 
   return (
     <div className="Groups">
+      <p>Signed in as {firebase.auth().currentUser.displayName}</p>
+      <button onClick={() => firebase.auth().signOut()} className="sign-out-button">
+        <ExitToAppIcon />
+      </button>
       <h1>Select Group</h1>
       {
         groups ?
         groups.map((g, i) =>
-          <button onClick={() => selectGroup(g)} className={`group-${i}`}>
+          <button
+            key={`groupbutton-${i}`}
+            onClick={() => selectGroup(g)}
+            className={`group-${i}`}
+          >
             {g}
           </button>
         ) :

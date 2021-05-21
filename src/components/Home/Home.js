@@ -4,35 +4,39 @@ import Page from '../Page/Page.js';
 import Groups from '../Groups/Groups.js';
 
 import firebase from 'firebase/app';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 
 import './Home.css';
 
 function Home() {
   const uid = firebase.auth().currentUser.uid;
   const userRef = firebase.firestore().collection('users').doc(uid);
-  const [userData] = useDocumentData(userRef);
+  const [userDoc] = useDocument(userRef);
 
   const [group, setGroup] = useState(undefined);
 
-  function getGroup() {
-    // if no user data
-    if (!userData) {
-      // create document
-      userRef.set({
+  // retrieves current user group
+  async function getGroup() {
+    if (!userDoc) return;
+    // if user doc exists
+    if (userDoc.exists) {
+      // set current group
+      const docData = userDoc.data();
+      setGroup(docData.currentGroup);
+    // if no user document
+    } else {
+      // create user document
+      await userRef.set({
         currentGroup: '',
         groups: []
       });
-    // if user data, set current group
-    } else {
-      setGroup(userData.currentGroup);
     }
   }
 
   // get group when user data changes
   useEffect(() => {
     getGroup();
-  }, [userData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userDoc]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Home">

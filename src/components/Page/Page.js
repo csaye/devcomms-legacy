@@ -7,10 +7,10 @@ import Todos from '../Todos/Todos.js';
 
 import './Page.css';
 
-function Page() {
+function Page(props) {
   return (
     <div className="Page">
-      <Header />
+      <Header group={props.group} />
       <div className="page-content">
         <Chat />
         <div>
