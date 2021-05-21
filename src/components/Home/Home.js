@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Page from '../Page/Page.js';
 import Groups from '../Groups/Groups.js';
+import Loading from '../Loading/Loading.js';
 
 import firebase from 'firebase/app';
 import { useDocument } from 'react-firebase-hooks/firestore';
@@ -49,7 +50,7 @@ function Home() {
             <Groups />
           }
         </> :
-        <p>Loading...</p>
+        <Loading />
       }
     </div>
   );

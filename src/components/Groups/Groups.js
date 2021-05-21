@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import Loading from '../Loading/Loading.js';
+
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
@@ -12,6 +14,7 @@ import './Groups.css';
 function Groups() {
   const [groups, setGroups] = useState(undefined);
   const [groupName, setGroupName] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const groupsRef = firebase.firestore().collection('groups');
@@ -39,6 +42,9 @@ function Groups() {
       return;
     }
 
+    // start loading
+    setLoading(true);
+
     // create group document
     await groupsRef.add({
       name: groupName,
@@ -65,52 +71,56 @@ function Groups() {
 
   return (
     <div className="Groups">
-      <div className="center-box">
-        <h1><GroupIcon /> Groups</h1>
-        <hr />
-        <h2 className="select-text">Select Group</h2>
-        {
-          groups ?
-          <>
-            {
-              groups.length > 0 ?
-              groups.map((g, i) =>
-                <button
-                  key={`groupbutton-${i}`}
-                  onClick={() => selectGroup(g)}
-                  className="group-button"
-                >
-                  {g}
-                </button>
-              ) :
-              <p>No groups</p>
-            }
-          </> :
-          <p>Retrieving groups...</p>
-        }
-        <form onSubmit={createGroup}>
-          <h2 className="create-text">Create Group</h2>
+      {
+        loading ?
+        <Loading /> :
+        <div className="center-box">
+          <h1><GroupIcon /> Groups</h1>
+          <hr />
+          <h2 className="select-text">Select Group</h2>
+          {
+            groups ?
+            <>
+              {
+                groups.length > 0 ?
+                groups.map((g, i) =>
+                  <button
+                    key={`groupbutton-${i}`}
+                    onClick={() => selectGroup(g)}
+                    className="group-button"
+                  >
+                    {g}
+                  </button>
+                ) :
+                <p>No groups</p>
+              }
+            </> :
+            <p>Retrieving groups...</p>
+          }
+          <form onSubmit={createGroup}>
+            <h2 className="create-text">Create Group</h2>
+            <div>
+              <input
+                placeholder="group name"
+                value={groupName}
+                onChange={e => setGroupName(e.target.value)}
+                required
+              />
+              <button className="create-button" type="submit">
+                <AddIcon />
+              </button>
+            </div>
+          </form>
+          {error && <p className="error-text">{error}</p>}
+          <hr />
           <div>
-            <input
-              placeholder="group name"
-              value={groupName}
-              onChange={e => setGroupName(e.target.value)}
-              required
-            />
-            <button className="create-button" type="submit">
-              <AddIcon />
+            <p>Signed in as {firebase.auth().currentUser.displayName}</p>
+            <button onClick={() => firebase.auth().signOut()} className="sign-out-button">
+              <ExitToAppIcon />
             </button>
           </div>
-        </form>
-        {error && <p className="error-text">{error}</p>}
-        <hr />
-        <div>
-          <p>Signed in as {firebase.auth().currentUser.displayName}</p>
-          <button onClick={() => firebase.auth().signOut()} className="sign-out-button">
-            <ExitToAppIcon />
-          </button>
         </div>
-      </div>
+      }
     </div>
   );
 }
