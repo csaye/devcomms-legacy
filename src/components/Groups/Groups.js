@@ -21,12 +21,14 @@ function Groups(props) {
   const [deleting, setDeleting] = useState(false);
 
   const groupsRef = firebase.firestore().collection('groups');
-  const [allGroups] = useCollectionData(groupsRef);
+  const groupsQuery = groupsRef.orderBy('name');
+  const [allGroups] = useCollectionData(groupsQuery);
 
   const uid = firebase.auth().currentUser.uid;
   const userRef = firebase.firestore().collection('users').doc(uid);
   const [userData] = useDocumentData(userRef);
-  const [ownedGroups] = useCollectionData(groupsRef.where('owner', '==', uid));
+  const ownedQuery = groupsRef.where('owner', '==', uid).orderBy('name');
+  const [ownedGroups] = useCollectionData(ownedQuery);
 
   // updates current user group in firebase
   async function selectGroup(group) {
@@ -72,18 +74,41 @@ function Groups(props) {
 
   // deletes group with given name
   async function deleteGroup(group) {
-    await firebase.firestore().collection('groups').doc(group).delete();
+    // delete group doc
+    const groupRef = groupsRef.doc(group);
+    // delete each subcollection
+    const batch = firebase.firestore().batch();
+    const subcollections = ['chats', 'goals', 'notes', 'sketches', 'todos'];
+    for (const subcollection of subcollections) {
+      await groupRef.collection(subcollection).get().then(docs => {
+        docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+      });
+    }
+    batch.delete(groupRef); // delete group document
+    batch.commit(); // commit batch
   }
 
   // set current user groups
   async function getGroups() {
-    if (!userData) return;
-    setGroups(userData.groups);
+    if (!userData || !allGroups) return;
+    // filter out deleted groups
+    const userGroups = userData.groups.filter(g => {
+      return allGroups.length > 0 && !allGroups.some(group => group.name === g.name);
+    });
+    setGroups(userGroups);
+    // update user doc with new groups
+    if (userData.groups.length !== userGroups.length) {
+      await userRef.update({
+        groups: userGroups
+      });
+    }
   }
 
   useEffect(() => {
     getGroups();
-  }, [userData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userData, allGroups]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Groups">
@@ -118,7 +143,7 @@ function Groups(props) {
                 ownedGroups.map((g, i) =>
                   <Popup
                     trigger={
-                      <button>{g.name}</button>
+                      <button className="group-button">{g.name}</button>
                     }
                     key={`grouppopup-${i}`}
                     modal
