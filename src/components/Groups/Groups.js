@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import Loading from '../Loading/Loading.js';
 
+import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
@@ -16,6 +18,7 @@ function Groups() {
   const [groupName, setGroupName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   const groupsRef = firebase.firestore().collection('groups');
   const [allGroups] = useCollectionData(groupsRef);
@@ -23,6 +26,7 @@ function Groups() {
   const uid = firebase.auth().currentUser.uid;
   const userRef = firebase.firestore().collection('users').doc(uid);
   const [userData] = useDocumentData(userRef);
+  const [ownedGroups] = useCollectionData(groupsRef.where('owner', '==', uid));
 
   // updates current user group in firebase
   async function selectGroup(group) {
@@ -66,6 +70,11 @@ function Groups() {
     });
   }
 
+  // deletes group with given name
+  async function deleteGroup(group) {
+    await firebase.firestore().collection('groups').doc(group).delete();
+  }
+
   // set current user groups
   async function getGroups() {
     if (!userData) return;
@@ -84,12 +93,11 @@ function Groups() {
         <div className="center-box">
           <h1><GroupIcon /> Groups</h1>
           <hr />
-          <h2 className="select-text">Select Group</h2>
           {
-            groups ?
+            (groups && groups.length > 0) &&
             <>
+              <h2>Select Group</h2>
               {
-                groups.length > 0 ?
                 groups.map((g, i) =>
                   <button
                     key={`groupbutton-${i}`}
@@ -98,14 +106,64 @@ function Groups() {
                   >
                     {g}
                   </button>
-                ) :
-                <p>No groups</p>
+                )
               }
-            </> :
-            <p>Retrieving groups...</p>
+            </>
+          }
+          {
+            (ownedGroups && ownedGroups.length > 0) &&
+            <>
+              <h2>Edit Group</h2>
+              {
+                ownedGroups.map((g, i) =>
+                  <Popup
+                    trigger={
+                      <button>{g.name}</button>
+                    }
+                    key={`grouppopup-${i}`}
+                    modal
+                  >
+                    {
+                      close => (
+                        <div className="modal">
+                          <button className="close" onClick={close}>&times;</button>
+                          <div className="header">Editing Group</div>
+                          <div className="content">
+                          </div>
+                          {
+                            deleting ?
+                            <>
+                              <p className="delete-text">Delete group?</p>
+                              <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
+                                cancel
+                              </button>
+                              <button onClick={() => {
+                                deleteGroup(g.name);
+                                close();
+                                setDeleting(false);
+                              }}>
+                                delete
+                              </button>
+                            </> :
+                            <button
+                              className="button"
+                              onClick={() => {
+                                setDeleting(true);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </button>
+                          }
+                        </div>
+                      )
+                    }
+                  </Popup>
+                )
+              }
+            </>
           }
           <form onSubmit={createGroup}>
-            <h2 className="create-text">Create Group</h2>
+            <h2>Create Group</h2>
             <div>
               <input
                 placeholder="group name"
