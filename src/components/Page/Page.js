@@ -12,13 +12,13 @@ function Page(props) {
     <div className="Page">
       <Header group={props.group} />
       <div className="page-content">
-        <Chat />
+        <Chat group={props.group} />
         <div>
-          <Notes />
-          <Goals />
+          <Notes group={props.group} />
+          <Goals group={props.group} />
         </div>
-        <Sketch />
-        <Todos />
+        <Sketch group={props.group} />
+        <Todos group={props.group} />
       </div>
     </div>
   );

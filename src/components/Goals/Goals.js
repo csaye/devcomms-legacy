@@ -9,13 +9,14 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import './Goals.css';
 
-function Goals() {
+function Goals(props) {
   const [text, setText] = useState('');
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
 
   // get goals
-  const goalsRef = firebase.firestore().collection('goals');
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const goalsRef = groupRef.collection('goals');
   const goalsQuery = goalsRef.orderBy('endAt');
   const [goals] = useCollectionData(goalsQuery, { idField: 'id' });
 

@@ -5,7 +5,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Sketch.css';
@@ -21,14 +21,17 @@ let ctx;
 
 const lineColors = ['red', 'orange', 'yellow', 'green', 'blue', 'black'];
 
-function Sketch() {
+function Sketch(props) {
   const [lastCanvasUrl, setLastCanvasUrl] = useState(undefined);
   const [lineWidth, setLineWidth] = useState(2);
   const [lineColor, setLineColor] = useState('black');
   const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef();
-  const sketchRef = firebase.firestore().collection('sketches').doc('sketch');
-  const [sketchData] = useDocumentData(sketchRef);
+
+  // get sketch data reference
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const sketchRef = groupRef.collection('sketches').doc('sketch');
+  const [sketchDoc] = useDocument(sketchRef);
 
   // updates sketch in firebase
   async function updateSketch() {
@@ -98,6 +101,7 @@ function Sketch() {
 
   // loads given url onto canvas
   function loadUrl(url) {
+    if (!url) return;
     const img = new Image();
     img.onload = () => ctx.drawImage(img, 0, 0);
     img.src = url;
@@ -133,13 +137,18 @@ function Sketch() {
 
   // gets and sets canvas data
   async function getData() {
-
-    // if no sketch data, return
-    if (!sketchData) return;
-
-    // load sketch from firebase
-    const url = sketchData.data;
-    loadUrl(url);
+    if (!sketchDoc) return;
+    // if sketch doc exists, load data
+    if (sketchDoc.exists) {
+      const docData = sketchDoc.data();
+      const url = docData.data;
+      loadUrl(url);
+    // if no sketch doc, create doc
+    } else {
+      await sketchRef.set({
+        data: ''
+      })
+    }
     setLoaded(true);
   }
 
@@ -149,10 +158,10 @@ function Sketch() {
     ctx = canvas.getContext('2d');
   }, []);
 
-  // get data when sketch changes
+  // get data when sketch doc changes
   useEffect(() => {
     getData();
-  }, [sketchData]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sketchDoc]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Sketch">

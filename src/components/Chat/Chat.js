@@ -28,8 +28,9 @@ const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
 let pageHidden = false; // whether page is hidden
 let shiftDown = false; // whether shift key is down
 
-function Chat() {
-  const chatsRef = firebase.firestore().collection('chats');
+function Chat(props) {
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const chatsRef = groupRef.collection('chats');
   const uid = firebase.auth().currentUser.uid;
 
   const [text, setText] = useState('');

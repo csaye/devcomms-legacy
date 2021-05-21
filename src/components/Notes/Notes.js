@@ -2,22 +2,33 @@ import React, { useEffect, useState } from 'react';
 
 import DescriptionIcon from '@material-ui/icons/Description';
 
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Notes.css';
 
-function Notes() {
+function Notes(props) {
   const [text, setText] = useState('');
   const [loaded, setLoaded] = useState(false);
 
-  const noteRef = firebase.firestore().collection('notes').doc('note');
-  const [noteData] = useDocumentData(noteRef);
+  // get notes reference
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const noteRef = groupRef.collection('notes').doc('note');
+  const [noteDoc] = useDocument(noteRef);
 
   // gets text from note data
   async function getText() {
-    if (!noteData) return;
-    setText(noteData.text);
+    if (!noteDoc) return;
+    // if note exists, get text
+    if (noteDoc.exists) {
+      const docData = noteDoc.data();
+      setText(docData.text);
+    // if note does not exist, create doc
+    } else {
+      await noteRef.set({
+        text: ''
+      });
+    }
     setLoaded(true);
   }
 
@@ -28,10 +39,10 @@ function Notes() {
     });
   }
 
-  // get text when note data changes
+  // get text when note doc changes
   useEffect(() => {
     getText();
-  }, [noteData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [noteDoc]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Notes">

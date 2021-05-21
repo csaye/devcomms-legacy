@@ -34,6 +34,13 @@ function Groups() {
   // attempts to create a group with given name
   async function createGroup(e) {
     e.preventDefault();
+
+    // invalid characters
+    if (groupName.includes('/')) {
+      setError('Group name contains invalid characters.');
+      return;
+    }
+
     // if group already exists with name
     if (allGroups.some(group =>
       group.name.toLowerCase() === groupName.toLowerCase()
@@ -46,7 +53,7 @@ function Groups() {
     setLoading(true);
 
     // create group document
-    await groupsRef.add({
+    await firebase.firestore().collection('groups').doc(groupName).set({
       name: groupName,
       owner: uid,
       members: [uid]
