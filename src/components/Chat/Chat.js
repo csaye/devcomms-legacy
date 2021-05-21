@@ -178,7 +178,7 @@ function Chat(props) {
                       m.timestamp - messages[i - 1].timestamp > timestampOffset // time since last sender
                     ) &&
                     <p className="message-header">
-                      <span className="sender-name">{m.senderName}</span>
+                      <span className="sender-name">@{m.senderName}</span>
                       <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
                     </p>
                   }

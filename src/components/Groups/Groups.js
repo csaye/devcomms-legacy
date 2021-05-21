@@ -74,6 +74,7 @@ function Groups(props) {
 
   // deletes group with given name
   async function deleteGroup(group) {
+    setLoading(true);
     // delete group doc
     const groupRef = groupsRef.doc(group);
     // delete each subcollection
@@ -88,6 +89,7 @@ function Groups(props) {
     }
     batch.delete(groupRef); // delete group document
     batch.commit(); // commit batch
+    setLoading(false);
   }
 
   // set current user groups
@@ -113,13 +115,13 @@ function Groups(props) {
   return (
     <div className="Groups">
       {
-        loading ?
+        (loading || !groups || !ownedGroups) ?
         <Loading /> :
         <div className="center-box">
           <h1><GroupIcon /> Groups</h1>
           <hr />
           {
-            (groups && groups.length > 0) &&
+            groups.length > 0 &&
             <>
               <h2>Select Group</h2>
               {
@@ -136,7 +138,7 @@ function Groups(props) {
             </>
           }
           {
-            (ownedGroups && ownedGroups.length > 0) &&
+            ownedGroups.length > 0 &&
             <>
               <h2>Edit Group</h2>
               {
@@ -154,6 +156,7 @@ function Groups(props) {
                           <button className="close" onClick={close}>&times;</button>
                           <div className="header">Editing Group</div>
                           <div className="content">
+                            <p>{g.name}</p>
                           </div>
                           {
                             deleting ?

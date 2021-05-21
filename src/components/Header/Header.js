@@ -1,4 +1,6 @@
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PersonIcon from '@material-ui/icons/Person';
+import GroupIcon from '@material-ui/icons/Group';
 
 import firebase from 'firebase/app';
 
@@ -20,7 +22,8 @@ function Header(props) {
       <h1>DevComms</h1>
       <img className="logo-img" src={logo} alt="logo" />
       <span className="flex-grow" />
-      <p>@{props.username} / {props.group}</p>
+      <PersonIcon className="header-icon" />@{props.username}
+      <GroupIcon className="header-icon" />{props.group}
       <button onClick={exitGroup} className="sign-out-button">
         <ExitToAppIcon />
       </button>

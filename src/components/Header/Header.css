@@ -13,8 +13,12 @@
   height: 40px;
 }
 
+.Header .header-icon {
+  margin-left: 10px;
+}
+
 .Header .sign-out-button {
-  margin: 0 10px;
+  margin: 0 10px 0 15px;
   padding: 3px 0 0 0;
   width: 34px;
   height: 34px;
