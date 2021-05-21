@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Groups.css';
 
 function Groups() {
   const [groups, setGroups] = useState(undefined);
+  const [groupName, setGroupName] = useState('');
+  const [error, setError] = useState('');
+
+  const groupsRef = firebase.firestore().collection('groups');
+  const [allGroups] = useCollectionData(groupsRef);
 
   const uid = firebase.auth().currentUser.uid;
   const userRef = firebase.firestore().collection('users').doc(uid);
@@ -14,6 +20,30 @@ function Groups() {
   async function selectGroup(group) {
     await userRef.update({
       currentGroup: group
+    });
+  }
+
+  // attempts to create a group with given name
+  async function createGroup(e) {
+    e.preventDefault();
+    // if group already exists with name
+    if (allGroups.some(group =>
+      group.name.toLowerCase() === groupName.toLowerCase()
+    )) {
+      setError('Group with name already exists.');
+      return;
+    }
+
+    // create group document
+    await groupsRef.add({
+      name: groupName,
+      owner: uid,
+      members: [uid]
+    })
+
+    // set current user group to this
+    await firebase.firestore().collection('users').doc(uid).update({
+      currentGroup: groupName
     });
   }
 
@@ -41,6 +71,16 @@ function Groups() {
         ) :
         <p>Retrieving groups...</p>
       }
+      <form onSubmit={createGroup}>
+        <input
+          placeholder="group name"
+          value={groupName}
+          onChange={e => setGroupName(e.target.value)}
+          required
+        />
+        <button type="submit">Create Group</button>
+      </form>
+      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }
