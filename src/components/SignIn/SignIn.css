@@ -26,7 +26,8 @@
   margin: 5px 0 10px 0;
 }
 
-.SignIn button {
-  padding: 10px;
-  transition: 0.25s;
+.SignIn form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
