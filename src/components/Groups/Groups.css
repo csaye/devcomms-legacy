@@ -1,7 +1,46 @@
 .Groups {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.Groups .center-box {
+  background: #ddd;
+  border-radius: 5px;
+  padding: 20px 40px;
+  box-shadow: 0 0 3px #333;
+  text-align: center;
+}
+
+.Groups h1 {
+  margin: 0;
+}
+
+.Groups h2 {
+  margin: 10px 0;
+}
+
+.Groups p {
+  margin: 10px 0;
+}
+
+.Groups .group-button {
+  margin: 0 3px;
 }
 
 .Groups .error-text {
   color: red;
+}
+
+.Groups form input {
+  margin: 0 5px 5px 0;
+  position: relative;
+  bottom: 5px;
+}
+
+.Groups .sign-out-button {
+  padding: 3px 0 0 0;
+  width: 34px;
+  height: 34px;
 }
