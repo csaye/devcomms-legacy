@@ -57,7 +57,7 @@ function Chat(props) {
       edited: false,
       type: 'text',
       timestamp: new Date(),
-      senderName: firebase.auth().currentUser.displayName,
+      senderName: props.username,
       senderUid: uid
     });
   }
@@ -99,7 +99,7 @@ function Chat(props) {
           type: isImage ? 'image' : 'file',
           filename: file.name,
           timestamp: new Date(),
-          senderName: firebase.auth().currentUser.displayName,
+          senderName: props.username,
           senderUid: uid
         });
       });

@@ -75,6 +75,7 @@ function SignIn() {
     const uid = firebase.auth().currentUser.uid;
     await firebase.firestore().collection('users').doc(uid).set({
       username: username,
+      uid: uid,
       registered: new Date(),
       currentGroup: '',
       groups: []
@@ -90,6 +91,7 @@ function SignIn() {
         {
           signingUp ?
           <form onSubmit={signUp}>
+            <h2>Sign Up</h2>
             <input
               placeholder="email"
               type="email"
@@ -113,6 +115,7 @@ function SignIn() {
             <button type="submit">Sign Up</button>
           </form> :
           <form onSubmit={signIn}>
+            <h2>Sign In</h2>
             <input
               placeholder="email"
               type="email"
@@ -132,11 +135,11 @@ function SignIn() {
         }
         {
           signingUp ?
-          <button onClick={() => {
+          <button className="switch-button" onClick={() => {
             setError('');
             setSigningUp(false);
           }}>Have an account? Sign in</button> :
-          <button onClick={() => {
+          <button className="switch-button" onClick={() => {
             setError('');
             setSigningUp(true);
           }}>No account? Sign up</button>

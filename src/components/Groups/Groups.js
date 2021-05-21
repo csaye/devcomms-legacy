@@ -13,7 +13,7 @@ import firebase from 'firebase/app';
 
 import './Groups.css';
 
-function Groups() {
+function Groups(props) {
   const [groups, setGroups] = useState(undefined);
   const [groupName, setGroupName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -179,7 +179,7 @@ function Groups() {
           {error && <p className="error-text">{error}</p>}
           <hr />
           <div>
-            <p>Signed in as {firebase.auth().currentUser.displayName}</p>
+            <p>Signed in as @{props.username}</p>
             <button onClick={() => firebase.auth().signOut()} className="sign-out-button">
               <ExitToAppIcon />
             </button>

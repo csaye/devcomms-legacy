@@ -10,9 +10,9 @@ import './Page.css';
 function Page(props) {
   return (
     <div className="Page">
-      <Header group={props.group} />
+      <Header group={props.group} username={props.username} />
       <div className="page-content">
-        <Chat group={props.group} />
+        <Chat group={props.group} username={props.username} />
         <div>
           <Notes group={props.group} />
           <Goals group={props.group} />

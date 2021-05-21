@@ -20,7 +20,7 @@ function Header(props) {
       <h1>DevComms</h1>
       <img className="logo-img" src={logo} alt="logo" />
       <span className="flex-grow" />
-      <p>{firebase.auth().currentUser.displayName} / Group {props.group}</p>
+      <p>@{props.username} / {props.group}</p>
       <button onClick={exitGroup} className="sign-out-button">
         <ExitToAppIcon />
       </button>

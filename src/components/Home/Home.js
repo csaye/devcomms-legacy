@@ -5,39 +5,27 @@ import Groups from '../Groups/Groups.js';
 import Loading from '../Loading/Loading.js';
 
 import firebase from 'firebase/app';
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 import './Home.css';
 
 function Home() {
   const uid = firebase.auth().currentUser.uid;
   const userRef = firebase.firestore().collection('users').doc(uid);
-  const [userDoc] = useDocument(userRef);
+  const [userData] = useDocumentData(userRef);
 
   const [group, setGroup] = useState(undefined);
 
   // retrieves current user group
   async function getGroup() {
-    if (!userDoc) return;
-    // if user doc exists
-    if (userDoc.exists) {
-      // set current group
-      const docData = userDoc.data();
-      setGroup(docData.currentGroup);
-    // if no user document
-    } else {
-      // create user document
-      await userRef.set({
-        currentGroup: '',
-        groups: []
-      });
-    }
+    if (!userData) return;
+    setGroup(userData.currentGroup);
   }
 
   // get group when user data changes
   useEffect(() => {
     getGroup();
-  }, [userDoc]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Home">
@@ -46,8 +34,8 @@ function Home() {
         <>
           {
             group ?
-            <Page group={group} /> :
-            <Groups />
+            <Page group={group} username={userData.username} /> :
+            <Groups username={userData.username} />
           }
         </> :
         <Loading />
