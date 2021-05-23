@@ -19,6 +19,7 @@ function Groups(props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [member, setMember] = useState('');
 
   const groupsRef = firebase.firestore().collection('groups');
   const groupsQuery = groupsRef.orderBy('name');
@@ -92,13 +93,29 @@ function Groups(props) {
     setLoading(false);
   }
 
+  // adds member to given group
+  async function addMember(e, group) {
+    e.preventDefault();
+    const newMember = member;
+    setMember('');
+    // retrieve new member uid
+    const usersDocs = await firebase.firestore().collection('users').get();
+    const usersData = usersDocs.docs.map(doc => doc.data());
+    if (!usersData.some(userData => userData.username === newMember)) return;
+    const memberUid = usersData.filter(userData => userData.username === newMember)[0].uid;
+    // update document in firebase
+    await firebase.firestore().collection('groups').doc(group).update({
+      members: firebase.firestore.FieldValue.arrayUnion(memberUid)
+    });
+  }
+
   // set current user groups
   async function getGroups() {
     if (!userData || !allGroups) return;
-    // filter out deleted groups
-    const userGroups = userData.groups.filter(g => {
-      return allGroups.length > 0 && !allGroups.some(group => group.name === g.name);
-    });
+    // retrieve user groups
+    const userGroups = allGroups.filter(g => {
+      return g.members.includes(uid);
+    }).map(g => g.name);
     setGroups(userGroups);
     // update user doc with new groups
     if (userData.groups.length !== userGroups.length) {
@@ -156,8 +173,35 @@ function Groups(props) {
                           <button className="close" onClick={close}>&times;</button>
                           <div className="header">Editing Group</div>
                           <div className="content">
-                            <p>{g.name}</p>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}
+                            >
+                              <GroupIcon />{g.name}
+                            </div>
                           </div>
+                          Add member
+                          <form
+                            onSubmit={e => addMember(e, g.name)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <input
+                              placeholder="username"
+                              value={member}
+                              onChange={e => setMember(e.target.value)}
+                              style={{
+                                marginRight: '5px'
+                              }}
+                              required
+                            />
+                            <button type="submit"><AddIcon /></button>
+                          </form>
                           {
                             deleting ?
                             <>
@@ -177,6 +221,9 @@ function Groups(props) {
                               className="button"
                               onClick={() => {
                                 setDeleting(true);
+                              }}
+                              style={{
+                                marginTop: '10px'
                               }}
                             >
                               <DeleteIcon />
