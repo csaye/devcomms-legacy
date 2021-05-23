@@ -9,6 +9,7 @@ import './SignIn.css';
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const [signingUp, setSigningUp] = useState(false);
@@ -47,6 +48,11 @@ function SignIn() {
     e.preventDefault();
     setError('');
 
+    // verify password confirmation
+    if (password !== confirmPassword) {
+      setError("Passwords must match.");
+      return;
+    }
     // verify username chars
     if (!/^[A-Za-z0-9_]+$/.test(username)) {
       setError("Username can only contain alphanumeric characters and underscore.");
@@ -92,13 +98,23 @@ function SignIn() {
           signingUp ?
           <form onSubmit={signUp}>
             <h2>Sign Up</h2>
+            <label htmlFor="signup-email">Email</label>
             <input
-              placeholder="email"
+              id="signup-email"
+              placeholder="example@domain.com"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
             />
+            <label htmlFor="signup-username">Username</label>
+            <input
+              placeholder="username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
+            />
+            <label htmlFor="signup-username">Password</label>
             <input
               placeholder="password"
               type="password"
@@ -107,23 +123,28 @@ function SignIn() {
               required
             />
             <input
-              placeholder="username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              placeholder="confirm password"
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
               required
             />
             <button type="submit">Sign Up</button>
           </form> :
           <form onSubmit={signIn}>
             <h2>Sign In</h2>
+            <label htmlFor="signin-email">Email</label>
             <input
+              id="signin-email"
               placeholder="email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
             />
+            <label htmlFor="signin-password">Password</label>
             <input
+              id="signin-password"
               placeholder="password"
               type="password"
               value={password}
@@ -133,6 +154,8 @@ function SignIn() {
             <button type="submit">Sign In</button>
           </form>
         }
+        {error && <p className="error-text">{error}</p>}
+        <hr className="bottom-hr" />
         {
           signingUp ?
           <button className="switch-button" onClick={() => {
@@ -144,7 +167,6 @@ function SignIn() {
             setSigningUp(true);
           }}>No account? Sign up</button>
         }
-        {error && <p className="error-text">{error}</p>}
       </div>
     </div>
   );

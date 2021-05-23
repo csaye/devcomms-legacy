@@ -36,6 +36,27 @@
   align-items: center;
 }
 
-.SignIn .switch-button {
-  margin-top: 15px;
+.SignIn form input {
+  display: block;
+}
+
+.SignIn label {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.SignIn label:first-of-type {
+  margin-top: 0;
+}
+
+.SignIn form button {
+  margin-top: 10px;
+}
+
+.SignIn .error-text {
+  margin: 10px 0 0 0;
+}
+
+.SignIn .bottom-hr {
+  margin: 15px 0;
 }
