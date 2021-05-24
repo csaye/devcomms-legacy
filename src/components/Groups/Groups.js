@@ -25,8 +25,10 @@ function Groups(props) {
   const groupsQuery = groupsRef.orderBy('name');
   const [allGroups] = useCollectionData(groupsQuery);
 
+  const usersRef = firebase.firestore().collection('users');
+  const [usersData] = useCollectionData(usersRef);
   const uid = firebase.auth().currentUser.uid;
-  const userRef = firebase.firestore().collection('users').doc(uid);
+  const userRef = usersRef.doc(uid);
   const [userData] = useDocumentData(userRef);
   const ownedQuery = groupsRef.where('owner', '==', uid).orderBy('name');
   const [ownedGroups] = useCollectionData(ownedQuery);
@@ -93,6 +95,12 @@ function Groups(props) {
     setLoading(false);
   }
 
+  // gets a username from user id
+  function getUsername(userId) {
+    const matches = usersData.filter(user => user.uid === userId);
+    return matches.length === 0 ? null : matches[0].username;
+  }
+
   // adds member to given group
   async function addMember(e, group) {
     e.preventDefault();
@@ -102,7 +110,7 @@ function Groups(props) {
     const usersDocs = await firebase.firestore().collection('users').get();
     const usersData = usersDocs.docs.map(doc => doc.data());
     if (!usersData.some(userData => userData.username === newMember)) return;
-    const memberUid = usersData.filter(userData => userData.username === newMember)[0].uid;
+    const memberUid = usersData.filter(user => user.username === newMember)[0].uid;
     // update document in firebase
     await firebase.firestore().collection('groups').doc(group).update({
       members: firebase.firestore.FieldValue.arrayUnion(memberUid)
@@ -171,19 +179,27 @@ function Groups(props) {
                       close => (
                         <div className="modal">
                           <button className="close" onClick={close}>&times;</button>
-                          <div className="header">Editing Group</div>
-                          <div className="content">
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                              }}
-                            >
-                              <GroupIcon />{g.name}
-                            </div>
+                          <div
+                            className="header"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                          Editing
+                          <GroupIcon style={{marginLeft: '5px'}} />
+                          {g.name}
                           </div>
-                          Add member
+                          <p>Members</p>
+                          {
+                            g.members.map((m, i) =>
+                              <p key={`groupmember-${i}`} style={{margin: '0'}}>
+                                - {getUsername(m)}
+                              </p>
+                            )
+                          }
+                          <p>Add member</p>
                           <form
                             onSubmit={e => addMember(e, g.name)}
                             style={{
