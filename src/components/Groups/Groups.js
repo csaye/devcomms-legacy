@@ -6,6 +6,7 @@ import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
+import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
@@ -107,13 +108,20 @@ function Groups(props) {
     const newMember = member;
     setMember('');
     // retrieve new member uid
-    const usersDocs = await firebase.firestore().collection('users').get();
-    const usersData = usersDocs.docs.map(doc => doc.data());
-    if (!usersData.some(userData => userData.username === newMember)) return;
-    const memberUid = usersData.filter(user => user.username === newMember)[0].uid;
+    const matches = usersData.filter(user => user.username === newMember);
+    if (matches.length === 0) return;
+    const memberUid = matches[0].uid;
     // update document in firebase
     await firebase.firestore().collection('groups').doc(group).update({
       members: firebase.firestore.FieldValue.arrayUnion(memberUid)
+    });
+  }
+
+  // removes given member from given group
+  async function removeMember(group, member) {
+    // update document in firebase
+    await firebase.firestore().collection('groups').doc(group).update({
+      members: firebase.firestore.FieldValue.arrayRemove(member)
     });
   }
 
@@ -194,9 +202,29 @@ function Groups(props) {
                           <p>Members</p>
                           {
                             g.members.map((m, i) =>
-                              <p key={`groupmember-${i}`} style={{margin: '0'}}>
-                                - {getUsername(m)}
-                              </p>
+                              <div key={`groupmember-${i}`}>
+                                <p style={{margin: '0'}}>
+                                  <PersonIcon
+                                    style={{
+                                      position: 'relative', top: '7px',
+                                      marginRight: '-4px'
+                                    }}
+                                  /> {getUsername(m)}
+                                  {
+                                    m !== uid &&
+                                    <button
+                                      onClick={() => removeMember(g.name, m)}
+                                      style={{
+                                        margin: '0', padding: '0', border: '0',
+                                        width: '0', height: '0',
+                                        position: 'relative', top: '7px'
+                                      }}
+                                    >
+                                      <DeleteIcon />
+                                    </button>
+                                  }
+                                </p>
+                              </div>
                             )
                           }
                           <p>Add member</p>
