@@ -6,7 +6,21 @@ Try it here: [csaye.com/devcomms](https://csaye.com/devcomms)
 
 ## About
 
-DevComms aims to simplify and streamline team development. With a collection of helpful, synchronized widgets, your team can chat, arrange notes, set goals and more all in one place.
+DevComms aims to simplify and streamline team development. With a collection of helpful, synchronized widgets, your team can chat, arrange notes, set goals, and more all in one place.
+
+### Features
+
+- Create group as owner and manage group members
+- Switch between groups and keep data separate
+- Feature-rich chat with Markdown styling and file uploads
+- Automatically stored and synchronized data
+
+### Widgets
+
+- Synchronized notes widget with character-by-character updates
+- Synchronized sketch widget for team visualization
+- Synchronized goals widget with built-in countdown timer
+- Synchronized todo widget with priority sorting
 
 ## Available Scripts
 
