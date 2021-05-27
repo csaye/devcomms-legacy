@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import Background from '../Background/Background.js';
 import SignIn from '../SignIn/SignIn.js';
 import Home from '../Home/Home.js';
 import Loading from '../Loading/Loading.js';
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <div className="App">
+      <Background />
       {
         loaded ?
         <>

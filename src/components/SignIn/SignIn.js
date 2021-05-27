@@ -101,7 +101,7 @@ function SignIn() {
             <label htmlFor="signup-email">Email</label>
             <input
               id="signup-email"
-              placeholder="example@domain.com"
+              placeholder="email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
