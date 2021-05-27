@@ -19,6 +19,7 @@ function Groups(props) {
   const [groupName, setGroupName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [addError, setAddError] = useState('');
   const [deleting, setDeleting] = useState(false);
   const [member, setMember] = useState('');
 
@@ -109,7 +110,11 @@ function Groups(props) {
     setMember('');
     // retrieve new member uid
     const matches = usersData.filter(user => user.username === newMember);
-    if (matches.length === 0) return;
+    if (matches.length === 0) {
+      setAddError(`No user @${newMember} found`)
+      setTimeout(() => setAddError(''), 2000);
+      return;
+    }
     const memberUid = matches[0].uid;
     // update document in firebase
     await firebase.firestore().collection('groups').doc(group).update({
@@ -199,35 +204,41 @@ function Groups(props) {
                           <GroupIcon style={{marginLeft: '5px'}} />
                           {g.name}
                           </div>
-                          <p>Members</p>
+                          <p style={{margin: '15px 0 5px 0'}}><u>Members</u></p>
                           {
-                            g.members.map((m, i) =>
-                              <div key={`groupmember-${i}`}>
-                                <p style={{margin: '0'}}>
-                                  <PersonIcon
+                            g.members.sort().map((m, i) =>
+                              <div
+                                key={`groupmember-${i}`}
+                                style={{
+                                  height: '30px',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center'
+                                }}
+                              >
+                                <PersonIcon
+                                  style={{
+
+                                  }}
+                                /> {getUsername(m)}
+                                {
+                                  m !== uid &&
+                                  <button
+                                    onClick={() => removeMember(g.name, m)}
                                     style={{
-                                      position: 'relative', top: '7px',
-                                      marginRight: '-4px'
+                                      border: '0',
+                                      background: 'transparent',
+                                      margin: '0', padding: '0'
                                     }}
-                                  /> {getUsername(m)}
-                                  {
-                                    m !== uid &&
-                                    <button
-                                      onClick={() => removeMember(g.name, m)}
-                                      style={{
-                                        margin: '0', padding: '0', border: '0',
-                                        width: '0', height: '0',
-                                        position: 'relative', top: '7px'
-                                      }}
-                                    >
-                                      <DeleteIcon />
-                                    </button>
-                                  }
-                                </p>
+                                  >
+                                    <DeleteIcon />
+                                  </button>
+                                }
                               </div>
                             )
                           }
-                          <p>Add member</p>
+                          <hr />
+                          <p style={{margin: '15px 0 5px 0'}}><u>Add member</u></p>
                           <form
                             onSubmit={e => addMember(e, g.name)}
                             style={{
@@ -246,6 +257,15 @@ function Groups(props) {
                             />
                             <button type="submit"><AddIcon /></button>
                           </form>
+                          {
+                            addError && <p
+                              className="error-text"
+                              style={{margin: '5px 0'}}
+                              >
+                                {addError}
+                              </p>
+                          }
+                          <hr style={{marginBottom: '0'}} />
                           {
                             deleting ?
                             <>
