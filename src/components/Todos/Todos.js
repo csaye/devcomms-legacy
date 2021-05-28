@@ -70,7 +70,7 @@ function Todos(props) {
             {
               todos.length > 0 ?
               todos.map((t, i) =>
-                <Todo key={`todo-${i}`} data={t} />
+                <Todo key={`todo-${i}`} data={t} group={props.group} />
               ) :
               <p>No todos yet.</p>
             }

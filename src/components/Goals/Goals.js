@@ -70,7 +70,7 @@ function Goals(props) {
           {
             goals.length > 0 ?
             goals.map((g, i) =>
-              <Goal key={`goal-${i}`} data={g} />
+              <Goal key={`goal-${i}`} data={g} group={props.group} />
             ) :
             <p>No goals yet.</p>
           }

@@ -7,9 +7,12 @@ import './Todo.css';
 function Todo(props) {
   const { id, title, priority } = props.data;
 
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const todosRef = groupRef.collection('todos');
+
   // deletes todo from firebase
   async function deleteTodo() {
-    await firebase.firestore().collection('todos').doc(id).delete();
+    await todosRef.doc(id).delete();
   }
 
   return (

@@ -23,6 +23,10 @@
   margin: 0 0 5px 0;
 }
 
+.Goal .overdue-text {
+  color: red;
+}
+
 .Goal .time-icon {
   font-size: 14px;
 }

@@ -17,7 +17,8 @@ function Goal(props) {
 
   const [timeLeft, setTimeLeft] = useState(endDate - new Date());
 
-  const goalsRef = firebase.firestore().collection('goals');
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const goalsRef = groupRef.collection('goals');
 
   // deletes goal document from firebase
   async function deleteGoal() {
@@ -40,10 +41,22 @@ function Goal(props) {
         {`${endDate.toDateString()}, ${endDate.toLocaleTimeString()}`}
       </p>
       <p className="time-left">
-        {Math.floor(timeLeft / DAY_MS)}<span className="time-icon">d</span>
-        {Math.floor(timeLeft % DAY_MS / HOUR_MS)}<span className="time-icon">h</span>
-        {Math.floor(timeLeft % DAY_MS % HOUR_MS / MIN_MS)}<span className="time-icon">m</span>
-        {Math.floor(timeLeft % DAY_MS % HOUR_MS % MIN_MS / SEC_MS)}<span className="time-icon">s</span>
+        {
+          timeLeft >= 0 ?
+          <>
+            {timeLeft > DAY_MS && <>{Math.floor(timeLeft / DAY_MS)}<span className="time-icon">d</span></>}
+            {timeLeft > HOUR_MS && <>{Math.floor(timeLeft % DAY_MS / HOUR_MS)}<span className="time-icon">h</span></>}
+            {timeLeft > MIN_MS && <>{Math.floor(timeLeft % DAY_MS % HOUR_MS / MIN_MS)}<span className="time-icon">m</span></>}
+            {Math.floor(timeLeft % DAY_MS % HOUR_MS % MIN_MS / SEC_MS)}<span className="time-icon">s</span>
+          </> :
+          <span className="overdue-text">
+            {-timeLeft > DAY_MS && <>{Math.floor(-timeLeft / DAY_MS)}<span className="time-icon">d</span></>}
+            {-timeLeft > HOUR_MS && <>{Math.floor(-timeLeft % DAY_MS / HOUR_MS)}<span className="time-icon">h</span></>}
+            {-timeLeft > MIN_MS && <>{Math.floor(-timeLeft % DAY_MS % HOUR_MS / MIN_MS)}<span className="time-icon">m</span></>}
+            {Math.floor(-timeLeft % DAY_MS % HOUR_MS % MIN_MS / SEC_MS)}<span className="time-icon">s</span>
+            {' '}ago
+          </span>
+        }
       </p>
       <button onClick={deleteGoal} className="delete-button">
         <CheckIcon className="check-icon" />
