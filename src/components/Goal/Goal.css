@@ -48,3 +48,11 @@
   left: -2px;
   bottom: 1px;
 }
+
+.Goal .edit-icon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  right: 2px;
+  bottom: 2px;
+}

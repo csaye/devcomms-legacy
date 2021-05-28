@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Popup from 'reactjs-popup';
 
 import CheckIcon from '@material-ui/icons/Check';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import firebase from 'firebase/app';
 
@@ -15,14 +18,52 @@ function Goal(props) {
   const { text, id, endAt } = props.data;
   const endDate = endAt.toDate();
 
+  function formatDate(d) {
+    let year = d.getFullYear().toString();
+    let month = (d.getMonth() + 1).toString();
+    let day = d.getDate().toString();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  function formatTime(d) {
+    let hour = d.getHours().toString();
+    let minute = d.getMinutes().toString();
+
+    if (hour.length < 2) hour = '0' + hour;
+    if (minute.length < 2) minute = '0' + minute;
+
+    return [hour, minute].join(':');
+  }
+
+  const [deleting, setDeleting] = useState(false);
+  const [newText, setNewText] = useState(text);
+  const [newEndDate, setNewEndDate] = useState(formatDate(endDate));
+  const [newEndTime, setNewEndTime] = useState(formatTime(endDate));
+
   const [timeLeft, setTimeLeft] = useState(endDate - new Date());
 
   const groupRef = firebase.firestore().collection('groups').doc(props.group);
   const goalsRef = groupRef.collection('goals');
+  const goalRef = goalsRef.doc(id);
 
   // deletes goal document from firebase
   async function deleteGoal() {
-    await goalsRef.doc(id).delete();
+    await goalRef.delete();
+  }
+
+  // creates a goal document in firebase
+  function updateGoal() {
+    const endDateTime = new Date(`${newEndDate} ${newEndTime}`);
+
+    // add document to firebase
+    goalRef.update({
+      endAt: endDateTime,
+      text: newText
+    });
   }
 
   useEffect(() => {
@@ -58,9 +99,89 @@ function Goal(props) {
           </span>
         }
       </p>
-      <button onClick={deleteGoal} className="delete-button">
-        <CheckIcon className="check-icon" />
-      </button>
+      <Popup
+        trigger={
+          <button className="delete-button">
+            <EditIcon className="edit-icon" />
+          </button>
+        }
+        modal
+      >
+        {
+          close => (
+            <div className="modal">
+              <button className="close" onClick={close}>&times;</button>
+              <div className="header">Editing Todo</div>
+              <div className="content">
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    updateGoal();
+                    close();
+                  }}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                  }}
+                >
+                  <input
+                    placeholder="title"
+                    value={newText}
+                    onChange={e => setNewText(e.target.value)}
+                    style={{width: '145px'}}
+                    required
+                  />
+                  <input
+                    type="date"
+                    value={newEndDate}
+                    onChange={e => setNewEndDate(e.target.value)}
+                    required
+                  />
+                  <input
+                    type="time"
+                    value={newEndTime}
+                    onChange={e => setNewEndTime(e.target.value)}
+                    style={{width: '148px'}}
+                    required
+                  />
+                  <button
+                    type="submit"
+                    style={{margin: '10px 0 0 0'}}
+                  >
+                    <CheckIcon />
+                  </button>
+                </form>
+              </div>
+              <hr style={{margin: '0 0 10px 0'}} />
+              {
+                deleting ?
+                <>
+                  <p className="delete-text">Delete goal?</p>
+                  <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
+                    cancel
+                  </button>
+                  <button onClick={() => {
+                    deleteGoal();
+                    close();
+                    setDeleting(false);
+                  }}>
+                    delete
+                  </button>
+                </> :
+                <button
+                  className="button"
+                  onClick={() => {
+                    setDeleting(true);
+                  }}
+                >
+                  <DeleteIcon />
+                </button>
+              }
+            </div>
+          )
+        }
+      </Popup>
     </div>
   );
 }
