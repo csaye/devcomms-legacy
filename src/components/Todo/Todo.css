@@ -34,10 +34,10 @@
   width: 16px;
 }
 
-.Todo .check-icon {
+.Todo .edit-icon {
   width: 16px;
   height: 16px;
   position: relative;
-  left: -2px;
-  bottom: 1px;
+  right: 2px;
+  bottom: 2px;
 }
