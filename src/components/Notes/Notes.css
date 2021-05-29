@@ -15,4 +15,8 @@
 .Notes textarea {
   flex-grow: 1;
   margin: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  outline: none;
+  padding: 5px;
 }

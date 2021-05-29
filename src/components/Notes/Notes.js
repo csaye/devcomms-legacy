@@ -34,6 +34,7 @@ function Notes(props) {
 
   // updates firebase document text
   async function updateText(newText) {
+    setText(newText);
     await noteRef.update({
       text: newText
     });

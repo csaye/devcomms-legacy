@@ -125,20 +125,25 @@ function Goal(props) {
                     alignItems: 'center'
                   }}
                 >
+                  <label htmlFor="goal-newtitle">Title</label>
                   <input
+                    id="goal-newtitle"
                     placeholder="title"
-                    value={newText}
-                    onChange={e => setNewText(e.target.value)}
-                    style={{width: '145px'}}
+                    value={newTitle}
+                    onChange={e => setNewTitle(e.target.value)}
                     required
                   />
+                  <label htmlFor="goal-newdate">Date</label>
                   <input
+                    id="goal-newdate"
                     type="date"
                     value={newEndDate}
                     onChange={e => setNewEndDate(e.target.value)}
                     required
                   />
+                  <label htmlFor="goal-newtime">Time</label>
                   <input
+                    id="goal-newtime"
                     type="time"
                     value={newEndTime}
                     onChange={e => setNewEndTime(e.target.value)}

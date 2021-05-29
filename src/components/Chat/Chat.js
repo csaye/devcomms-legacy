@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-
 import Popup from 'reactjs-popup';
+
 import EditIcon from '@material-ui/icons/Edit';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -264,6 +264,7 @@ function Chat(props) {
                                   <GetAppIcon />
                                 </button>
                               }
+                              <hr style={{margin: '-5px 0 10px 0'}} />
                               {
                                 deleting ?
                                 <>

@@ -30,6 +30,17 @@
   color: red;
   margin: 5px 0;
 }
+.modal hr {
+  border: 1px solid gray;
+  border-bottom: 0;
+}
+.modal label {
+  font-size: 12px;
+  margin: 5px 0 0 0;
+}
+.modal label:first-of-type {
+  margin: 0;
+}
 
 @keyframes anvil {
   0% {
