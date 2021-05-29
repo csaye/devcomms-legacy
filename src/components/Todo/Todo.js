@@ -19,15 +19,16 @@ function Todo(props) {
   // get reference to todos collection
   const groupRef = firebase.firestore().collection('groups').doc(props.group);
   const todosRef = groupRef.collection('todos');
+  const todoRef = todosRef.doc(id);
 
   // deletes todo from firebase
   async function deleteTodo() {
-    await todosRef.doc(id).delete();
+    await todoRef.delete();
   }
 
   // updates todo with new values
   async function updateTodo() {
-    await todosRef.doc(id).update({
+    await todoRef.update({
       title: newTitle,
       priority: newPriority
     });

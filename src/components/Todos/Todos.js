@@ -43,10 +43,12 @@ function Todos(props) {
   return (
     <div className="Todos">
       <h1><ListIcon /> Todos</h1>
+      <hr />
       <form onSubmit={createTodo}>
         <label htmlFor="todos-title">Title</label>
         <input
           id="todos-title"
+          placeholder="title"
           value={title}
           onChange={e => setTitle(e.target.value)}
           required
@@ -54,6 +56,7 @@ function Todos(props) {
         <label htmlFor="todos-priority">Priority</label>
         <input
           id="todos-priority"
+          placeholder="priority"
           type="number"
           value={priority}
           onChange={e => setPriority(e.target.value)}
@@ -63,6 +66,7 @@ function Todos(props) {
           <AddIcon />
         </button>
       </form>
+      <hr />
       <div>
         {
           todos ?
