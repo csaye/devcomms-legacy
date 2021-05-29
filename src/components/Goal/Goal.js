@@ -15,7 +15,7 @@ const HOUR_MS = MIN_MS * 60;
 const DAY_MS = HOUR_MS * 24;
 
 function Goal(props) {
-  const { text, id, endAt } = props.data;
+  const { title, id, endAt } = props.data;
   const endDate = endAt.toDate();
 
   function formatDate(d) {
@@ -40,7 +40,7 @@ function Goal(props) {
   }
 
   const [deleting, setDeleting] = useState(false);
-  const [newText, setNewText] = useState(text);
+  const [newTitle, setNewTitle] = useState(title);
   const [newEndDate, setNewEndDate] = useState(formatDate(endDate));
   const [newEndTime, setNewEndTime] = useState(formatTime(endDate));
 
@@ -62,7 +62,7 @@ function Goal(props) {
     // add document to firebase
     goalRef.update({
       endAt: endDateTime,
-      text: newText
+      title: newTitle
     });
   }
 
@@ -77,7 +77,7 @@ function Goal(props) {
 
   return (
     <div className="Goal">
-      <h1>{text}</h1>
+      <h1>{title}</h1>
       <p className="end-date">
         {`${endDate.toDateString()}, ${endDate.toLocaleTimeString()}`}
       </p>

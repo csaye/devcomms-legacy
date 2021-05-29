@@ -10,15 +10,37 @@
   margin: 10px 0;
 }
 
-.Goals input {
-  width: 80%;
+.Goals label {
+  display: block;
+  font-size: 12px;
+  margin: 5px 0 0 0;
 }
 
-.Goals .title-input {
-  padding: 1px 1px 1px 0;
+.Goals input {
+  width: 200px;
+  border: 0;
+  padding: 2px 3px;
+  border-radius: 3px;
+  outline: none;
+}
+
+.Goals input:first-of-type {
+  padding: 4px 3px;
 }
 
 .Goals .create-button {
   display: block;
   margin: 10px auto;
+  border-radius: 5px;
+}
+
+.Goals .create-button .add-icon {
+  position: relative;
+  top: 1px;
+}
+
+.Goals hr {
+  border: 1px solid #555;
+  border-bottom: 0;
+  margin: 10px 20px;
 }

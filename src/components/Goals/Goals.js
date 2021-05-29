@@ -10,7 +10,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import './Goals.css';
 
 function Goals(props) {
-  const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
   const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
 
@@ -23,8 +23,8 @@ function Goals(props) {
   // creates a goal document in firebase
   function addGoal(e) {
     e.preventDefault();
-    const goalText = text;
-    setText('');
+    const goalTitle = title;
+    setTitle('');
     const endDateTime = new Date(`${endDate} ${endTime}`);
     setEndDate('');
     setEndTime('');
@@ -32,37 +32,44 @@ function Goals(props) {
     // add document to firebase
     goalsRef.add({
       endAt: endDateTime,
-      text: goalText
+      title: goalTitle
     });
   }
 
   return (
     <div className="Goals">
       <h1><LibraryAddCheckIcon /> Goals</h1>
+      <hr />
       <form onSubmit={addGoal}>
+        <label htmlFor="goals-title">Title</label>
         <input
+          id="goals-title"
           placeholder="title"
-          className="title-input"
-          value={text}
-          onChange={e => setText(e.target.value)}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
           required
         />
+        <label htmlFor="goals-date">Date</label>
         <input
+          id="goals-date"
           type="date"
           value={endDate}
           onChange={e => setEndDate(e.target.value)}
           required
         />
+        <label htmlFor="goals-time">Time</label>
         <input
+          id="goals-time"
           type="time"
           value={endTime}
           onChange={e => setEndTime(e.target.value)}
           required
         />
         <button type="submit" className="create-button">
-          <AddIcon />
+          <AddIcon className="add-icon" />
         </button>
       </form>
+      <hr />
       <div className="goal-list">
       {
         goals ?
