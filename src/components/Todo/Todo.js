@@ -17,7 +17,7 @@ function Todo(props) {
   const [newPriority, setNewPriority] = useState(priority);
 
   // get reference to todos collection
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
   const todosRef = groupRef.collection('todos');
   const todoRef = todosRef.doc(id);
 

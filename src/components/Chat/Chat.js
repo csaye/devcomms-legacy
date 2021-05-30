@@ -29,7 +29,7 @@ let pageHidden = false; // whether page is hidden
 let shiftDown = false; // whether shift key is down
 
 function Chat(props) {
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
   const chatsRef = groupRef.collection('chats');
   const uid = firebase.auth().currentUser.uid;
 

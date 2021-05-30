@@ -25,7 +25,7 @@ function Groups(props) {
 
   const groupsRef = firebase.firestore().collection('groups');
   const groupsQuery = groupsRef.orderBy('name');
-  const [allGroups] = useCollectionData(groupsQuery);
+  const [allGroups] = useCollectionData(groupsQuery, { idField: 'id' });
 
   const usersRef = firebase.firestore().collection('users');
   const [usersData] = useCollectionData(usersRef);
@@ -33,12 +33,12 @@ function Groups(props) {
   const userRef = usersRef.doc(uid);
   const [userData] = useDocumentData(userRef);
   const ownedQuery = groupsRef.where('owner', '==', uid).orderBy('name');
-  const [ownedGroups] = useCollectionData(ownedQuery);
+  const [ownedGroups] = useCollectionData(ownedQuery, { idField: 'id' });
 
   // updates current user group in firebase
-  async function selectGroup(group) {
+  async function selectGroup(groupId) {
     await userRef.update({
-      currentGroup: group
+      currentGroup: groupId
     });
   }
 
@@ -64,24 +64,26 @@ function Groups(props) {
     setLoading(true);
 
     // create group document
-    await firebase.firestore().collection('groups').doc(groupName).set({
+    await firebase.firestore().collection('groups').add({
       name: groupName,
       owner: uid,
       members: [uid]
-    });
-
-    // set current user group to this
-    await firebase.firestore().collection('users').doc(uid).update({
-      currentGroup: groupName,
-      groups: firebase.firestore.FieldValue.arrayUnion(groupName)
+    }).then(doc => {
+      // get group id
+      const groupId = doc.id;
+      // set current user group to this
+      firebase.firestore().collection('users').doc(uid).update({
+        currentGroup: groupId,
+        groups: firebase.firestore.FieldValue.arrayUnion(groupId)
+      });
     });
   }
 
-  // deletes group with given name
-  async function deleteGroup(group) {
+  // deletes group with given id
+  async function deleteGroup(groupId) {
     setLoading(true);
     // delete group doc
-    const groupRef = groupsRef.doc(group);
+    const groupRef = groupsRef.doc(groupId);
     // delete each subcollection
     const batch = firebase.firestore().batch();
     const subcollections = ['chats', 'goals', 'notes', 'sketches', 'todos'];
@@ -104,8 +106,7 @@ function Groups(props) {
   }
 
   // adds member to given group
-  async function addMember(e, group) {
-    e.preventDefault();
+  async function addMember(groupId) {
     const newMember = member;
     setMember('');
     // retrieve new member uid
@@ -117,15 +118,15 @@ function Groups(props) {
     }
     const memberUid = matches[0].uid;
     // update document in firebase
-    await firebase.firestore().collection('groups').doc(group).update({
+    await firebase.firestore().collection('groups').doc(groupId).update({
       members: firebase.firestore.FieldValue.arrayUnion(memberUid)
     });
   }
 
   // removes given member from given group
-  async function removeMember(group, member) {
+  async function removeMember(groupId, member) {
     // update document in firebase
-    await firebase.firestore().collection('groups').doc(group).update({
+    await firebase.firestore().collection('groups').doc(groupId).update({
       members: firebase.firestore.FieldValue.arrayRemove(member)
     });
   }
@@ -136,12 +137,12 @@ function Groups(props) {
     // retrieve user groups
     const userGroups = allGroups.filter(g => {
       return g.members.includes(uid);
-    }).map(g => g.name);
+    });
     setGroups(userGroups);
-    // update user doc with new groups
+    // update user doc with new group ids
     if (userData.groups.length !== userGroups.length) {
       await userRef.update({
-        groups: userGroups
+        groups: userGroups.map(g => g.id)
       });
     }
   }
@@ -166,10 +167,10 @@ function Groups(props) {
                 groups.map((g, i) =>
                   <button
                     key={`groupbutton-${i}`}
-                    onClick={() => selectGroup(g)}
+                    onClick={() => selectGroup(g.id)}
                     className="group-button"
                   >
-                    {g}
+                    {g.name}
                   </button>
                 )
               }
@@ -216,15 +217,11 @@ function Groups(props) {
                                   alignItems: 'center'
                                 }}
                               >
-                                <PersonIcon
-                                  style={{
-
-                                  }}
-                                /> {getUsername(m)}
+                                <PersonIcon/> {getUsername(m)}
                                 {
                                   m !== uid &&
                                   <button
-                                    onClick={() => removeMember(g.name, m)}
+                                    onClick={() => removeMember(g.id, m)}
                                     style={{
                                       border: '0',
                                       background: 'transparent',
@@ -240,7 +237,10 @@ function Groups(props) {
                           <hr />
                           <p style={{margin: '15px 0 5px 0'}}><u>Add member</u></p>
                           <form
-                            onSubmit={e => addMember(e, g.name)}
+                            onSubmit={e => {
+                              e.preventDefault();
+                              addMember(g.id);
+                            }}
                             style={{
                               display: 'flex',
                               alignItems: 'center'
@@ -274,7 +274,7 @@ function Groups(props) {
                                 cancel
                               </button>
                               <button onClick={() => {
-                                deleteGroup(g.name);
+                                deleteGroup(g.id);
                                 close();
                                 setDeleting(false);
                               }}>

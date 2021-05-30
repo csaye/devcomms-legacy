@@ -12,7 +12,7 @@ function Notes(props) {
   const [loaded, setLoaded] = useState(false);
 
   // get notes reference
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
+  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
   const noteRef = groupRef.collection('notes').doc('note');
   const [noteDoc] = useDocument(noteRef);
 

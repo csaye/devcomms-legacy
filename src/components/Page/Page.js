@@ -10,15 +10,15 @@ import './Page.css';
 function Page(props) {
   return (
     <div className="Page">
-      <Header group={props.group} username={props.username} />
+      <Header groupName={props.groupName} username={props.username} />
       <div className="page-content">
-        <Chat group={props.group} username={props.username} />
+        <Chat groupId={props.groupId} username={props.username} />
         <div>
-          <Notes group={props.group} />
-          <Goals group={props.group} />
+          <Notes groupId={props.groupId} />
+          <Goals groupId={props.groupId} />
         </div>
-        <Sketch group={props.group} />
-        <Todos group={props.group} />
+        <Sketch groupId={props.groupId} />
+        <Todos groupId={props.groupId} />
       </div>
     </div>
   );

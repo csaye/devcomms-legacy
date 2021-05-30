@@ -23,7 +23,7 @@ function Header(props) {
       <img className="logo-img" src={logo} alt="logo" />
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
-      <GroupIcon className="header-icon" />{props.group}
+      <GroupIcon className="header-icon" />{props.groupName}
       <button onClick={exitGroup} className="sign-out-button">
         <ExitToAppIcon />
       </button>
