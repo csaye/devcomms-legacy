@@ -4,6 +4,7 @@ import Loading from '../Loading/Loading.js';
 
 import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CheckIcon from '@material-ui/icons/Check';
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
 import PersonIcon from '@material-ui/icons/Person';
@@ -17,6 +18,7 @@ import './Groups.css';
 function Groups(props) {
   const [groups, setGroups] = useState(undefined);
   const [groupName, setGroupName] = useState('');
+  const [newGroupName, setNewGroupName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [addError, setAddError] = useState('');
@@ -52,13 +54,13 @@ function Groups(props) {
       return;
     }
 
-    // if group already exists with name
-    if (allGroups.some(group =>
-      group.name.toLowerCase() === groupName.toLowerCase()
-    )) {
-      setError('Group with name already exists.');
-      return;
-    }
+    // // if group already exists with name
+    // if (allGroups.some(group =>
+    //   group.name.toLowerCase() === groupName.toLowerCase()
+    // )) {
+    //   setError('Group with name already exists.');
+    //   return;
+    // }
 
     // start loading
     setLoading(true);
@@ -97,6 +99,13 @@ function Groups(props) {
     batch.delete(groupRef); // delete group document
     batch.commit(); // commit batch
     setLoading(false);
+  }
+
+  // updates group document in firebase
+  async function updateGroup(groupId) {
+    await groupsRef.doc(groupId).update({
+      name: newGroupName
+    });
   }
 
   // gets a username from user id
@@ -187,6 +196,9 @@ function Groups(props) {
                       <button className="group-button">{g.name}</button>
                     }
                     key={`grouppopup-${i}`}
+                    onOpen={() => {
+                      setNewGroupName(g.name);
+                    }}
                     modal
                   >
                     {
@@ -201,10 +213,35 @@ function Groups(props) {
                               justifyContent: 'center'
                             }}
                           >
-                          Editing
-                          <GroupIcon style={{marginLeft: '5px'}} />
-                          {g.name}
+                            Editing
+                            <GroupIcon style={{marginLeft: '5px'}} />
+                            {g.name}
                           </div>
+                          <form
+                            style={{
+                              margin: '0 0 20px 0'
+                            }}
+                            onSubmit={e => {
+                              e.preventDefault();
+                              updateGroup(g.id);
+                              close();
+                            }}
+                          >
+                            <p style={{margin: '10px 0 0 0'}}><u>Group Name</u></p>
+                            <input
+                              placeholder="group name"
+                              value={newGroupName}
+                              onChange={e => setNewGroupName(e.target.value)}
+                              required
+                            />
+                            <button
+                              type="submit"
+                              style={{marginLeft: '5px', position: 'relative', top: '5px'}}
+                            >
+                              <CheckIcon />
+                            </button>
+                          </form>
+                          <hr />
                           <p style={{margin: '15px 0 5px 0'}}><u>Members</u></p>
                           {
                             g.members.sort().map((m, i) =>
