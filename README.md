@@ -1,4 +1,4 @@
-# DevComms
+# DevComms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
 
 Team communication and coordination all in one place.
 
