@@ -10,8 +10,8 @@ import firebase from 'firebase/app';
 
 import './Sketch.css';
 
-const width = 256;
-const height = 256;
+const width = 384;
+const height = 384;
 
 let prevX = 0, prevY = 0, currX = 0, currY = 0;
 let drawing = false;

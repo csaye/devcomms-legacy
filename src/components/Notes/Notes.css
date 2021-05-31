@@ -1,7 +1,6 @@
 .Notes {
-  background: #ccc;
-  height: 50%;
-  width: 276px;
+  height: 100%;
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -14,7 +13,7 @@
 
 .Notes textarea {
   flex-grow: 1;
-  margin: 10px;
+  margin: 10px 20px 20px 20px;
   border: 1px solid black;
   border-radius: 5px;
   outline: none;

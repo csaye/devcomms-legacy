@@ -1,8 +1,6 @@
 .Sketch {
-  background: #bbb;
   height: 100%;
-  min-width: 276px;
-  max-width: 276px;
+  width: 100%;
   text-align: center;
   overflow: auto;
 }

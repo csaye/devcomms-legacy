@@ -45,3 +45,21 @@
   flex-grow: 1;
   overflow: auto;
 }
+
+@media (max-width: 991px) {
+  .Page {
+    min-height: 100%;
+  }
+
+  .Page .page-content {
+    flex-direction: column;
+  }
+
+  .Page .select-widget {
+    width: 100%;
+  }
+
+  .Chat {
+    width: 100%;
+  }
+}

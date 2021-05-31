@@ -1,8 +1,6 @@
 .Todos {
-  background: #ddd;
   height: 100%;
-  min-width: 276px;
-  max-width: 276px;
+  width: 100%;
   text-align: center;
   overflow: auto;
 }
@@ -12,6 +10,7 @@
 }
 
 .Todos > hr {
+  border: 1px solid #555;
   border-bottom: 0;
   margin: 0 20px 5px 20px;
 }

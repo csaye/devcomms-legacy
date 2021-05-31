@@ -1,20 +1,22 @@
 .Chat {
   height: 100%;
+  min-height: 360px;
   min-width: 276px;
+  width: 50%;
   background: #ddd;
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   justify-content: flex-end;
 }
 
 .Chat .chat-header {
   background: #bbb;
+  height: 60px;
   text-align: center;
 }
 
 .Chat .chat-header h1 {
-  margin: 10px 0;
+  margin: 11px 0;
 }
 
 .Chat .message-list {
