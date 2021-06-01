@@ -74,8 +74,8 @@ function Sketch(props) {
     // get previous and current mouse positions
     prevX = currX;
     prevY = currY;
-    currX = e.clientX - canvas.offsetLeft;
-    currY = e.clientY - canvas.offsetTop;
+    currX = e.clientX - canvas.offsetLeft + window.scrollX;
+    currY = e.clientY - canvas.offsetTop + window.scrollY;
 
     // if moving mouse, draw
     if (operation === 'move') draw();
