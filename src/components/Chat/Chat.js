@@ -159,10 +159,7 @@ function Chat(props) {
 
   return (
     <div className="Chat">
-      <div className="chat-header">
-        <h1><ChatIcon /> Chat</h1>
-      </div>
-      <span className="flex-grow" />
+
       <div className="message-list">
         {
           messages ?
@@ -331,7 +328,7 @@ function Chat(props) {
           placeholder="message"
           required
         />
-        <button type="submit">
+        <button type="submit" className="send-button">
           <SendIcon />
         </button>
       </form>

@@ -1,10 +1,11 @@
 .Page {
   height: 100%;
+  min-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   width: fit-content;
-  min-width: 100%;
+  color: #ddd;
 }
 
 .Page .page-content {
@@ -17,6 +18,7 @@
   min-width: 276px;
   width: 50%;
   height: 100%;
+  background: #282a2e;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -24,7 +26,6 @@
 
 .Page .widget-header {
   min-height: 60px;
-  background: #ddd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,7 +42,6 @@
 }
 
 .Page .widget {
-  background: #bbb;
   flex-grow: 1;
   overflow: auto;
 }
