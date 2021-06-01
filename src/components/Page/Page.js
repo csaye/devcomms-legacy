@@ -23,7 +23,7 @@ function Page(props) {
       case 'goals': return <Goals groupId={props.groupId} />
       case 'sketch': return <Sketch groupId={props.groupId} />
       case 'todos': return <Todos groupId={props.groupId} />
-      default: return <p>Select a widget above.</p>
+      default: return <p className="select-text">Select a widget above.</p>
     }
   }
 
@@ -34,10 +34,10 @@ function Page(props) {
         <Chat groupId={props.groupId} username={props.username} />
         <div className="select-widget">
           <div className="widget-header">
-            <button onClick={() => setWidget('todos')}><ListIcon /></button>
-            <button onClick={() => setWidget('sketch')}><BrushIcon /></button>
-            <button onClick={() => setWidget('goals')}><LibraryAddCheckIcon /></button>
-            <button onClick={() => setWidget('notes')}><DescriptionIcon /></button>
+            <button className={widget === 'todos' ? 'clean-btn selected' : 'clean-btn'} onClick={() => setWidget('todos')}><ListIcon /></button>
+            <button className={widget === 'sketch' ? 'clean-btn selected' : 'clean-btn'} onClick={() => setWidget('sketch')}><BrushIcon /></button>
+            <button className={widget === 'goals' ? 'clean-btn selected' : 'clean-btn'} onClick={() => setWidget('goals')}><LibraryAddCheckIcon /></button>
+            <button className={widget === 'notes' ? 'clean-btn selected' : 'clean-btn'} onClick={() => setWidget('notes')}><DescriptionIcon /></button>
           </div>
           <div className="widget">{getWidget()}</div>
         </div>

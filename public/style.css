@@ -24,3 +24,10 @@ textarea {
 .error-text {
   color: red;
 }
+
+.clean-btn {
+  border: 0;
+  border-radius: 2px;
+  background: #36393f;
+  color: #ddd;
+}

@@ -6,13 +6,9 @@
 }
 
 .Todos > h1 {
-  margin: 10px 0;
-}
-
-.Todos > hr {
-  border: 1px solid #555;
-  border-bottom: 0;
-  margin: 0 20px 5px 20px;
+  width: fit-content;
+  margin: 0 auto 10px auto;
+  border-bottom: 1px solid white;
 }
 
 .Todos form {
@@ -32,15 +28,13 @@
   padding: 4px 3px;
   border-radius: 3px;
   outline: none;
+  background: #36393f;
+  color: #ddd;
 }
 
 .Todos .submit-button {
   display: block;
-  margin: 10px 0;
+  margin: 10px 0 0 0;
+  padding: 3px 3px 0 3px;
   border-radius: 5px;
-}
-
-.Todos .submit-button .add-icon {
-  position: relative;
-  top: 1px;
 }

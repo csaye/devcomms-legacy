@@ -4,7 +4,6 @@ import Popup from 'reactjs-popup';
 
 import EditIcon from '@material-ui/icons/Edit';
 import SendIcon from '@material-ui/icons/Send';
-import ChatIcon from '@material-ui/icons/Chat';
 import PublishIcon from '@material-ui/icons/Publish';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -302,7 +301,7 @@ function Chat(props) {
         <span ref={messagesEnd} />
       </div>
       <form onSubmit={addMessage}>
-        <label htmlFor="chat-fileinput" className="upload-button">
+        <label htmlFor="chat-fileinput" className="upload-button clean-btn">
           <PublishIcon />
         </label>
         <input
@@ -328,7 +327,7 @@ function Chat(props) {
           placeholder="message"
           required
         />
-        <button type="submit" className="send-button">
+        <button type="submit" className="send-button clean-btn">
           <SendIcon />
         </button>
       </form>

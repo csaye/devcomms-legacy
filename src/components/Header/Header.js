@@ -23,8 +23,8 @@ function Header(props) {
       <img className="logo-img" src={logo} alt="logo" />
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
-      <GroupIcon className="header-icon" />{props.groupName}
-      <button onClick={exitGroup} className="sign-out-button">
+      <GroupIcon className="header-icon" />{props.groupName ? props.groupName : '...'}
+      <button onClick={exitGroup} className="sign-out-button clean-btn">
         <ExitToAppIcon />
       </button>
     </div>

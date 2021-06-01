@@ -8,12 +8,14 @@
 }
 
 .Notes h1 {
-  margin: 10px 0 0 0;
+  width: fit-content;
+  margin: 0 auto 10px auto;
+  border-bottom: 1px solid white;
 }
 
 .Notes textarea {
   flex-grow: 1;
-  margin: 10px 20px 20px 20px;
+  margin: 0 20px 20px 20px;
   border: 1px solid black;
   border-radius: 5px;
   outline: none;

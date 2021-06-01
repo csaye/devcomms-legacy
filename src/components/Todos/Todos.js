@@ -43,7 +43,6 @@ function Todos(props) {
   return (
     <div className="Todos">
       <h1><ListIcon /> Todos</h1>
-      <hr />
       <form onSubmit={createTodo}>
         <label htmlFor="todos-title">Title</label>
         <input
@@ -62,11 +61,10 @@ function Todos(props) {
           onChange={e => setPriority(e.target.value)}
           required
         />
-        <button type="submit" className="submit-button">
+        <button type="submit" className="submit-button clean-btn">
           <AddIcon />
         </button>
       </form>
-      <hr />
       <div>
         {
           todos ?

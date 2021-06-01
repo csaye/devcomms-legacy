@@ -24,6 +24,10 @@
   text-align: center;
 }
 
+.Page .select-text {
+  margin: 0 0 10px 0;
+}
+
 .Page .widget-header {
   min-height: 60px;
   display: flex;
@@ -32,8 +36,12 @@
 }
 
 .Page .widget-header > button {
-  padding: 0 2px;
+  padding: 1px 3px;
   margin: 0 5px;
+}
+
+.Page .widget-header > button.selected {
+  border: 1px solid #ddd;
 }
 
 .Page .widget-header > button > svg {

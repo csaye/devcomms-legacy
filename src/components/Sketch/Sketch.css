@@ -5,8 +5,10 @@
   overflow: auto;
 }
 
-.Sketch h1 {
-  margin: 10px 0 0 0;
+.Sketch > h1 {
+  width: fit-content;
+  margin: 0 auto;
+  border-bottom: 1px solid white;
 }
 
 .Sketch canvas {
@@ -71,8 +73,12 @@
 
 .Sketch .canvas-button {
   margin-right: 5px;
-  padding: 1px 3px 0 3px;
+  padding: 3px 3px 0 3px;
   margin-bottom: 10px;
+}
+
+.Sketch .canvas-button.disabled {
+  color: #282a2e;
 }
 
 .Sketch .canvas-button:last-of-type {

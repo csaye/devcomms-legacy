@@ -6,7 +6,15 @@
 }
 
 .Goals > h1 {
-  margin: 10px 0;
+  width: fit-content;
+  margin: 0 auto 10px auto;
+  border-bottom: 1px solid white;
+}
+
+.Goals form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Goals label {
@@ -21,25 +29,17 @@
   padding: 2px 3px;
   border-radius: 3px;
   outline: none;
+  background: #36393f;
+  color: #ddd;
 }
 
 .Goals input:first-of-type {
   padding: 4px 3px;
 }
 
-.Goals .create-button {
+.Goals .submit-button {
   display: block;
-  margin: 10px auto;
+  margin: 10px auto 0 auto;
   border-radius: 5px;
-}
-
-.Goals .create-button .add-icon {
-  position: relative;
-  top: 1px;
-}
-
-.Goals hr {
-  border: 1px solid #555;
-  border-bottom: 0;
-  margin: 10px 20px;
+  padding: 3px 3px 0 3px;
 }

@@ -39,7 +39,6 @@ function Goals(props) {
   return (
     <div className="Goals">
       <h1><LibraryAddCheckIcon /> Goals</h1>
-      <hr />
       <form onSubmit={addGoal}>
         <label htmlFor="goals-title">Title</label>
         <input
@@ -65,11 +64,10 @@ function Goals(props) {
           onChange={e => setEndTime(e.target.value)}
           required
         />
-        <button type="submit" className="create-button">
-          <AddIcon className="add-icon" />
+        <button type="submit" className="submit-button clean-btn">
+          <AddIcon />
         </button>
       </form>
-      <hr />
       <div className="goal-list">
       {
         goals ?

@@ -1,5 +1,5 @@
 .Goal {
-  background: #efefef;
+  background: #36393f;
   margin: 20px;
   overflow: auto;
   padding: 5px 5px 10px 5px;
@@ -36,9 +36,11 @@
   right: 0;
   bottom: 0;
   padding: 0;
-  margin: 5px;
+  margin: 2px;
   height: 16px;
   width: 16px;
+  border: 0;
+  background: transparent;
 }
 
 .Goal .check-icon {
@@ -52,7 +54,5 @@
 .Goal .edit-icon {
   width: 16px;
   height: 16px;
-  position: relative;
-  right: 2px;
-  bottom: 2px;
+  color: #ddd;
 }

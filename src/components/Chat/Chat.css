@@ -115,11 +115,9 @@
 .Chat .upload-button {
   cursor: pointer;
   padding: 3px;
-  background: #36393f;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 2px;
 }
 
 .Chat .file-input {
@@ -140,10 +138,5 @@
 }
 
 .Chat .send-button {
-  border: 0;
-  background: #36393f;
-  color: #ddd;
   padding: 3px;
-  border-radius: 2px;
-  padding:
 }

@@ -1,5 +1,5 @@
 .Todo {
-  background: #fff;
+  background: #36393f;
   margin: 20px;
   border-radius: 2px;
   box-shadow: 0 0 2px #000;
@@ -17,8 +17,7 @@
   right: 0;
   top: 0;
   margin: 2px;
-  background: #efefef;
-  border-radius: 5px;
+  color: #ddd;
   font-size: 12px;
   padding: 0 2px;
 }
@@ -31,12 +30,12 @@
   margin: 2px;
   height: 16px;
   width: 16px;
+  border: 0;
+  background: transparent;
 }
 
 .Todo .edit-icon {
   width: 16px;
   height: 16px;
-  position: relative;
-  right: 2px;
-  bottom: 2px;
+  color: #ddd;
 }
