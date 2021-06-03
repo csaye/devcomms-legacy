@@ -78,26 +78,9 @@
   color: #777;
 }
 
-.Chat .edit-button {
-  margin: 2px;
-  padding: 0;
-  height: 20px;
-  background: transparent;
-  border: 0;
-  height: fit-content;
-  border-radius: 10px;
-  position: absolute;
+.Chat .edit-btn {
   top: 0;
-  right: 0;
-}
-
-.Chat .edit-button:hover {
-  background: #202225;
-}
-
-.Chat .edit-icon {
-  height: 15px;
-  color: #ddd;
+  margin: 3px;
 }
 
 .Chat form {

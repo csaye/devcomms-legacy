@@ -101,10 +101,16 @@ function Goal(props) {
       </p>
       <Popup
         trigger={
-          <button className="delete-button">
-            <EditIcon className="edit-icon" />
+          <button className="edit-btn">
+            <EditIcon />
           </button>
         }
+        onOpen={() => {
+          setDeleting(false);
+          setNewTitle(title);
+          setNewEndDate(formatDate(endDate));
+          setNewEndTime(formatTime(endDate));
+        }}
         modal
       >
         {

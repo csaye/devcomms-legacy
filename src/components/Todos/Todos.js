@@ -47,6 +47,7 @@ function Todos(props) {
         <label htmlFor="todos-title">Title</label>
         <input
           id="todos-title"
+          autocomplete="off"
           placeholder="title"
           value={title}
           onChange={e => setTitle(e.target.value)}

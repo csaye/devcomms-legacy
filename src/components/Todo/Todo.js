@@ -30,7 +30,7 @@ function Todo(props) {
   async function updateTodo() {
     await todoRef.update({
       title: newTitle,
-      priority: newPriority
+      priority: parseFloat(newPriority)
     });
   }
 
@@ -40,10 +40,15 @@ function Todo(props) {
       <p className="priority-text">#{priority}</p>
       <Popup
         trigger={
-          <button className="delete-button">
-            <EditIcon className="edit-icon" />
+          <button className="edit-btn">
+            <EditIcon />
           </button>
         }
+        onOpen={() => {
+          setDeleting(false);
+          setNewTitle(title);
+          setNewPriority(priority);
+        }}
         modal
       >
         {

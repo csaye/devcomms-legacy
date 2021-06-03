@@ -31,16 +31,9 @@
   font-size: 14px;
 }
 
-.Goal .delete-button {
-  position: absolute;
-  right: 0;
+.Goal .edit-btn {
   bottom: 0;
-  padding: 0;
   margin: 2px;
-  height: 16px;
-  width: 16px;
-  border: 0;
-  background: transparent;
 }
 
 .Goal .check-icon {
@@ -49,10 +42,4 @@
   position: relative;
   left: -2px;
   bottom: 1px;
-}
-
-.Goal .edit-icon {
-  width: 16px;
-  height: 16px;
-  color: #ddd;
 }

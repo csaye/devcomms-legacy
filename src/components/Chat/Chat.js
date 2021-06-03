@@ -212,8 +212,8 @@ function Chat(props) {
                       <Popup
                         trigger={
                           hovering === m.id &&
-                          <button className="edit-button">
-                            <EditIcon className="edit-icon" />
+                          <button className="edit-btn">
+                            <EditIcon />
                           </button>
                         }
                         modal
