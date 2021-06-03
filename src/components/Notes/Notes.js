@@ -51,6 +51,7 @@ function Notes(props) {
       {
         loaded ?
         <textarea
+          spellCheck="false"
           value={text}
           className="flex-grow"
           onChange={e => updateText(e.target.value)}

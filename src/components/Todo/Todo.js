@@ -72,16 +72,13 @@ function Todo(props) {
                   <label htmlFor="todos-newtitle">Title</label>
                   <input
                     id="todos-newtitle"
+                    autoComplete="off"
+                    spellCheck="false"
                     value={newTitle}
                     onChange={e => setNewTitle(e.target.value)}
                     required
                   />
-                  <label
-                    htmlFor="todos-newpriority"
-                    style={{marginTop: '5px'}}
-                  >
-                    Priority
-                  </label>
+                  <label htmlFor="todos-newpriority">Priority</label>
                   <input
                     id="todos-newpriority"
                     type="number"

@@ -32,6 +32,10 @@ textarea {
   color: #ddd;
 }
 
+.clean-btn:hover {
+  background: #2f3136;
+}
+
 .edit-btn {
   position: absolute;
   right: 0;

@@ -43,7 +43,8 @@ function Goals(props) {
         <label htmlFor="goals-title">Title</label>
         <input
           id="goals-title"
-          autocomplete="off"
+          autoComplete="off"
+          spellCheck="false"
           placeholder="title"
           value={title}
           onChange={e => setTitle(e.target.value)}

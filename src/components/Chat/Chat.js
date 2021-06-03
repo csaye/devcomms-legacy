@@ -230,20 +230,25 @@ function Chat(props) {
                               <div className="content">
                                 {
                                   m.type === 'text' ?
-                                  <form onSubmit={e => {
-                                    updateMessage(e, m.id);
-                                    close();
-                                  }}>
+                                  <form
+                                    onSubmit={e => {
+                                      updateMessage(e, m.id);
+                                      close();
+                                    }}
+                                    style={{
+                                      display: 'flex', alignItems: 'center',
+                                      marginBottom: '5px'
+                                    }}
+                                  >
                                     <textarea
+                                      autoComplete="off"
+                                      spellCheck="false"
                                       value={newText}
                                       onChange={e => setNewText(e.target.value)}
                                       style={{"marginRight": "10px"}}
                                       required
                                     />
-                                    <button
-                                      type="submit"
-                                      style={{"position": "relative", "bottom": "8px", "height": "38px"}}
-                                    >
+                                    <button type="submit">
                                       <CheckIcon />
                                     </button>
                                   </form> :
@@ -311,6 +316,8 @@ function Chat(props) {
           className="file-input"
         />
         <textarea
+          autoComplete="off"
+          spellCheck="false"
           value={text}
           className="text-input"
           onChange={e => setText(e.target.value)}

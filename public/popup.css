@@ -1,3 +1,11 @@
+.popup-content {
+  background: #282a2e!important;
+  border: 1px solid #202225!important;
+  color: #ddd;
+  border-radius: 5px;
+  width: fit-content!important;
+  -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+}
 .modal {
   padding: 10px 15px 15px 15px;
   text-align: center;
@@ -21,14 +29,14 @@
   right: -10px;
   top: -10px;
   font-size: 24px;
-  background: #fff;
+  background: #282a2e;
   border-radius: 18px;
-  border: 1px solid #bbb;
+  border: 1px solid #202225;
   outline: none;
 }
 .modal .delete-text {
   color: red;
-  margin: 5px 0;
+  margin: 0 0 5px 0;
 }
 .modal hr {
   border: 1px solid gray;
@@ -36,10 +44,31 @@
 }
 .modal label {
   font-size: 12px;
-  margin: 5px 0 0 0;
+  margin: 5px 0 0 0!important;
 }
 .modal label:first-of-type {
-  margin: 0;
+  margin: 0!important;
+}
+.modal input, .modal textarea {
+  border: 0;
+  padding: 2px 3px;
+  border-radius: 3px;
+  outline: none;
+  background: #36393f;
+  color: #ddd;
+}
+.modal button {
+  background: #202225;
+  padding: 3px;
+  border: 0;
+  border-radius: 5px;
+  color: #ddd;
+}
+.modal button:hover {
+  background: #2f3136;
+}
+.modal button svg {
+  margin-bottom: -3px;
 }
 
 @keyframes anvil {
@@ -58,9 +87,4 @@
     opacity: 1;
     box-shadow: 0 0 500px rgba(241, 241, 241, 0);
   }
-}
-.popup-content {
-  border-radius: 5px;
-  width: fit-content!important;
-  -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
 }
