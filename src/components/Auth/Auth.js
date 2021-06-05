@@ -4,9 +4,9 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import logo from '../../img/logo.png';
-import './SignIn.css';
+import './Auth.css';
 
-function SignIn() {
+function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -89,7 +89,7 @@ function SignIn() {
   }
 
   return (
-    <div className="SignIn">
+    <div className="Auth">
       <div className="center-box">
         <img src={logo} alt="logo" />
         <h1>DevComms</h1>
@@ -172,4 +172,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Auth;

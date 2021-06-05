@@ -1,11 +1,11 @@
-.SignIn {
+.Auth {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.SignIn .center-box {
+.Auth .center-box {
   background: #ddd;
   border-radius: 5px;
   padding: 20px 40px;
@@ -13,50 +13,50 @@
   text-align: center;
 }
 
-.SignIn img {
+.Auth img {
   height: 60px;
   margin: -5px 0;
 }
 
-.SignIn h1 {
+.Auth h1 {
   margin: 0;
 }
 
-.SignIn hr {
+.Auth hr {
   margin: 5px 0 10px 0;
 }
 
-.SignIn h2 {
+.Auth h2 {
   margin: 0 0 10px 0;
 }
 
-.SignIn form {
+.Auth form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.SignIn form input {
+.Auth form input {
   display: block;
 }
 
-.SignIn label {
+.Auth label {
   margin-top: 5px;
   font-size: 12px;
 }
 
-.SignIn label:first-of-type {
+.Auth label:first-of-type {
   margin-top: 0;
 }
 
-.SignIn form button {
+.Auth form button {
   margin-top: 10px;
 }
 
-.SignIn .error-text {
+.Auth .error-text {
   margin: 10px 0 0 0;
 }
 
-.SignIn .bottom-hr {
+.Auth .bottom-hr {
   margin: 15px 0;
 }
