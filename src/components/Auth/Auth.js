@@ -14,8 +14,8 @@ function Auth() {
   const [error, setError] = useState('');
   const [signingUp, setSigningUp] = useState(false);
 
-  const usersRef = firebase.firestore().collection('users');
-  const [usersData] = useCollectionData(usersRef);
+  const usernamesRef = firebase.firestore().collection('usernames');
+  const [usernamesData] = useCollectionData(usernamesRef);
 
   // attempts to sign in user
   async function signIn(e) {
@@ -64,7 +64,7 @@ function Auth() {
       return;
     }
     // verify username availability
-    if (usersData && usersData.some(u => u.username.toLower() === username.toLower())) {
+    if (usernamesData.some(user => user.username.toLowerCase() === username.toLowerCase())) {
       setError("Username taken. Please try another.");
       return;
     }
@@ -77,14 +77,17 @@ function Auth() {
       setError(e.code);
       return;
     };
-    // create user user document
+    // create user documents
     const uid = firebase.auth().currentUser.uid;
     await firebase.firestore().collection('users').doc(uid).set({
       username: username,
       uid: uid,
       registered: new Date(),
-      currentGroup: '',
-      groups: []
+      group: ''
+    });
+    await firebase.firestore().collection('usernames').doc(uid).set({
+      username: username,
+      uid: uid
     });
   }
 

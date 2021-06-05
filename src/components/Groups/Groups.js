@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Loading from '../Loading/Loading.js';
 
@@ -10,13 +10,12 @@ import GroupIcon from '@material-ui/icons/Group';
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Groups.css';
 
 function Groups(props) {
-  const [groups, setGroups] = useState(undefined);
   const [groupName, setGroupName] = useState('');
   const [newGroupName, setNewGroupName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,22 +24,22 @@ function Groups(props) {
   const [deleting, setDeleting] = useState(false);
   const [member, setMember] = useState('');
 
-  const groupsRef = firebase.firestore().collection('groups');
-  const groupsQuery = groupsRef.orderBy('name');
-  const [allGroups] = useCollectionData(groupsQuery, { idField: 'id' });
-
-  const usersRef = firebase.firestore().collection('users');
-  const [usersData] = useCollectionData(usersRef);
   const uid = firebase.auth().currentUser.uid;
-  const userRef = usersRef.doc(uid);
-  const [userData] = useDocumentData(userRef);
+  const groupsRef = firebase.firestore().collection('groups');
+  const groupsQuery = groupsRef.where('members', 'array-contains', uid).orderBy('name');
+  const [groups] = useCollectionData(groupsQuery, { idField: 'id' });
+
+  const usernamesRef = firebase.firestore().collection('usernames');
+  const [usernamesData] = useCollectionData(usernamesRef);
+
+  const userRef = firebase.firestore().collection('users').doc(uid);
   const ownedQuery = groupsRef.where('owner', '==', uid).orderBy('name');
   const [ownedGroups] = useCollectionData(ownedQuery, { idField: 'id' });
 
   // updates current user group in firebase
   async function selectGroup(groupId) {
     await userRef.update({
-      currentGroup: groupId
+      group: groupId
     });
   }
 
@@ -53,14 +52,6 @@ function Groups(props) {
       setError('Group name contains invalid characters.');
       return;
     }
-
-    // // if group already exists with name
-    // if (allGroups.some(group =>
-    //   group.name.toLowerCase() === groupName.toLowerCase()
-    // )) {
-    //   setError('Group with name already exists.');
-    //   return;
-    // }
 
     // start loading
     setLoading(true);
@@ -75,8 +66,7 @@ function Groups(props) {
       const groupId = doc.id;
       // set current user group to this
       firebase.firestore().collection('users').doc(uid).update({
-        currentGroup: groupId,
-        groups: firebase.firestore.FieldValue.arrayUnion(groupId)
+        group: groupId
       });
     });
   }
@@ -110,7 +100,7 @@ function Groups(props) {
 
   // gets a username from user id
   function getUsername(userId) {
-    const matches = usersData.filter(user => user.uid === userId);
+    const matches = usernamesData.filter(user => user.uid === userId);
     return matches.length === 0 ? null : matches[0].username;
   }
 
@@ -119,7 +109,7 @@ function Groups(props) {
     const newMember = member;
     setMember('');
     // retrieve new member uid
-    const matches = usersData.filter(user => user.username === newMember);
+    const matches = usernamesData.filter(user => user.username === newMember);
     if (matches.length === 0) {
       setAddError(`No user @${newMember} found`)
       setTimeout(() => setAddError(''), 2000);
@@ -139,26 +129,6 @@ function Groups(props) {
       members: firebase.firestore.FieldValue.arrayRemove(member)
     });
   }
-
-  // set current user groups
-  async function getGroups() {
-    if (!userData || !allGroups) return;
-    // retrieve user groups
-    const userGroups = allGroups.filter(g => {
-      return g.members.includes(uid);
-    });
-    setGroups(userGroups);
-    // update user doc with new group ids
-    if (userData.groups.length !== userGroups.length) {
-      await userRef.update({
-        groups: userGroups.map(g => g.id)
-      });
-    }
-  }
-
-  useEffect(() => {
-    getGroups();
-  }, [userData, allGroups]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Groups">

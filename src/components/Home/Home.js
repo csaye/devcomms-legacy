@@ -14,21 +14,13 @@ function Home() {
   const userRef = firebase.firestore().collection('users').doc(uid);
   const [userData] = useDocumentData(userRef);
 
-  const [groupId, setGroupId] = useState(undefined);
-  const [groupName, setGroupName] = useState(undefined);
+  const [group, setGroup] = useState(undefined);
 
-  // retrieves current user group id and name
+  // retrieves current user group id
   async function getGroup() {
     if (!userData) return;
-    const gId = userData.currentGroup;
-    setGroupId(gId);
-    if (!gId) return;
-    // retrieve group name from doc at group id
-    await firebase.firestore().collection('groups').doc(gId).get().then(doc => {
-      const docData = doc.data();
-      const gName = docData.name;
-      setGroupName(gName);
-    })
+    const groupId = userData.group;
+    setGroup(groupId);
   }
 
   // get group when user data changes
@@ -39,11 +31,11 @@ function Home() {
   return (
     <div className="Home">
       {
-        groupId !== undefined ?
+        group !== undefined ?
         <>
           {
-            groupId ?
-            <Page groupId={groupId} groupName={groupName} username={userData.username} /> :
+            group ?
+            <Page group={group} username={userData.username} /> :
             <Groups username={userData.username} />
           }
         </> :
