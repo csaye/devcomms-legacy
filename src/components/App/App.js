@@ -43,7 +43,7 @@ function App() {
             <Auth />
           }
         </> :
-        <Loading />
+        <Loading message="Loading auth..." />
       }
     </div>
   );

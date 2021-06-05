@@ -39,7 +39,7 @@ function Home() {
             <Groups username={userData.username} />
           }
         </> :
-        <Loading />
+        <Loading message="Loading groups..." />
       }
     </div>
   );

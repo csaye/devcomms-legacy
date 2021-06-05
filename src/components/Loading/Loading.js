@@ -1,9 +1,9 @@
 import './Loading.css';
 
-function Loading() {
+function Loading(props) {
   return (
     <div className="Loading">
-      <h1>Loading...</h1>
+      <h1>{props.message}</h1>
     </div>
   );
 }

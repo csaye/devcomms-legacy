@@ -134,7 +134,7 @@ function Groups(props) {
     <div className="Groups">
       {
         (loading || !groups || !ownedGroups) ?
-        <Loading /> :
+        <Loading message="Loading groups..." /> :
         <div className="center-box">
           <h1><GroupIcon /> Groups</h1>
           <hr />

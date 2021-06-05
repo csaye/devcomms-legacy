@@ -35,8 +35,8 @@
   outline: none;
 }
 .modal .delete-text {
+  margin-bottom: 5px;
   color: red;
-  margin: 0 0 5px 0;
 }
 .modal hr {
   border: 1px solid gray;
