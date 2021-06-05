@@ -46,7 +46,7 @@ function Goal(props) {
 
   const [timeLeft, setTimeLeft] = useState(endDate - new Date());
 
-  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
   const goalsRef = groupRef.collection('goals');
   const goalRef = goalsRef.doc(id);
 

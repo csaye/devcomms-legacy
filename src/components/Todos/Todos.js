@@ -12,7 +12,7 @@ import './Todos.css';
 
 function Todos(props) {
   // get todos reference
-  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
   const todosRef = groupRef.collection('todos');
   const [todos] = useCollectionData(
     todosRef.orderBy('priority'), { idField: 'id' }
@@ -74,7 +74,7 @@ function Todos(props) {
             {
               todos.length > 0 ?
               todos.map((t, i) =>
-                <Todo key={`todo-${i}`} data={t} groupId={props.groupId} />
+                <Todo key={`todo-${i}`} data={t} group={props.group} />
               ) :
               <p>No todos yet.</p>
             }

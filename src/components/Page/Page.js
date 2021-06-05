@@ -19,19 +19,19 @@ function Page(props) {
 
   function getWidget() {
     switch (widget) {
-      case 'notes': return <Notes groupId={props.groupId} />
-      case 'goals': return <Goals groupId={props.groupId} />
-      case 'sketch': return <Sketch groupId={props.groupId} />
-      case 'todos': return <Todos groupId={props.groupId} />
+      case 'notes': return <Notes group={props.group} />
+      case 'goals': return <Goals group={props.group} />
+      case 'sketch': return <Sketch group={props.group} />
+      case 'todos': return <Todos group={props.group} />
       default: return <p className="select-text">Select a widget above.</p>
     }
   }
 
   return (
     <div className="Page">
-      <Header groupName={props.groupName} username={props.username} />
+      <Header group={props.group} username={props.username} />
       <div className="page-content">
-        <Chat groupId={props.groupId} username={props.username} />
+        <Chat group={props.group} username={props.username} />
         <div className="select-widget">
           <div className="widget-header">
             <button className={widget === 'todos' ? 'clean-btn selected' : 'clean-btn'} onClick={() => setWidget('todos')}><ListIcon /></button>

@@ -15,7 +15,7 @@ function Goals(props) {
   const [endTime, setEndTime] = useState('');
 
   // get goals
-  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
   const goalsRef = groupRef.collection('goals');
   const goalsQuery = goalsRef.orderBy('endAt');
   const [goals] = useCollectionData(goalsQuery, { idField: 'id' });
@@ -77,7 +77,7 @@ function Goals(props) {
           {
             goals.length > 0 ?
             goals.map((g, i) =>
-              <Goal key={`goal-${i}`} data={g} groupId={props.groupId} />
+              <Goal key={`goal-${i}`} data={g} group={props.group} />
             ) :
             <p>No goals yet.</p>
           }

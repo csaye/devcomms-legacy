@@ -29,7 +29,7 @@ function Sketch(props) {
   const canvasRef = useRef();
 
   // get sketch data reference
-  const groupRef = firebase.firestore().collection('groups').doc(props.groupId);
+  const groupRef = firebase.firestore().collection('groups').doc(props.group);
   const sketchRef = groupRef.collection('sketches').doc('sketch');
   const [sketchDoc] = useDocument(sketchRef);
 
