@@ -56,3 +56,17 @@ textarea {
   width: 16px;
   color: #ddd;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  background: #282a2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
