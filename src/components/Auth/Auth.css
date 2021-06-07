@@ -3,10 +3,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ddd;
 }
 
 .Auth .center-box {
-  background: #ddd;
+  background: #282a2e;
   border-radius: 5px;
   padding: 20px 40px;
   box-shadow: 0 0 3px #333;
@@ -38,6 +39,12 @@
 
 .Auth form input {
   display: block;
+  border: 0;
+  padding: 2px 3px;
+  border-radius: 3px;
+  outline: none;
+  background: #36393f;
+  color: #ddd;
 }
 
 .Auth label {
@@ -51,6 +58,13 @@
 
 .Auth form button {
   margin-top: 10px;
+  padding: 5px 7px;
+  background: #2196f3;
+  color: #202225;
+}
+
+.Auth form button:hover {
+  background: #2176ff;
 }
 
 .Auth .error-text {

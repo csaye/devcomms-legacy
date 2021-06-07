@@ -3,10 +3,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #ddd;
 }
 
 .Groups .center-box {
-  background: #ddd;
+  background: #282a2e;
   width: 200px;
   border-radius: 5px;
   padding: 20px 40px;
@@ -38,7 +39,13 @@
 .Groups form input {
   margin: 0 5px 5px 0;
   position: relative;
-  bottom: 5px;
+  bottom: 7px;
+  border: 0;
+  padding: 2px 3px;
+  border-radius: 3px;
+  outline: none;
+  background: #36393f;
+  color: #ddd;
 }
 
 .Groups .create-button {
