@@ -108,16 +108,17 @@ function Sketch(props) {
   }
 
   async function undoCanvas() {
+    // load url to canvas
     if (!lastCanvasUrl) return;
     loadUrl(lastCanvasUrl);
 
     // update firebase document
     await sketchRef.update({
       data: lastCanvasUrl
-    })
-
-    // clear last canvas url
-    setLastCanvasUrl(undefined);
+    }).then(doc => {
+      // clear last canvas url
+      setLastCanvasUrl(undefined);
+    });
   }
 
   // downloads canvas as a png

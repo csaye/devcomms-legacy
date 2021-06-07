@@ -127,12 +127,13 @@ function Auth() {
             />
             <input
               placeholder="confirm password"
+              style={{marginTop: '2px'}}
               type="password"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
               required
             />
-            <button type="submit">Sign Up</button>
+            <button className="clean-btn">Sign Up</button>
           </form> :
           <form onSubmit={signIn}>
             <h2>Sign In</h2>
@@ -154,18 +155,18 @@ function Auth() {
               onChange={e => setPassword(e.target.value)}
               required
             />
-            <button type="submit">Sign In</button>
+            <button className="clean-btn">Sign In</button>
           </form>
         }
         {error && <p className="error-text">{error}</p>}
         <hr className="bottom-hr" />
         {
           signingUp ?
-          <button className="switch-button" onClick={() => {
+          <button className="switch-button clean-btn" onClick={() => {
             setError('');
             setSigningUp(false);
           }}>Have an account? Sign in</button> :
-          <button className="switch-button" onClick={() => {
+          <button className="switch-button clean-btn" onClick={() => {
             setError('');
             setSigningUp(true);
           }}>No account? Sign up</button>

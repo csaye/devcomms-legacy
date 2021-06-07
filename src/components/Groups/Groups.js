@@ -147,7 +147,7 @@ function Groups(props) {
                   <button
                     key={`groupbutton-${i}`}
                     onClick={() => selectGroup(g.id)}
-                    className="group-button"
+                    className="group-button clean-btn"
                   >
                     {g.name}
                   </button>
@@ -163,7 +163,7 @@ function Groups(props) {
                 ownedGroups.map((g, i) =>
                   <Popup
                     trigger={
-                      <button className="group-button">{g.name}</button>
+                      <button className="group-button clean-btn">{g.name}</button>
                     }
                     key={`grouppopup-${i}`}
                     onOpen={() => {
@@ -317,7 +317,7 @@ function Groups(props) {
                 onChange={e => setGroupName(e.target.value)}
                 required
               />
-              <button className="create-button" type="submit">
+              <button className="create-button clean-btn" type="submit">
                 <AddIcon />
               </button>
             </div>
@@ -326,7 +326,7 @@ function Groups(props) {
           <hr />
           <div>
             <p>Signed in as @{props.username}</p>
-            <button onClick={() => firebase.auth().signOut()} className="sign-out-button">
+            <button onClick={() => firebase.auth().signOut()} className="sign-out-button clean-btn">
               <ExitToAppIcon />
             </button>
           </div>
