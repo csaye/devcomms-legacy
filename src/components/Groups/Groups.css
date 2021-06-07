@@ -41,6 +41,10 @@
   bottom: 5px;
 }
 
+.Groups .create-button {
+  padding: 3px 3px 0 3px;
+}
+
 .Groups .sign-out-button {
   padding: 3px 0 0 0;
   width: 34px;

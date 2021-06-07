@@ -260,12 +260,13 @@ function Chat(props) {
                               {
                                 m.type !== 'text' &&
                                 <button
+                                  style={{margin: '0 0 10px 0'}}
                                   onClick={() => downloadFile(m.url, m.filename)}
                                 >
                                   <GetAppIcon />
                                 </button>
                               }
-                              <hr style={{margin: '-5px 0 10px 0'}} />
+                              <hr style={{margin: '0 0 10px 0'}} />
                               {
                                 deleting ?
                                 <>

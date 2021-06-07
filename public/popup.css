@@ -35,7 +35,7 @@
   outline: none;
 }
 .modal .delete-text {
-  margin-bottom: 5px;
+  margin: 0 0 5px 0;
   color: red;
 }
 .modal hr {
@@ -69,6 +69,12 @@
 }
 .modal button svg {
   margin-bottom: -3px;
+}
+.modal a {
+  color: #2196f3;
+}
+.modal ::-webkit-scrollbar {
+  background: #202225;
 }
 
 @keyframes anvil {

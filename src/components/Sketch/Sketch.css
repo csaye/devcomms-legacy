@@ -2,11 +2,12 @@
   height: 100%;
   width: 100%;
   text-align: center;
+  overflow: auto;
 }
 
 .Sketch > h1 {
   width: fit-content;
-  margin: 0 auto;
+  margin: 10px auto 0 auto;
   border-bottom: 1px solid white;
 }
 
