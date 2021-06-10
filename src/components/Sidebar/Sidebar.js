@@ -37,6 +37,47 @@ function Sidebar() {
           </button>
         )
       }
+      <Popup
+        trigger={
+          <button className="group-btn">
+            <AddIcon />
+          </button>
+        }
+        modal
+      >
+        {
+          close => (
+            <div className="modal">
+              <button className="close" onClick={close}>&times;</button>
+              <div
+                className="header"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                Create New Group
+                <GroupIcon style={{marginLeft: '5px'}} />
+              </div>
+              <form onSubmit={e => {
+                e.preventDefault();
+                createGroup().then(close);
+              }}>
+                <input
+                  placeholder="group name"
+                  value={groupName}
+                  onChange={e => setGroupName(e.target.value)}
+                  required
+                />
+                <button className="create-button clean-btn" type="submit">
+                  <AddIcon />
+                </button>
+              </form>
+            </div>
+          )
+        }
+      </Popup>
     </div>
   );
 }
