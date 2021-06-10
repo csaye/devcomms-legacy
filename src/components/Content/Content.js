@@ -14,7 +14,13 @@ import './Content.css';
 function Content(props) {
   return (
     <div className="Content">
-      <p>Content</p>
+      {
+        props.channel ?
+        <>
+          {props.channel}
+        </> :
+        <p>No channel selected</p>
+      }
     </div>
   );
 }
