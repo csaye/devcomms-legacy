@@ -1,6 +1,6 @@
 .Header {
   min-height: 60px;
-  border-bottom: 1px solid var(--dark3);
+  border-bottom: 1px solid var(--dark4);
   background: var(--dark0);
   display: flex;
   align-items: center;

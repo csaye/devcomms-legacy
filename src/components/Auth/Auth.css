@@ -59,6 +59,7 @@
 .Auth form button {
   margin-top: 10px;
   padding: 5px 7px;
+  border-radius: 3px;
   background: var(--blue0);
   color: var(--dark0);
 }

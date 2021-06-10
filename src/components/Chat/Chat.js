@@ -16,7 +16,7 @@ import logo from '../../img/logo.png';
 
 import './Chat.css';
 
-const timestampOffset = 120; // delay in seconds before a new header
+const timestampOffset = 60 * 5; // delay in seconds before a new header
 const maxMessages = 64; // maximum messages shown at one time
 
 const now = new Date();
