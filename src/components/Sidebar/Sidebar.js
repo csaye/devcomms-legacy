@@ -1,20 +1,47 @@
+import React, { useState } from 'react';
+
+import Popup from 'reactjs-popup';
+import AddIcon from '@material-ui/icons/Add';
+import GroupIcon from '@material-ui/icons/Group';
+
 import './Sidebar.css';
 
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 function Sidebar() {
-  const uid = firebase.auth().currentUser.uid;
-  const userRef = firebase.firestore().collection('users').doc(uid);
+  const [groupName, setGroupName] = useState('');
 
+  // get user doc
+  const uid = firebase.auth().currentUser.uid;
+  const userDoc = firebase.firestore().collection('users').doc(uid);
+
+  // get user groups
   const groupsRef = firebase.firestore().collection('groups');
   const groupsQuery = groupsRef.where('members', 'array-contains', uid).orderBy('name');
   const [groups] = useCollectionData(groupsQuery, { idField: 'id' });
 
   // selects given group for current user
   async function selectGroup(group) {
-    await userRef.update({
+    await userDoc.update({
       group: group.id
+    });
+  }
+
+  // creates a group with given name
+  async function createGroup() {
+    // create group document
+    await groupsRef.add({
+      name: groupName,
+      owner: uid,
+      members: [uid]
+    }).then(doc => {
+      // get group id
+      const groupId = doc.id;
+      // set current user group to this
+      userDoc.update({
+        group: groupId
+      });
     });
   }
 
