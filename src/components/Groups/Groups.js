@@ -4,12 +4,12 @@ import Popup from 'reactjs-popup';
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
 
-import './Sidebar.css';
+import './Groups.css';
 
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
-function Sidebar() {
+function Groups() {
   const [groupName, setGroupName] = useState('');
 
   // get user doc
@@ -47,17 +47,17 @@ function Sidebar() {
 
   if (!groups) {
     return (
-      <div className="Sidebar" />
+      <div className="Groups" />
     );
   }
 
   return (
-    <div className="Sidebar">
+    <div className="Groups">
       {
         groups.map((group, i) =>
           <button
             className="group-btn"
-            key={`sidebar-groupdiv-${i}`}
+            key={`groups-button-${i}`}
             onClick={() => selectGroup(group)}
           >
             {group.name}
@@ -118,4 +118,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default Groups;

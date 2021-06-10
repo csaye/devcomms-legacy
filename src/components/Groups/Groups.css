@@ -1,11 +1,11 @@
-.Sidebar {
+.Groups {
   width: 80px;
   background: var(--dark0);
   border-right: 1px solid var(--dark4);
   overflow: auto;
 }
 
-.Sidebar .group-btn {
+.Groups .group-btn {
   margin: 10px auto;
   width: 60px;
   height: 60px;
@@ -18,6 +18,6 @@
   color: var(--dark0);
 }
 
-.Sidebar .group-btn:hover {
+.Groups .group-btn:hover {
   transform: scale(1.04);
 }
