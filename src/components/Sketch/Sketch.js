@@ -10,8 +10,8 @@ import firebase from 'firebase/app';
 
 import './Sketch.css';
 
-const width = 384;
-const height = 384;
+const width = 512;
+const height = 512;
 
 let prevX = 0, prevY = 0, currX = 0, currY = 0;
 let drawing = false;
@@ -29,9 +29,9 @@ function Sketch(props) {
   const canvasRef = useRef();
 
   // get sketch data reference
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const sketchRef = groupRef.collection('sketches').doc('sketch');
-  const [sketchDoc] = useDocument(sketchRef);
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const [sketchData] = useDocument(channelDoc);
 
   // updates sketch in firebase
   async function updateSketch() {
@@ -40,9 +40,9 @@ function Sketch(props) {
     const url = canvas.toDataURL();
 
     // update firebase document
-    await sketchRef.update({
+    await channelDoc.update({
       data: url
-    })
+    });
   }
 
   function draw() {
@@ -83,18 +83,17 @@ function Sketch(props) {
 
   // clears canvas
   function clearCanvas() {
-
+    // confirm delete
+    if (!window.confirm('Clear canvas?')) return;
     // get last canvas url
     const url = canvas.toDataURL();
     setLastCanvasUrl(url);
-
     // fill with white
     ctx.beginPath();
     ctx.rect(0, 0, width, height);
     ctx.fillStyle = 'white';
     ctx.fill();
     ctx.closePath();
-
     // update sketch in firebase
     updateSketch();
   }
@@ -113,7 +112,7 @@ function Sketch(props) {
     loadUrl(lastCanvasUrl);
 
     // update firebase document
-    await sketchRef.update({
+    await channelDoc.update({
       data: lastCanvasUrl
     }).then(doc => {
       // clear last canvas url
@@ -123,11 +122,9 @@ function Sketch(props) {
 
   // downloads canvas as a png
   function downloadCanvas() {
-
     // get object url
     canvas.toBlob(blob => {
       const url = URL.createObjectURL(blob);
-
       // download from link element
       const link = document.createElement('a');
       link.download = 'sketch.png';
@@ -138,17 +135,17 @@ function Sketch(props) {
 
   // gets and sets canvas data
   async function getData() {
-    if (!sketchDoc) return;
+    if (!sketchData) return;
     // if sketch doc exists, load data
-    if (sketchDoc.exists) {
-      const docData = sketchDoc.data();
+    if (sketchData.exists) {
+      const docData = sketchData.data();
       const url = docData.data;
       loadUrl(url);
     // if no sketch doc, create doc
     } else {
-      await sketchRef.set({
+      await channelDoc.set({
         data: ''
-      })
+      });
     }
     setLoaded(true);
   }
@@ -159,10 +156,10 @@ function Sketch(props) {
     ctx = canvas.getContext('2d');
   }, []);
 
-  // get data when sketch doc changes
+  // get data when sketch data changes
   useEffect(() => {
     getData();
-  }, [sketchDoc]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sketchData]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Sketch">
