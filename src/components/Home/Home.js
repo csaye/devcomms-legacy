@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import Page from '../Page/Page.js';
-import Groups from '../Groups/Groups.js';
 import Loading from '../Loading/Loading.js';
 
 import firebase from 'firebase/app';
@@ -32,13 +31,7 @@ function Home() {
     <div className="Home">
       {
         group !== undefined ?
-        <>
-          {
-            group ?
-            <Page group={group} username={userData.username} /> :
-            <Groups username={userData.username} />
-          }
-        </> :
+        <Page group={group} username={userData.username} /> :
         <Loading message="Loading groups..." />
       }
     </div>

@@ -32,15 +32,6 @@ function Header(props) {
   const usernamesRef = firebase.firestore().collection('usernames');
   const [usernamesData] = useCollectionData(usernamesRef);
 
-  // exits current group
-  async function exitGroup() {
-    // set current group to empty string
-    const userDoc = firebase.firestore().collection('users').doc(uid);
-    await userDoc.update({
-      group: ''
-    });
-  }
-
   // updates group document in firebase
   async function updateGroup() {
     await groupDoc.update({
@@ -251,7 +242,7 @@ function Header(props) {
           }
         </Popup>
       }
-      <button onClick={exitGroup} className="sign-out-button clean-btn">
+      <button onClick={() => firebase.auth().signOut()} className="sign-out-button clean-btn">
         <ExitToAppIcon />
       </button>
     </div>
