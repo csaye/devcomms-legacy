@@ -29,6 +29,153 @@ function Header(props) {
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
       <GroupIcon className="header-icon" />{groupData ? groupData.name : '...'}
+      {
+        (groupData && groupData.owner === uid) &&
+        <Popup
+          trigger={
+            <button className="group-button clean-btn">
+              <EditIcon />
+            </button>
+          }
+          onOpen={() => {
+            setNewGroupName(groupData.name);
+          }}
+          modal
+        >
+          {
+            close => (
+              <div className="modal">
+                <button className="close" onClick={close}>&times;</button>
+                <div
+                  className="header"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  Editing
+                  <GroupIcon style={{marginLeft: '5px'}} />
+                  {groupData.name}
+                </div>
+                <form
+                  style={{
+                    margin: '0 0 20px 0'
+                  }}
+                  onSubmit={e => {
+                    e.preventDefault();
+                    updateGroup();
+                    close();
+                  }}
+                >
+                  <p style={{margin: '10px 0 0 0'}}><u>Group Name</u></p>
+                  <input
+                    placeholder="group name"
+                    value={newGroupName}
+                    onChange={e => setNewGroupName(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="submit"
+                    style={{marginLeft: '5px', position: 'relative', top: '5px'}}
+                  >
+                    <CheckIcon />
+                  </button>
+                </form>
+                <hr />
+                <p style={{margin: '15px 0 5px 0'}}><u>Members</u></p>
+                {
+                  groupData.members.sort().map((m, i) =>
+                    <div
+                      key={`groupmember-${i}`}
+                      style={{
+                        height: '30px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <PersonIcon/> {getUsername(m)}
+                      {
+                        m !== uid &&
+                        <button
+                          onClick={() => removeMember(m)}
+                          style={{
+                            border: '0',
+                            background: 'transparent',
+                            margin: '0', padding: '0'
+                          }}
+                        >
+                          <DeleteIcon />
+                        </button>
+                      }
+                    </div>
+                  )
+                }
+                <hr />
+                <p style={{margin: '15px 0 5px 0'}}><u>Add member</u></p>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    addMember();
+                  }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <input
+                    placeholder="username"
+                    value={member}
+                    onChange={e => setMember(e.target.value)}
+                    style={{
+                      marginRight: '5px'
+                    }}
+                    required
+                  />
+                  <button type="submit"><AddIcon /></button>
+                </form>
+                {
+                  addError && <p
+                    className="error-text"
+                    style={{margin: '5px 0'}}
+                    >
+                      {addError}
+                    </p>
+                }
+                <hr style={{marginBottom: '0'}} />
+                {
+                  deleting ?
+                  <>
+                    <p className="delete-text">Delete group?</p>
+                    <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
+                      cancel
+                    </button>
+                    <button onClick={() => {
+                      deleteGroup();
+                      close();
+                      setDeleting(false);
+                    }}>
+                      delete
+                    </button>
+                  </> :
+                  <button
+                    className="button"
+                    onClick={() => {
+                      setDeleting(true);
+                    }}
+                    style={{
+                      marginTop: '10px'
+                    }}
+                  >
+                    <DeleteIcon />
+                  </button>
+                }
+              </div>
+            )
+          }
+        </Popup>
+      }
       <button onClick={exitGroup} className="sign-out-button clean-btn">
         <ExitToAppIcon />
       </button>
