@@ -95,7 +95,7 @@ function Auth() {
     <div className="Auth">
       <div className="center-box">
         <img src={logo} alt="logo" />
-        <h1>DevComms</h1>
+        <h1>Devcomms</h1>
         <hr />
         {
           signingUp ?

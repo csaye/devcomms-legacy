@@ -1,4 +1,4 @@
-# DevComms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
+# Devcomms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
 
 Team communication and coordination all in one place.
 
@@ -10,7 +10,7 @@ Try it here: [csaye.com/devcomms](https://csaye.com/devcomms)
 
 ## About
 
-DevComms aims to simplify and streamline team development. With a collection of helpful, synchronized widgets, your team can chat, arrange notes, set goals, and more all in one place.
+Devcomms aims to simplify and streamline team development. With a collection of helpful, synchronized widgets, your team can chat, arrange notes, set goals, and more all in one place.
 
 ### Features
 

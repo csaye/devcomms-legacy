@@ -171,7 +171,7 @@ function Chat(props) {
     document.addEventListener("visibilitychange", () => {
       pageHidden = document.hidden;
       // if page not hidden, reset title
-      if (!pageHidden) document.title = 'DevComms';
+      if (!pageHidden) document.title = 'Devcomms';
     });
 
     // listen for message creation
@@ -188,7 +188,7 @@ function Chat(props) {
         if (change.type === 'added') {
           const data = change.doc.data();
           sendNotification(data);
-          document.title = 'DevComms (new)';
+          document.title = 'Devcomms (new)';
         }
       });
     });

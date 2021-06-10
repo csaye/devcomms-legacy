@@ -24,7 +24,7 @@ function Header(props) {
 
   return (
     <div className="Header">
-      <h1>DevComms</h1>
+      <h1>Devcomms</h1>
       <img className="logo-img" src={logo} alt="logo" />
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
