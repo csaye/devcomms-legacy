@@ -1,0 +1,5 @@
+.Channels {
+  min-width: 240px;
+  max-width: 240px;
+  background: var(--dark2);
+}
