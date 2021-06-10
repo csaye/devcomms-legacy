@@ -1,25 +1,100 @@
+import React, { useState } from 'react';
+
+import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 
 import firebase from 'firebase/app';
 
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
 
 import logo from '../../img/logo.png';
 import './Header.css';
 
 function Header(props) {
+  const [newGroupName, setNewGroupName] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [addError, setAddError] = useState('');
+  const [member, setMember] = useState('');
+
+  const uid = firebase.auth().currentUser.uid;
+
+  // get group data
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const [groupData] = useDocumentData(groupDoc);
 
+  // get usernames data
+  const usernamesRef = firebase.firestore().collection('usernames');
+  const [usernamesData] = useCollectionData(usernamesRef);
+
   // exits current group
   async function exitGroup() {
-    const uid = firebase.auth().currentUser.uid;
     // set current group to empty string
-    await firebase.firestore().collection('users').doc(uid).update({
+    const userDoc = firebase.firestore().collection('users').doc(uid);
+    await userDoc.update({
       group: ''
     });
+  }
+
+  // updates group document in firebase
+  async function updateGroup() {
+    await groupDoc.update({
+      name: newGroupName
+    });
+  }
+
+  // adds member to group
+  async function addMember() {
+    const newMember = member;
+    setMember('');
+    // retrieve new member uid
+    const matches = usernamesData.filter(user => user.username === newMember);
+    if (matches.length === 0) {
+      setAddError(`No user @${newMember} found`)
+      setTimeout(() => setAddError(''), 2000);
+      return;
+    }
+    const memberUid = matches[0].uid;
+    // update document in firebase
+    await groupDoc.update({
+      members: firebase.firestore.FieldValue.arrayUnion(memberUid)
+    });
+  }
+
+  // removes given member
+  async function removeMember(member) {
+    // update document in firebase
+    await groupDoc.update({
+      members: firebase.firestore.FieldValue.arrayRemove(member)
+    });
+  }
+
+  // deletes group
+  async function deleteGroup() {
+    // delete each subcollection
+    const batch = firebase.firestore().batch();
+    const subcollections = ['chats', 'goals', 'notes', 'sketches', 'todos'];
+    for (const subcollection of subcollections) {
+      await groupDoc.collection(subcollection).get().then(docs => {
+        docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+      });
+    }
+    batch.delete(groupDoc); // delete group document
+    batch.commit(); // commit batch
+  }
+
+  // gets a username from user id
+  function getUsername(userId) {
+    if (!usernamesData) return '...';
+    const matches = usernamesData.filter(user => user.uid === userId);
+    return matches.length === 0 ? null : matches[0].username;
   }
 
   return (
