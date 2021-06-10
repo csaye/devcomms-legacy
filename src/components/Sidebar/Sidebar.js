@@ -70,6 +70,9 @@ function Sidebar() {
             <AddIcon />
           </button>
         }
+        onOpen={() => {
+          setGroupName('');
+        }}
         modal
       >
         {
@@ -97,7 +100,13 @@ function Sidebar() {
                   onChange={e => setGroupName(e.target.value)}
                   required
                 />
-                <button className="create-button clean-btn" type="submit">
+                <button
+                  className="clean-btn"
+                  style={{
+                    marginLeft: '5px', marginTop: '5px',
+                    position: 'relative', top: '4px'
+                  }}
+                >
                   <AddIcon />
                 </button>
               </form>

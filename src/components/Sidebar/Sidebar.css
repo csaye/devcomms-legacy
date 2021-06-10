@@ -17,3 +17,7 @@
   text-align: center;
   color: var(--dark0);
 }
+
+.Sidebar .group-btn:hover {
+  transform: scale(1.04);
+}

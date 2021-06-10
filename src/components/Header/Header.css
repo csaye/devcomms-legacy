@@ -11,15 +11,30 @@
 }
 
 .Header .logo-img {
-  height: 40px;
+  height: 50px;
+  margin: 0 16px 0 12px;
+}
+
+.Header > span.divider {
+  position: absolute;
+  left: 74px;
+  border-right: 1px solid var(--dark4);
+  height: 60px;
 }
 
 .Header .header-icon {
   margin-left: 10px;
 }
 
+.Header .edit-button {
+  margin: 0 0 0 10px;
+  padding: 3px 0 0 0;
+  width: 34px;
+  height: 34px;
+}
+
 .Header .sign-out-button {
-  margin: 0 10px 0 15px;
+  margin: 0 10px;
   padding: 3px 0 0 0;
   width: 34px;
   height: 34px;

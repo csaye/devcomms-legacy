@@ -90,8 +90,9 @@ function Header(props) {
 
   return (
     <div className="Header">
-      <h1>Devcomms</h1>
       <img className="logo-img" src={logo} alt="logo" />
+      <span className="divider" />
+      <h1>Devcomms</h1>
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
       <GroupIcon className="header-icon" />{groupData ? groupData.name : '...'}
@@ -99,7 +100,7 @@ function Header(props) {
         (groupData && groupData.owner === uid) &&
         <Popup
           trigger={
-            <button className="group-button clean-btn">
+            <button className="group-button clean-btn edit-button">
               <EditIcon />
             </button>
           }

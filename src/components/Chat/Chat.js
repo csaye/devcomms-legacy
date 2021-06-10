@@ -157,6 +157,13 @@ function Chat(props) {
     }
   }
 
+  // called when page visibility changes
+  function onVisChange() {
+    pageHidden = document.hidden;
+    // if page not hidden, reset title
+    if (!pageHidden) document.title = 'Devcomms';
+  }
+
   // when messages update
   useEffect(() => {
     chatScroll(); // scroll chat
@@ -168,14 +175,10 @@ function Chat(props) {
     if (Notification.permission === 'default') Notification.requestPermission();
 
     // create visibility listener on start
-    document.addEventListener("visibilitychange", () => {
-      pageHidden = document.hidden;
-      // if page not hidden, reset title
-      if (!pageHidden) document.title = 'Devcomms';
-    });
+    document.addEventListener("visibilitychange", onVisChange);
 
     // listen for message creation
-    messagesQuery.onSnapshot(snapshot => {
+    const messagesListener = messagesQuery.onSnapshot(snapshot => {
       // skip initial state of database
       if (firstQuery) {
         firstQuery = false;
@@ -192,6 +195,12 @@ function Chat(props) {
         }
       });
     });
+
+    // clear listeners on return
+    return () => {
+      document.removeEventListener("visibilitychange", onVisChange);
+      messagesListener();
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
