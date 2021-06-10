@@ -1,0 +1,4 @@
+.Content {
+  background: var(--dark3);
+  flex-grow: 1;
+}
