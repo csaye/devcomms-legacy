@@ -12,8 +12,9 @@ import './Todos.css';
 
 function Todos(props) {
   // get todos reference
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const todosRef = groupRef.collection('todos');
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const todosRef = channelDoc.collection('todos');
   const [todos] = useCollectionData(
     todosRef.orderBy('priority'), { idField: 'id' }
   );

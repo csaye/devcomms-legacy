@@ -15,8 +15,9 @@ function Goals(props) {
   const [endTime, setEndTime] = useState('');
 
   // get goals
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const goalsRef = groupRef.collection('goals');
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const goalsRef = channelDoc.collection('goals');
   const goalsQuery = goalsRef.orderBy('endAt');
   const [goals] = useCollectionData(goalsQuery, { idField: 'id' });
 

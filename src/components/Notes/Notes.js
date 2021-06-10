@@ -12,20 +12,20 @@ function Notes(props) {
   const [loaded, setLoaded] = useState(false);
 
   // get notes reference
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const noteRef = groupRef.collection('notes').doc('note');
-  const [noteDoc] = useDocument(noteRef);
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const [noteData] = useDocument(channelDoc);
 
   // gets text from note data
   async function getText() {
-    if (!noteDoc) return;
+    if (!noteData) return;
     // if note exists, get text
-    if (noteDoc.exists) {
-      const docData = noteDoc.data();
+    if (noteData.exists) {
+      const docData = noteData.data();
       setText(docData.text);
     // if note does not exist, create doc
     } else {
-      await noteRef.set({
+      await channelDoc.set({
         text: ''
       });
     }
@@ -35,7 +35,7 @@ function Notes(props) {
   // updates firebase document text
   async function updateText(newText) {
     setText(newText);
-    await noteRef.update({
+    await channelDoc.update({
       text: newText
     });
   }
@@ -43,7 +43,7 @@ function Notes(props) {
   // get text when note doc changes
   useEffect(() => {
     getText();
-  }, [noteDoc]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [noteData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Notes">
