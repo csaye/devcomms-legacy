@@ -1,0 +1,19 @@
+.Sidebar {
+  width: 80px;
+  background: var(--dark0);
+  border-right: 1px solid var(--dark4);
+  overflow: auto;
+}
+
+.Sidebar .group-btn {
+  margin: 10px auto;
+  width: 60px;
+  height: 60px;
+  background: var(--gray1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--dark0);
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Sidebar from '../Sidebar/Sidebar.js';
 import Chat from '../Chat/Chat.js';
 import Header from '../Header/Header.js';
 import Notes from '../Notes/Notes.js';
@@ -31,6 +32,7 @@ function Page(props) {
     <div className="Page">
       <Header group={props.group} username={props.username} />
       <div className="page-content">
+        <Sidebar />
         <Chat group={props.group} username={props.username} />
         <div className="select-widget">
           <div className="widget-header">
