@@ -78,7 +78,7 @@
 }
 
 .Sketch .canvas-button.disabled {
-  color: #282a2e;
+  color: var(--dark1);
 }
 
 .Sketch .canvas-button:last-of-type {

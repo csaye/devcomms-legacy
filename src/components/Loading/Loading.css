@@ -6,8 +6,8 @@
 }
 
 .Loading h1 {
-  background: #282a2e;
-  color: #ddd;
+  background: var(--dark1);
+  color: var(--gray0);
   box-shadow: 0 0 3px #333;
   padding: 5px 10px;
   border-radius: 5px;

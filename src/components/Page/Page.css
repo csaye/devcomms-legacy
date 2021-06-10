@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: stretch;
   width: fit-content;
-  color: #ddd;
+  color: var(--gray0);
 }
 
 .Page .page-content {
@@ -18,7 +18,7 @@
   min-width: 276px;
   width: 50%;
   height: 100%;
-  background: #282a2e;
+  background: var(--dark1);
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -33,7 +33,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 5px solid #202225;
+  border-bottom: 5px solid var(--dark0);
 }
 
 .Page .widget-header > button {
@@ -42,7 +42,7 @@
 }
 
 .Page .widget-header > button.selected {
-  border: 1px solid #ddd;
+  border: 1px solid var(--gray0);
 }
 
 .Page .widget-header > button > svg {

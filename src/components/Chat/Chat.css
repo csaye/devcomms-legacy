@@ -2,8 +2,8 @@
   height: 100%;
   min-width: 276px;
   width: 50%;
-  background: #2f3136;
-  color: #ddd;
+  background: var(--dark2);
+  color: var(--gray0);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -21,7 +21,7 @@
 
 .Chat .message-list {
   overflow: auto;
-  padding: 5px 5px 15px 5px;
+  padding-bottom: 10px;
 }
 
 .Chat .message-header {
@@ -59,7 +59,7 @@
 }
 
 .Chat .message-text:hover {
-  background: #282a2e;
+  background: var(--dark1);
 }
 
 .Chat .markdown-text {
@@ -78,7 +78,7 @@
 }
 
 .Chat a {
-  color: #2196f3;
+  color: var(--blue0);
 }
 
 .Chat .edit-btn {
@@ -91,7 +91,7 @@
   align-items: flex-end;
   align-items: center;
   padding: 10px;
-  background: #202225;
+  background: var(--dark0);
 }
 
 .Chat form button {
@@ -119,8 +119,8 @@
   padding: 6px 5px 4px 5px;
   border-radius: 5px;
   height: 20px;
-  background: #36393f;
-  color: #ddd;
+  background: var(--dark3);
+  color: var(--gray0);
 }
 
 .Chat .send-button {

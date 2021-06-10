@@ -3,11 +3,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ddd;
+  color: var(--gray0);
 }
 
 .Auth .center-box {
-  background: #282a2e;
+  background: var(--dark1);
   border-radius: 5px;
   padding: 20px 40px;
   box-shadow: 0 0 3px #333;
@@ -43,8 +43,8 @@
   padding: 2px 3px;
   border-radius: 3px;
   outline: none;
-  background: #36393f;
-  color: #ddd;
+  background: var(--dark3);
+  color: var(--gray0);
 }
 
 .Auth label {
@@ -59,12 +59,12 @@
 .Auth form button {
   margin-top: 10px;
   padding: 5px 7px;
-  background: #2196f3;
-  color: #202225;
+  background: var(--blue0);
+  color: var(--dark0);
 }
 
 .Auth form button:hover {
-  background: #2176ff;
+  background: var(--blue1);
 }
 
 .Auth .error-text {

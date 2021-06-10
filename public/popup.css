@@ -1,7 +1,7 @@
 .popup-content {
-  background: #282a2e!important;
-  border: 1px solid #202225!important;
-  color: #ddd;
+  background: var(--dark1)!important;
+  border: 1px solid var(--dark0)!important;
+  color: var(--gray0);
   border-radius: 5px;
   width: fit-content!important;
   -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
@@ -29,13 +29,13 @@
   right: -10px;
   top: -10px;
   font-size: 24px;
-  background: #282a2e;
+  background: var(--dark1);
   border-radius: 18px;
-  border: 1px solid #202225;
+  border: 1px solid var(--dark0);
   outline: none;
 }
 .modal .delete-text {
-  margin: 0 0 5px 0;
+  margin: 5px 0;
   color: red;
 }
 .modal hr {
@@ -54,27 +54,27 @@
   padding: 2px 3px;
   border-radius: 3px;
   outline: none;
-  background: #36393f;
-  color: #ddd;
+  background: var(--dark3);
+  color: var(--gray0);
 }
 .modal button {
-  background: #202225;
+  background: var(--dark0);
   padding: 3px;
   border: 0;
   border-radius: 5px;
-  color: #ddd;
+  color: var(--gray0);
 }
 .modal button:hover {
-  background: #2f3136;
+  background: var(--dark2);
 }
 .modal button svg {
   margin-bottom: -3px;
 }
 .modal a {
-  color: #2196f3;
+  color: var(--blue0);
 }
 .modal ::-webkit-scrollbar {
-  background: #202225;
+  background: var(--dark0);
 }
 
 @keyframes anvil {

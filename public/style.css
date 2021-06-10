@@ -28,12 +28,12 @@ textarea {
 .clean-btn {
   border: 0;
   border-radius: 2px;
-  background: #36393f;
-  color: #ddd;
+  background: var(--dark3);
+  color: var(--gray0);
 }
 
 .clean-btn:hover {
-  background: #2f3136;
+  background: var(--dark2);
 }
 
 .edit-btn {
@@ -48,25 +48,25 @@ textarea {
 }
 
 .edit-btn:hover {
-  background: #202225;
+  background: var(--dark0);
 }
 
 .edit-btn svg {
   height: 16px;
   width: 16px;
-  color: #ddd;
+  color: var(--gray0);
 }
 
 ::-webkit-scrollbar {
   width: 5px;
-  background: #202225;
+  background: var(--dark0);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ddd;
+  background: var(--gray0);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #bbb;
+  background: var(--gray1);
 }

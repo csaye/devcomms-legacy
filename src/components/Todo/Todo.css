@@ -1,5 +1,5 @@
 .Todo {
-  background: #36393f;
+  background: var(--dark3);
   margin: 15px;
   border-radius: 2px;
   box-shadow: 0 0 2px #000;
@@ -17,7 +17,7 @@
   right: 0;
   top: 0;
   margin: 2px;
-  color: #ddd;
+  color: var(--gray0);
   font-size: 12px;
   padding: 0 2px;
 }

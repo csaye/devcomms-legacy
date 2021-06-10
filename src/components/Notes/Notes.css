@@ -20,6 +20,6 @@
   border-radius: 5px;
   outline: none;
   padding: 5px;
-  background: #36393f;
-  color: #ddd;
+  background: var(--dark3);
+  color: var(--gray0);
 }
