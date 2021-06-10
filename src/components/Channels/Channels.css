@@ -2,4 +2,39 @@
   min-width: 240px;
   max-width: 240px;
   background: var(--dark2);
+  display: flex;
+  flex-direction: column;
+}
+
+.Channels .no-channels-text {
+  margin: 10px auto 0 auto;
+}
+
+.Channels .channel-button {
+  margin: 0;
+  padding: 5px 0;
+  font-size: 16px;
+  background: transparent;
+  border: 0;
+  color: var(--gray0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Channels .channel-button.selected {
+  background: var(--dark4);
+}
+
+.Channels .channel-button:hover {
+  background: var(--dark4);
+}
+
+.Channels .channel-button svg {
+  margin-right: 5px;
+}
+
+.Channels .add-button {
+  margin: 10px auto;
+  padding: 3px 3px 0 3px;
 }

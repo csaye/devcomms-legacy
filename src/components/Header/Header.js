@@ -125,14 +125,7 @@ function Header(props) {
             close => (
               <div className="modal">
                 <button className="close" onClick={close}>&times;</button>
-                <div
-                  className="header"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
+                <div className="header">
                   Editing
                   <GroupIcon style={{marginLeft: '5px'}} />
                   {groupData.name}
