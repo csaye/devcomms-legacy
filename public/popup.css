@@ -1,10 +1,14 @@
 .popup-content {
   background: var(--dark1)!important;
-  border: 1px solid var(--dark0)!important;
+  border: 1px solid var(--dark4)!important;
   color: var(--gray0);
   border-radius: 5px;
   width: fit-content!important;
   -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+}
+.popup-arrow {
+  color: var(--dark1)!important;
+  stroke: var(--dark4)!important;
 }
 .modal {
   padding: 10px 15px 15px 15px;
