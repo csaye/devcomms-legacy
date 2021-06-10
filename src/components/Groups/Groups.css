@@ -1,5 +1,6 @@
 .Groups {
-  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
   background: var(--dark0);
   border-right: 1px solid var(--dark4);
   overflow: auto;

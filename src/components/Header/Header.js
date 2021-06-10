@@ -25,12 +25,22 @@ function Header(props) {
   const uid = firebase.auth().currentUser.uid;
 
   // get group data
-  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const groupDoc = firebase.firestore().collection('groups').doc(
+    props.group ? props.group : 'null'
+  );
   const [groupData] = useDocumentData(groupDoc);
 
   // get usernames data
   const usernamesRef = firebase.firestore().collection('usernames');
   const [usernamesData] = useCollectionData(usernamesRef);
+
+  // clears selected group of current user
+  async function leaveGroup() {
+    const userDoc = firebase.firestore().collection('users').doc(uid);
+    await userDoc.update({
+      group: ''
+    });
+  }
 
   // updates group document in firebase
   async function updateGroup() {
@@ -90,12 +100,17 @@ function Header(props) {
 
   return (
     <div className="Header">
-      <img className="logo-img" src={logo} alt="logo" />
+      <img
+        onClick={leaveGroup}
+        className="logo-img"
+        src={logo}
+        alt="logo"
+      />
       <span className="divider" />
       <h1>Devcomms</h1>
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
-      <GroupIcon className="header-icon" />{groupData ? groupData.name : '...'}
+      {groupData && <><GroupIcon className="header-icon" />{groupData.name}</>}
       {
         (groupData && groupData.owner === uid) &&
         <Popup

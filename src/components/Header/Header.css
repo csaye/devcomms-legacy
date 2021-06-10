@@ -1,5 +1,6 @@
 .Header {
   min-height: 60px;
+  max-height: 60px;
   border-bottom: 1px solid var(--dark4);
   background: var(--dark0);
   display: flex;
@@ -12,12 +13,17 @@
 
 .Header .logo-img {
   height: 50px;
-  margin: 0 16px 0 12px;
+  margin: 0 20px 0 15px;
+  cursor: pointer;
+}
+
+.Header .logo-img:hover {
+  transform: scale(1.08);
 }
 
 .Header > span.divider {
   position: absolute;
-  left: 74px;
+  left: 79px;
   border-right: 1px solid var(--dark4);
   height: 60px;
 }
