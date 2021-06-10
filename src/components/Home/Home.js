@@ -10,8 +10,8 @@ import './Home.css';
 
 function Home() {
   const uid = firebase.auth().currentUser.uid;
-  const userRef = firebase.firestore().collection('users').doc(uid);
-  const [userData] = useDocumentData(userRef);
+  const userDoc = firebase.firestore().collection('users').doc(uid);
+  const [userData] = useDocumentData(userDoc);
 
   const [group, setGroup] = useState(undefined);
 

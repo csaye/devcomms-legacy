@@ -12,7 +12,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
-import logo from '../../img/logo.png';
+// import logo from '../../img/logo.png';
 
 import './Chat.css';
 
@@ -26,13 +26,14 @@ const nowYear = now.getFullYear();
 const today = new Date(nowYear, nowMonth, nowDay).setHours(0, 0, 0, 0);
 const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
 
-let pageHidden = false; // whether page is hidden
+// let pageHidden = false; // whether page is hidden
 let shiftDown = false; // whether shift key is down
-let firstQuery = true; // if first query to messages
+// let firstQuery = true; // if first query to messages
 
 function Chat(props) {
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const chatsRef = groupRef.collection('chats');
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const chatsRef = channelDoc.collection('chats');
   const uid = firebase.auth().currentUser.uid;
 
   const [text, setText] = useState('');
@@ -143,26 +144,26 @@ function Chat(props) {
     messagesEnd.current.scrollIntoView();
   }
 
-  // send a message notification to the user
-  function sendNotification(data) {
-    // return if browser does not support notifications
-    if (!('Notification' in window)) return;
-    // return if permissions not granted
-    if (!Notification.permission === 'granted') return;
-    // send notification
-    if (data) {
-      const titleText = `New message from @${data.senderName}`;
-      const bodyText = data.text ?? data.filename;
-      new Notification(titleText, { body: bodyText, icon: logo });
-    }
-  }
+  // // send a message notification to the user
+  // function sendNotification(data) {
+  //   // return if browser does not support notifications
+  //   if (!('Notification' in window)) return;
+  //   // return if permissions not granted
+  //   if (!Notification.permission === 'granted') return;
+  //   // send notification
+  //   if (data) {
+  //     const titleText = `New message from @${data.senderName}`;
+  //     const bodyText = data.text ?? data.filename;
+  //     new Notification(titleText, { body: bodyText, icon: logo });
+  //   }
+  // }
 
-  // called when page visibility changes
-  function onVisChange() {
-    pageHidden = document.hidden;
-    // if page not hidden, reset title
-    if (!pageHidden) document.title = 'Devcomms';
-  }
+  // // called when page visibility changes
+  // function onVisChange() {
+  //   pageHidden = document.hidden;
+  //   // if page not hidden, reset title
+  //   if (!pageHidden) document.title = 'Devcomms';
+  // }
 
   // when messages update
   useEffect(() => {
@@ -171,36 +172,36 @@ function Chat(props) {
 
   // on start
   useEffect(() => {
-    // ask for notification permissions
-    if (Notification.permission === 'default') Notification.requestPermission();
+    // // ask for notification permissions
+    // if (Notification.permission === 'default') Notification.requestPermission();
 
-    // create visibility listener on start
-    document.addEventListener("visibilitychange", onVisChange);
+    // // create visibility listener on start
+    // document.addEventListener("visibilitychange", onVisChange);
 
-    // listen for message creation
-    const messagesListener = messagesQuery.onSnapshot(snapshot => {
-      // skip initial state of database
-      if (firstQuery) {
-        firstQuery = false;
-        return;
-      }
-      // return if page not hidden
-      if (!pageHidden) return;
-      // for each new message
-      snapshot.docChanges().forEach(change => {
-        if (change.type === 'added') {
-          const data = change.doc.data();
-          sendNotification(data);
-          document.title = 'Devcomms (new)';
-        }
-      });
-    });
+    // // listen for message creation
+    // const messagesListener = messagesQuery.onSnapshot(snapshot => {
+    //   // skip initial state of database
+    //   if (firstQuery) {
+    //     firstQuery = false;
+    //     return;
+    //   }
+    //   // return if page not hidden
+    //   if (!pageHidden) return;
+    //   // for each new message
+    //   snapshot.docChanges().forEach(change => {
+    //     if (change.type === 'added') {
+    //       const data = change.doc.data();
+    //       sendNotification(data);
+    //       document.title = 'Devcomms (new)';
+    //     }
+    //   });
+    // });
 
     // clear listeners on return
-    return () => {
-      document.removeEventListener("visibilitychange", onVisChange);
-      messagesListener();
-    }
+    // return () => {
+    //   document.removeEventListener("visibilitychange", onVisChange);
+    //   messagesListener();
+    // }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

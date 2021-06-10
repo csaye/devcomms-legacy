@@ -8,10 +8,11 @@ import Content from '../Content/Content.js';
 import './Page.css';
 
 function Page(props) {
-  const [channel, setChannel] = useState('');
+  const [channel, setChannel] = useState(null);
 
+  // clear channel when group changes
   useEffect(() => {
-    setChannel('');
+    setChannel(null);
   }, [props.group]);
 
   return (
@@ -27,7 +28,11 @@ function Page(props) {
               channel={channel}
               setChannel={setChannel}
             />
-            <Content channel={channel} />
+            <Content
+              username={props.username}
+              group={props.group}
+              channel={channel}
+            />
           </> :
           <p className="nogroup">No group selected</p>
         }

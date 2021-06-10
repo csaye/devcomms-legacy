@@ -9,6 +9,7 @@ import './Channels.css';
 
 function Channels(props) {
   const [name, setName] = useState('');
+  const [type, setType] = useState('text');
 
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
@@ -19,7 +20,8 @@ function Channels(props) {
   async function createChannel(e) {
     e.preventDefault();
     await channelsRef.add({
-      name: name
+      name: name,
+      type: type
     });
   }
 
@@ -30,7 +32,7 @@ function Channels(props) {
         channels.map((channel, i) =>
           <button
             key={`channels-button-${i}`}
-            onClick={() => props.setChannel(channel.id)}
+            onClick={() => props.setChannel(channel)}
           >
             {channel.name}
           </button>
@@ -39,6 +41,17 @@ function Channels(props) {
       }
       <form onSubmit={createChannel}>
         <p><u>Create Channel</u></p>
+        <select
+          value={type}
+          onChange={e => setType(e.target.value)}
+          required
+        >
+          <option value="text">Text</option>
+          <option value="sketch">Sketch</option>
+          <option value="notes">Notes</option>
+          <option value="todos">Todos</option>
+          <option value="goals">Goals</option>
+        </select>
         <input
           placeholder="channel name"
           value={name}

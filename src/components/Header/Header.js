@@ -77,16 +77,13 @@ function Header(props) {
 
   // deletes group
   async function deleteGroup() {
-    // delete each subcollection
+    // delete all channels
     const batch = firebase.firestore().batch();
-    const subcollections = ['chats', 'goals', 'notes', 'sketches', 'todos'];
-    for (const subcollection of subcollections) {
-      await groupDoc.collection(subcollection).get().then(docs => {
-        docs.forEach(doc => {
-          batch.delete(doc.ref);
-        });
+    await groupDoc.collection('channels').get().then(docs => {
+      docs.forEach(doc => {
+        batch.delete(doc.ref);
       });
-    }
+    });
     batch.delete(groupDoc); // delete group document
     batch.commit(); // commit batch
   }
