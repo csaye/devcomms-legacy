@@ -7,6 +7,8 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
 import ChatIcon from '@material-ui/icons/Chat';
 import ListIcon from '@material-ui/icons/List';
 import BrushIcon from '@material-ui/icons/Brush';
@@ -18,6 +20,7 @@ import './Channels.css';
 function Channels(props) {
   const [name, setName] = useState('');
   const [type, setType] = useState('text');
+  const [newName, setNewName] = useState('');
 
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
@@ -51,6 +54,14 @@ function Channels(props) {
     await channelsRef.doc(channelId).delete();
   }
 
+  // updates channel name
+  async function updateChannel(channel) {
+    const channelId = channel.id;
+    await channelsRef.doc(channelId).update({
+      name: newName
+    });
+  }
+
   return (
     <div className="Channels">
       {
@@ -78,6 +89,40 @@ function Channels(props) {
             {
               close => (
                 <>
+                  <Popup
+                    nested
+                    onClose={close}
+                    trigger={
+                      <EditIcon style={{cursor: 'pointer'}} />
+                    }
+                    onOpen={() => setNewName(channel.name)}
+                    modal
+                  >
+                    <div className="modal">
+                      <button className="close" onClick={close}>&times;</button>
+                      <div className="header">Editing {channel.name}</div>
+                      <form onSubmit={e => {
+                        e.preventDefault();
+                        updateChannel(channel);
+                        close();
+                      }}>
+                        <input
+                          placeholder="channel name"
+                          value={newName}
+                          onChange={e => setNewName(e.target.value)}
+                          required
+                        />
+                        <button
+                          style={{
+                            marginLeft: '5px', marginTop: '5px',
+                            position: 'relative', top: '4px'
+                          }}
+                        >
+                          <CheckIcon />
+                        </button>
+                      </form>
+                    </div>
+                  </Popup>
                   <Popup
                     nested
                     onClose={close}
