@@ -51,7 +51,7 @@ function Channels(props) {
           <button
             key={`channels-button-${i}`}
             className={
-              props.channel === channel ?
+              props.channel?.id === channel.id ?
               'channel-button selected' :
               'channel-button'
             }

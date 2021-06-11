@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import DescriptionIcon from '@material-ui/icons/Description';
 
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
 import './Notes.css';
@@ -14,21 +14,13 @@ function Notes(props) {
   // get notes reference
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelDoc = groupDoc.collection('channels').doc(props.channel);
-  const [noteData] = useDocument(channelDoc);
+  const [noteData] = useDocumentData(channelDoc);
 
   // gets text from note data
   async function getText() {
     if (!noteData) return;
-    // if note exists, get text
-    if (noteData.exists) {
-      const docData = noteData.data();
-      setText(docData.text);
-    // if note does not exist, create doc
-    } else {
-      await channelDoc.set({
-        text: ''
-      });
-    }
+    // get text
+    setText(noteData.text);
     setLoaded(true);
   }
 

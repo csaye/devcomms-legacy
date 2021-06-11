@@ -23,7 +23,10 @@
 }
 
 .Channels .channel-button.selected {
-  background: var(--dark4);
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  margin-left: 10px;
+  background: var(--dark3);
 }
 
 .Channels .channel-button:hover {

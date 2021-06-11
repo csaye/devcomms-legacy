@@ -136,17 +136,10 @@ function Sketch(props) {
   // gets and sets canvas data
   async function getData() {
     if (!sketchData) return;
-    // if sketch doc exists, load data
-    if (sketchData.exists) {
-      const docData = sketchData.data();
-      const url = docData.data;
-      loadUrl(url);
-    // if no sketch doc, create doc
-    } else {
-      await channelDoc.set({
-        data: ''
-      });
-    }
+    // load data
+    const docData = sketchData.data();
+    const url = docData.data;
+    loadUrl(url);
     setLoaded(true);
   }
 
