@@ -11,6 +11,7 @@
   width: 60px;
   height: 60px;
   background: var(--gray1);
+  border: 0;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -21,4 +22,8 @@
 
 .Groups .group-btn:hover {
   transform: scale(1.04);
+}
+
+.Groups .group-btn.selected {
+  border: 5px solid var(--gray0);
 }

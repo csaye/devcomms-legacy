@@ -9,7 +9,7 @@ import './Groups.css';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
-function Groups() {
+function Groups(props) {
   const [groupName, setGroupName] = useState('');
 
   const createPopupRef = useRef();
@@ -61,7 +61,9 @@ function Groups() {
             key={`groups-button-${i}`}
             trigger={
               <button
-                className="group-btn"
+                className={
+                  props.group === group.id ? 'group-btn selected' : 'group-btn'
+                }
                 onClick={() => selectGroup(group)}
               >
                 {group.name}
@@ -107,7 +109,7 @@ function Groups() {
                   justifyContent: 'center'
                 }}
               >
-                Create New Group
+                New Group
                 <GroupIcon style={{marginLeft: '5px'}} />
               </div>
               <form onSubmit={e => {

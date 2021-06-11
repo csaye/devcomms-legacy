@@ -19,7 +19,7 @@ function Page(props) {
     <div className="Page">
       <Header group={props.group} username={props.username} />
       <div className="page-content">
-        <Groups />
+        <Groups group={props.group} />
         {
           props.group ?
           <>

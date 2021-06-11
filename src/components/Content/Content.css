@@ -2,3 +2,7 @@
   background: var(--dark3);
   flex-grow: 1;
 }
+
+.Content .no-channel-text {
+  margin: 10px;
+}

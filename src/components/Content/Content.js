@@ -26,7 +26,7 @@ function Content(props) {
         <>
           {getChannel(props.channel)}
         </> :
-        <p>No channel selected</p>
+        <p className="no-channel-text">No channel selected</p>
       }
     </div>
   );

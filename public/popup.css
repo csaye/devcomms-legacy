@@ -80,8 +80,12 @@
 .modal a {
   color: var(--blue0);
 }
-.modal ::-webkit-scrollbar {
-  background: var(--dark0);
+.modal .delete-btn {
+  background: var(--red0);
+  color: var(--dark0);
+}
+.modal .delete-btn:hover {
+  background: var(--red1);
 }
 
 @keyframes anvil {
