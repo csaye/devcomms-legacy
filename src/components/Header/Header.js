@@ -22,7 +22,11 @@ function Header(props) {
   const [addError, setAddError] = useState('');
   const [member, setMember] = useState('');
 
+  const [newUsername, setNewUsername] = useState(props.username);
+  const [usernameError, setUsernameError] = useState('');
+
   const uid = firebase.auth().currentUser.uid;
+  const userDoc = firebase.firestore().collection('users').doc(uid);
 
   // get group data
   const groupDoc = firebase.firestore().collection('groups').doc(
@@ -36,7 +40,6 @@ function Header(props) {
 
   // clears selected group of current user
   async function leaveGroup() {
-    const userDoc = firebase.firestore().collection('users').doc(uid);
     await userDoc.update({
       group: ''
     });
@@ -95,6 +98,36 @@ function Header(props) {
     return matches.length === 0 ? null : matches[0].username;
   }
 
+  // attempts to update username
+  async function updateUsername() {
+    const username = newUsername;
+
+    // verify username chars
+    if (!/^[A-Za-z0-9_]+$/.test(username)) {
+      setUsernameError("Username can only contain alphanumeric characters and underscore.");
+      return false;
+    }
+    // verify username length
+    if (username.length < 2 || username.length > 16) {
+      setUsernameError("Username must be between 2 and 16 characters.");
+      return false;
+    }
+    // verify username availability
+    if (usernamesData.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+      setUsernameError("Username taken. Please try another.");
+      return false;
+    }
+
+    // update firebase documents
+    await userDoc.update({
+      username: username
+    });
+    await firebase.firestore().collection('usernames').doc(uid).update({
+      username: username
+    });
+    return true;
+  }
+
   return (
     <div className="Header">
       <img
@@ -107,6 +140,44 @@ function Header(props) {
       <h1>Devcomms</h1>
       <span className="flex-grow" />
       <PersonIcon className="header-icon" />@{props.username}
+      <Popup
+        trigger={
+          <button className="clean-btn edit-button">
+            <EditIcon />
+          </button>
+        }
+        onOpen={() => {
+          setUsernameError('');
+          setNewUsername(props.username);
+        }}
+        modal
+      >
+        {
+          close => (
+            <div className="modal">
+              <button className="close" onClick={close}>&times;</button>
+              <div className="header">Editing Profile</div>
+              <form onSubmit={e => {
+                e.preventDefault();
+                updateUsername().then(updated => {
+                  if (updated) close();
+                });
+              }}>
+                <input
+                  placeholder="username"
+                  value={newUsername}
+                  onChange={e => setNewUsername(e.target.value)}
+                  required
+                />
+                <button style={{marginLeft: '5px', position: 'relative', top: '5px'}}>
+                  <CheckIcon />
+                </button>
+                {usernameError && <p style={{color: 'red', margin: '10px 0 0 0'}}>{usernameError}</p>}
+              </form>
+            </div>
+          )
+        }
+      </Popup>
       {groupData && <><GroupIcon className="header-icon" />{groupData.name}</>}
       {
         (groupData && groupData.owner === uid) &&
