@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ChatIcon from '@material-ui/icons/Chat';
 import ListIcon from '@material-ui/icons/List';
 import BrushIcon from '@material-ui/icons/Brush';
@@ -43,28 +44,83 @@ function Channels(props) {
     });
   }
 
+  // deletes given channel
+  async function deleteChannel(channel) {
+    const channelId = channel.id;
+    if (props.channel?.id === channelId) props.setChannel(null);
+    await channelsRef.doc(channelId).delete();
+  }
+
   return (
     <div className="Channels">
       {
         (channels && channels.length > 0) ?
         channels.map((channel, i) =>
-          <button
+          <Popup
             key={`channels-button-${i}`}
-            className={
-              props.channel?.id === channel.id ?
-              'channel-button selected' :
-              'channel-button'
+            trigger={
+              <button
+                className={
+                  props.channel?.id === channel.id ?
+                  'channel-button selected' :
+                  'channel-button'
+                }
+                onClick={() => props.setChannel(channel)}
+              >
+                {getIcon(channel.type)} {channel.name}
+              </button>
             }
-            onClick={() => props.setChannel(channel)}
+            on="right-click"
+            position="right top"
+            arrow={false}
+            nested
           >
-            {getIcon(channel.type)} {channel.name}
-          </button>
+            {
+              close => (
+                <>
+                  <Popup
+                    nested
+                    onClose={close}
+                    trigger={
+                      <DeleteIcon style={{cursor: 'pointer'}} />
+                    }
+                    modal
+                  >
+                    <div className="modal">
+                      <button className="close" onClick={close}>&times;</button>
+                      <div className="header">Delete {channel.name}?</div>
+                      <button
+                        onClick={close}
+                        style={{
+                          padding: '5px 10px', marginTop: '10px'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          deleteChannel(channel);
+                          close();
+                        }}
+                        style={{
+                          padding: '5px 10px', marginTop: '10px', marginLeft: '10px'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </Popup>
+                </>
+              )
+            }
+          </Popup>
         ) :
         <p className="no-channels-text">No channels yet</p>
       }
       <Popup
         trigger={
-          <button className="add-button">
+          <button className="add-button clean-btn2">
             <AddIcon />
           </button>
         }
