@@ -34,7 +34,9 @@ function Page(props) {
               channel={channel}
             />
           </> :
-          <p className="nogroup">No group selected</p>
+          <div className="nogroup">
+            <p>No group selected</p>
+          </div>
         }
       </div>
     </div>

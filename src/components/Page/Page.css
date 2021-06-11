@@ -17,5 +17,8 @@
 .Page .nogroup {
   flex-grow: 1;
   background: var(--dark3);
-  margin: 0;
+}
+
+.Page .nogroup > p {
+  margin: 10px;
 }

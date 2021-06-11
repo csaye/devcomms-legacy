@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import Popup from 'reactjs-popup';
 import AddIcon from '@material-ui/icons/Add';
@@ -11,8 +11,6 @@ import firebase from 'firebase/app';
 
 function Groups(props) {
   const [groupName, setGroupName] = useState('');
-
-  const createPopupRef = useRef();
 
   // get user doc
   const uid = firebase.auth().currentUser.uid;
@@ -57,41 +55,22 @@ function Groups(props) {
     <div className="Groups">
       {
         groups.map((group, i) =>
-          <Popup
-            key={`groups-button-${i}`}
-            trigger={
-              <button
-                className={
-                  props.group === group.id ? 'group-btn selected' : 'group-btn'
-                }
-                onClick={() => selectGroup(group)}
-              >
-                {group.name}
-              </button>
+          <button
+            className={
+              props.group === group.id ? 'group-btn selected' : 'group-btn'
             }
-            position="right center"
-            on="hover"
+            onClick={() => selectGroup(group)}
           >
             {group.name}
-          </Popup>
+          </button>
         )
       }
       <Popup
         trigger={
-          <button
-            className="group-btn"
-            onClick={() => createPopupRef.current.open()}
-          >
+          <button className="group-btn">
             <AddIcon />
           </button>
         }
-        on="hover"
-        position="right center"
-      >
-        New Group
-      </Popup>
-      <Popup
-        ref={createPopupRef}
         onOpen={() => {
           setGroupName('');
         }}

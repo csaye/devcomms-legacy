@@ -10,17 +10,19 @@
   margin: 10px auto;
   width: 60px;
   height: 60px;
-  background: var(--gray1);
+  background: var(--dark4);
   border: 0;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: var(--dark0);
+  color: var(--gray0);
+  overflow: hidden;
 }
 
 .Groups .group-btn:hover {
+  background: var(--dark3);
   transform: scale(1.04);
 }
 
