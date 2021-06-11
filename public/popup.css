@@ -13,6 +13,7 @@
 .modal {
   padding: 10px 15px 15px 15px;
   text-align: center;
+  max-width: 300px;
 }
 .modal > .header {
   border-bottom: 1px solid gray;

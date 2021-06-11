@@ -56,6 +56,7 @@ function Groups(props) {
       {
         groups.map((group, i) =>
           <button
+            key={`groups-button-${i}`}
             className={
               props.group === group.id ? 'group-btn selected' : 'group-btn'
             }

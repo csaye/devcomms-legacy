@@ -5,6 +5,7 @@ import Popup from 'reactjs-popup';
 import firebase from 'firebase/app';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
+import VerticalSplitIcon from '@material-ui/icons/VerticalSplit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -179,15 +180,31 @@ function Channels(props) {
           close => (
             <div className="modal">
               <button className="close" onClick={close}>&times;</button>
-              <div className="header">New Channel</div>
+              <div className="header">
+                New Channel
+                <VerticalSplitIcon style={{marginLeft: '5px'}} />
+              </div>
               <form onSubmit={e => {
                 e.preventDefault();
                 createChannel();
                 close();
               }}>
+                <div
+                  style={{
+                    display: 'inline-block', position: 'relative',
+                    top: '7px', marginRight: '5px'
+                  }}
+                >
+                  {getIcon(type)}
+                </div>
                 <select
                   value={type}
                   onChange={e => setType(e.target.value)}
+                  style={{
+                    cursor: 'pointer', outline: 'none',
+                    margin: '10px auto 0 auto', background: 'var(--dark4)',
+                    border: '1px solid var(--dark3)', color: 'var(--gray0)'
+                  }}
                   required
                 >
                   <option value="text">Text</option>
@@ -196,13 +213,19 @@ function Channels(props) {
                   <option value="todos">Todos</option>
                   <option value="goals">Goals</option>
                 </select>
+                <br />
                 <input
                   placeholder="channel name"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   required
                 />
-                <button>
+                <button
+                  style={{
+                    marginLeft: '5px', marginTop: '2px',
+                    position: 'relative', top: '4px'
+                  }}
+                >
                   <AddIcon />
                 </button>
               </form>
