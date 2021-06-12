@@ -1,8 +1,8 @@
-import Chat from '../Chat/Chat.js';
-import Sketch from '../Sketch/Sketch.js';
-import Notes from '../Notes/Notes.js';
-import Todos from '../Todos/Todos.js';
-import Goals from '../Goals/Goals.js';
+import Chat from '../Channels/Chat/Chat.js';
+import Sketch from '../Channels/Sketch/Sketch.js';
+import Notes from '../Channels/Notes/Notes.js';
+import Todos from '../Channels/Todos/Todos.js';
+import Goals from '../Channels/Goals/Goals.js';
 
 import './Content.css';
 

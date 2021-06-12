@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Goal from '../Goal/Goal.js';
+import Goal from './Goal/Goal.js';
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 import AddIcon from '@material-ui/icons/Add';
 

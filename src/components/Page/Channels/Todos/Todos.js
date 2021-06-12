@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Todo from '../Todo/Todo.js';
+import Todo from './Todo/Todo.js';
 
 import AddIcon from '@material-ui/icons/Add';
 import ListIcon from '@material-ui/icons/List';

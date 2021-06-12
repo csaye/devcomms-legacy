@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import Groups from '../Groups/Groups.js';
-import Header from '../Header/Header.js';
-import Channels from '../Channels/Channels.js';
-import Content from '../Content/Content.js';
+import Groups from './Groups/Groups.js';
+import Header from './Header/Header.js';
+import Channels from './Channels/Channels.js';
+import Content from './Content/Content.js';
 
 import firebase from 'firebase/app';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
