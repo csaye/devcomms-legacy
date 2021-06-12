@@ -4,10 +4,10 @@ import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
+import VerticalSplitIcon from '@material-ui/icons/VerticalSplit';
 
 import firebase from 'firebase/app';
 
@@ -33,6 +33,14 @@ function Header(props) {
     props.group ? props.group : 'null'
   );
   const [groupData] = useDocumentData(groupDoc);
+
+  // get channel data
+  const channelDoc = props.group ?
+  groupDoc.collection('channels').doc(
+    props.channel ? props.channel : 'null'
+  ) :
+  groupDoc;
+  const [channelData] = useDocumentData(channelDoc);
 
   // get usernames data
   const usernamesRef = firebase.firestore().collection('usernames');
@@ -89,6 +97,10 @@ function Header(props) {
     });
     batch.delete(groupDoc); // delete group document
     batch.commit(); // commit batch
+    // delete channel cache
+    await userDoc.update({
+      [`channels.${props.group}`]: firebase.firestore.FieldValue.delete()
+    });
   }
 
   // gets a username from user id
@@ -139,12 +151,11 @@ function Header(props) {
       <span className="divider" />
       <h1>Devcomms</h1>
       <span className="flex-grow" />
-      <PersonIcon className="header-icon" />@{props.username}
       <Popup
         trigger={
-          <button className="clean-btn edit-button">
-            <EditIcon />
-          </button>
+          <div className="flex-item">
+            <PersonIcon />@{props.username}
+          </div>
         }
         onOpen={() => {
           setUsernameError('');
@@ -178,14 +189,13 @@ function Header(props) {
           )
         }
       </Popup>
-      {groupData && <><GroupIcon className="header-icon" />{groupData.name}</>}
       {
         (groupData && groupData.owner === uid) &&
         <Popup
           trigger={
-            <button className="group-button clean-btn edit-button">
-              <EditIcon />
-            </button>
+            <div className="flex-item">
+              <GroupIcon />{groupData.name}
+            </div>
           }
           onOpen={() => {
             setNewGroupName(groupData.name);
@@ -314,6 +324,30 @@ function Header(props) {
                     <DeleteIcon />
                   </button>
                 }
+              </div>
+            )
+          }
+        </Popup>
+      }
+      {
+        channelData &&
+        <Popup
+          trigger={
+            <div className="flex-item">
+              <VerticalSplitIcon />{channelData.name}
+            </div>
+          }
+          modal
+        >
+          {
+            close => (
+              <div className="modal">
+                <button className="close" onClick={close}>&times;</button>
+                <div className="header">
+                  Editing
+                  <VerticalSplitIcon style={{marginLeft: '5px'}} />
+                  {channelData.name}
+                </div>
               </div>
             )
           }

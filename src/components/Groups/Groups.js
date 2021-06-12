@@ -70,6 +70,10 @@ function Groups(props) {
     });
     batch.delete(groupDoc); // delete group document
     batch.commit(); // commit batch
+    // delete channel cache
+    await userDoc.update({
+      [`channels.${group.id}`]: firebase.firestore.FieldValue.delete()
+    });
   }
 
   // check user group when groups change

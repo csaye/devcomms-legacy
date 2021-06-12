@@ -42,7 +42,7 @@ function Page(props) {
 
   return (
     <div className="Page">
-      <Header group={props.group} username={props.username} />
+      <Header group={props.group} channel={channel?.id} username={props.username} />
       <div className="page-content">
         <Groups group={props.group} />
         {
