@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Popup from 'reactjs-popup';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import GroupIcon from '@material-ui/icons/Group';
 
 import './Groups.css';
@@ -57,6 +58,20 @@ function Groups(props) {
     }
   }
 
+  // deletes given group
+  async function deleteGroup(group) {
+    // delete all channels
+    const batch = firebase.firestore().batch();
+    const groupDoc = groupsRef.doc(group.id);
+    await groupDoc.collection('channels').get().then(docs => {
+      docs.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+    });
+    batch.delete(groupDoc); // delete group document
+    batch.commit(); // commit batch
+  }
+
   // check user group when groups change
   useEffect(() => {
     checkUserGroup();
@@ -72,15 +87,67 @@ function Groups(props) {
     <div className="Groups">
       {
         groups.map((group, i) =>
-          <button
+          <Popup
             key={`groups-button-${i}`}
-            className={
-              props.group === group.id ? 'group-btn selected' : 'group-btn'
+            trigger={
+              <button
+                className={
+                  props.group === group.id ? 'group-btn selected' : 'group-btn'
+                }
+                onClick={() => selectGroup(group)}
+              >
+                {group.name}
+              </button>
             }
-            onClick={() => selectGroup(group)}
+            on="right-click"
+            position="right center"
+            arrow={false}
+            nested
           >
-            {group.name}
-          </button>
+            {
+              close => (
+                <>
+                  <Popup
+                    nested
+                    onClose={close}
+                    trigger={
+                      <DeleteIcon style={{cursor: 'pointer'}} />
+                    }
+                    modal
+                  >
+                    <div className="modal">
+                      <button className="close" onClick={close}>&times;</button>
+                      <div className="header">
+                        Delete
+                        <GroupIcon style={{marginLeft: '5px'}} />
+                        {group.name}?
+                      </div>
+                      <button
+                        onClick={close}
+                        style={{
+                          padding: '5px 10px', marginTop: '10px'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          deleteGroup(group);
+                          close();
+                        }}
+                        style={{
+                          padding: '5px 10px', marginTop: '10px', marginLeft: '10px'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </Popup>
+                </>
+              )
+            }
+          </Popup>
         )
       }
       <Popup

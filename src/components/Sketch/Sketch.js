@@ -138,6 +138,7 @@ function Sketch(props) {
     if (!sketchData) return;
     // load data
     const docData = sketchData.data();
+    if (!docData) return;
     const url = docData.data;
     loadUrl(url);
     setLoaded(true);
