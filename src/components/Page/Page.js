@@ -10,6 +10,8 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 import './Page.css';
 
+let firstUpdate = true;
+
 function Page(props) {
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
@@ -17,12 +19,26 @@ function Page(props) {
 
   const [channel, setChannel] = useState(null);
 
+  // gets cached channel for user
+  function getChannel() {
+    // if cached channel, set
+    const newChannel = userData?.channels[props.group];
+    if (newChannel) setChannel(newChannel);
+    // set channel to empty
+    else setChannel(null);
+  }
+
   // get new channel when group changes
   useEffect(() => {
-    if (userData?.channels[props.group]) {
-      setChannel(userData.channels[props.group]);
-    } else setChannel(null);
+    getChannel();
   }, [props.group]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (userData && firstUpdate) {
+      firstUpdate = false;
+      getChannel();
+    }
+  }, [userData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Page">

@@ -51,6 +51,16 @@ function Channels(props) {
     await channelsRef.add({
       name: name,
       type: type
+    }).then(docRef => {
+      // select channel
+      const channelObj = {
+        id: docRef.id,
+        type: type
+      }
+      props.setChannel(channelObj);
+      userDoc.update({
+        [`channels.${props.group}`]: channelObj
+      });
     });
   }
 
@@ -84,7 +94,10 @@ function Channels(props) {
   return (
     <div className="Channels">
       {
-        (channels && channels.length > 0) ?
+        !channels ?
+        <p className="placeholder-text">Loading channels...</p> :
+        channels.length === 0 ?
+        <p className="placeholder-text">No channels yet</p> :
         channels.map((channel, i) =>
           <Popup
             key={`channels-button-${i}`}
@@ -101,7 +114,7 @@ function Channels(props) {
               </button>
             }
             on="right-click"
-            position="right top"
+            position="right center"
             arrow={false}
             nested
           >
@@ -152,7 +165,12 @@ function Channels(props) {
                   >
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
-                      <div className="header">Delete {channel.name}?</div>
+                      <div className="header">
+                        Delete
+                        <span style={{marginLeft: '5px'}} />
+                        {getIcon(channel.type)}
+                        {channel.name}?
+                      </div>
                       <button
                         onClick={close}
                         style={{
@@ -179,8 +197,7 @@ function Channels(props) {
               )
             }
           </Popup>
-        ) :
-        <p className="no-channels-text">No channels yet</p>
+        )
       }
       <Popup
         trigger={
