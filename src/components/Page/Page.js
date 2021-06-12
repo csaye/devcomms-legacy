@@ -5,15 +5,24 @@ import Header from '../Header/Header.js';
 import Channels from '../Channels/Channels.js';
 import Content from '../Content/Content.js';
 
+import firebase from 'firebase/app';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+
 import './Page.css';
 
 function Page(props) {
+  const uid = firebase.auth().currentUser.uid;
+  const userDoc = firebase.firestore().collection('users').doc(uid);
+  const [userData] = useDocumentData(userDoc);
+
   const [channel, setChannel] = useState(null);
 
-  // clear channel when group changes
+  // get new channel when group changes
   useEffect(() => {
-    setChannel(null);
-  }, [props.group]);
+    if (userData?.channels[props.group]) {
+      setChannel(userData.channels[props.group]);
+    } else setChannel(null);
+  }, [props.group]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Page">

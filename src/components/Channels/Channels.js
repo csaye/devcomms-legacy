@@ -23,6 +23,10 @@ function Channels(props) {
   const [type, setType] = useState('text');
   const [newName, setNewName] = useState('');
 
+  // get user doc
+  const uid = firebase.auth().currentUser.uid;
+  const userDoc = firebase.firestore().collection('users').doc(uid);
+
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelsRef = groupDoc.collection('channels');
@@ -65,6 +69,18 @@ function Channels(props) {
     });
   }
 
+  // selects given channel
+  async function selectChannel(channel) {
+    const channelObj = {
+      id: channel.id,
+      type: channel.type
+    };
+    props.setChannel(channelObj);
+    await userDoc.update({
+      [`channels.${props.group}`]: channelObj
+    });
+  }
+
   return (
     <div className="Channels">
       {
@@ -79,7 +95,7 @@ function Channels(props) {
                   'channel-button selected' :
                   'channel-button'
                 }
-                onClick={() => props.setChannel(channel)}
+                onClick={() => selectChannel(channel)}
               >
                 {getIcon(channel.type)} {channel.name}
               </button>

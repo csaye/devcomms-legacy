@@ -83,7 +83,8 @@ function Auth() {
       username: username,
       uid: uid,
       registered: new Date(),
-      group: ''
+      group: '',
+      channels: {}
     });
     await firebase.firestore().collection('usernames').doc(uid).set({
       username: username,
