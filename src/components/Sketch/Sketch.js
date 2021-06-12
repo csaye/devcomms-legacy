@@ -10,6 +10,7 @@ import firebase from 'firebase/app';
 
 import './Sketch.css';
 
+// width and height of canvas in pixels
 const width = 512;
 const height = 512;
 
@@ -27,6 +28,7 @@ function Sketch(props) {
   const [lineColor, setLineColor] = useState('black');
   const [loaded, setLoaded] = useState(false);
   const canvasRef = useRef();
+  const sketchRef = useRef();
 
   // get sketch data reference
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
@@ -74,8 +76,8 @@ function Sketch(props) {
     // get previous and current mouse positions
     prevX = currX;
     prevY = currY;
-    currX = e.clientX - canvas.offsetLeft + window.scrollX;
-    currY = e.clientY - canvas.offsetTop + window.scrollY;
+    currX = e.clientX - canvas.offsetLeft + window.scrollX + sketchRef.current.scrollLeft;
+    currY = e.clientY - canvas.offsetTop + window.scrollY + sketchRef.current.scrollTop;
 
     // if moving mouse, draw
     if (operation === 'move') draw();
@@ -114,10 +116,10 @@ function Sketch(props) {
     // update firebase document
     await channelDoc.update({
       data: lastCanvasUrl
-    }).then(doc => {
-      // clear last canvas url
-      setLastCanvasUrl(undefined);
     });
+
+    // clear last canvas url
+    setLastCanvasUrl(undefined);
   }
 
   // downloads canvas as a png
@@ -156,7 +158,7 @@ function Sketch(props) {
   }, [sketchData]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="Sketch">
+    <div className="Sketch" ref={sketchRef}>
       {loaded && <h1><BrushIcon /> Sketch</h1>}
       <canvas
         ref={canvasRef}
