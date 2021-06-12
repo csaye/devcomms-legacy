@@ -67,7 +67,7 @@ function Goals(props) {
           onChange={e => setEndTime(e.target.value)}
           required
         />
-        <button type="submit" className="submit-button clean-btn">
+        <button type="submit" className="submit-button clean-btn var3">
           <AddIcon />
         </button>
       </form>

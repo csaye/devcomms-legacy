@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Popup from 'reactjs-popup';
 import AddIcon from '@material-ui/icons/Add';
@@ -44,6 +44,23 @@ function Groups(props) {
       });
     });
   }
+
+  // checks whether user group valid
+  function checkUserGroup() {
+    if (!groups) return;
+    // if no group where id is group
+    if (!groups.some(g => g.id === props.group)) {
+      // clear current group
+      userDoc.update({
+        group: ''
+      });
+    }
+  }
+
+  // check user group when groups change
+  useEffect(() => {
+    checkUserGroup();
+  }, [groups]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!groups) {
     return (

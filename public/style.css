@@ -32,18 +32,11 @@ textarea {
   background: var(--dark3);
   color: var(--gray0);
 }
-.clean-btn:hover {
-  background: var(--dark2);
-}
-.clean-btn2 {
-  border: 0;
-  border-radius: 2px;
-  background: var(--dark4);
-  color: var(--gray0);
-}
-.clean-btn2:hover {
-  background: var(--dark3);
-}
+.clean-btn:hover { background: var(--dark2); }
+.clean-btn.var2 { background: var(--dark4); }
+.clean-btn.var2:hover { background: var(--dark3); }
+.clean-btn.var3 { background: var(--dark2); }
+.clean-btn.var3:hover { background: var(--dark1); }
 
 .edit-btn {
   position: absolute;

@@ -26,7 +26,9 @@ function Channels(props) {
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelsRef = groupDoc.collection('channels');
-  const [channels] = useCollectionData(channelsRef, { idField: 'id' });
+  const [channels] = useCollectionData(
+    channelsRef.orderBy('name'), { idField: 'id' }
+  );
 
   // returns icon for requested channel type
   function getIcon(type) {
@@ -166,7 +168,7 @@ function Channels(props) {
       }
       <Popup
         trigger={
-          <button className="add-button clean-btn2">
+          <button className="add-button clean-btn var2">
             <AddIcon />
           </button>
         }

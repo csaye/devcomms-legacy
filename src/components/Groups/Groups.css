@@ -27,5 +27,5 @@
 }
 
 .Groups .group-btn.selected {
-  border: 5px solid var(--gray0);
+  border: 3px solid var(--gray0);
 }

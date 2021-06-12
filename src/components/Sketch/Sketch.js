@@ -220,11 +220,11 @@ function Sketch(props) {
           <div>
             {
               lastCanvasUrl ?
-              <button className="canvas-button clean-btn" onClick={undoCanvas}><UndoIcon /></button> :
-              <button className="canvas-button disabled clean-btn" disabled><UndoIcon /></button>
+              <button className="canvas-button clean-btn var3" onClick={undoCanvas}><UndoIcon /></button> :
+              <button className="canvas-button disabled clean-btn var3" disabled><UndoIcon /></button>
             }
-            <button className="canvas-button clean-btn" onClick={clearCanvas}><DeleteIcon /></button>
-            <button className="canvas-button clean-btn" onClick={downloadCanvas}><GetAppIcon /></button>
+            <button className="canvas-button clean-btn var3" onClick={clearCanvas}><DeleteIcon /></button>
+            <button className="canvas-button clean-btn var3" onClick={downloadCanvas}><GetAppIcon /></button>
           </div>
         </> :
         <p>Loading sketch...</p>
