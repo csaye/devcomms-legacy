@@ -41,6 +41,14 @@ function Todos(props) {
     })
   }
 
+  if (!todos) {
+    return (
+      <div className="Todos">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="Todos">
       <h1><ListIcon /> Todos</h1>
@@ -70,17 +78,11 @@ function Todos(props) {
       </form>
       <div>
         {
-          todos ?
-          <>
-            {
-              todos.length > 0 ?
-              todos.map((t, i) =>
-                <Todo key={`todo-${i}`} data={t} group={props.group} />
-              ) :
-              <p>No todos yet.</p>
-            }
-          </> :
-          <p>Retrieving todos...</p>
+          todos.length > 0 ?
+          todos.map((t, i) =>
+            <Todo key={`todo-${i}`} data={t} group={props.group} />
+          ) :
+          <p>No todos yet.</p>
         }
       </div>
     </div>

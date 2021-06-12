@@ -141,6 +141,7 @@ function Chat(props) {
 
   // scroll to end of messages
   function chatScroll() {
+    if (!messagesEnd.current) return;
     messagesEnd.current.scrollIntoView();
   }
 
@@ -204,153 +205,154 @@ function Chat(props) {
     // }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (!messages) {
+    return (
+      <div className="Chat">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="Chat">
-
       <div className="message-list">
         {
-          messages ?
-          <>
-            {
-              messages.length > 0 ?
-              messages.map((m, i) =>
-                <div key={`message-${i}`} className="message">
-                  {
-                    (
-                      i === 0 || // first message
-                      m.senderUid !== messages[i - 1].senderUid || // different sender
-                      m.timestamp - messages[i - 1].timestamp > timestampOffset // time since last sender
-                    ) &&
-                    <p className="message-header">
-                      <span className="sender-name">@{m.senderName}</span>
-                      <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
-                    </p>
-                  }
-                  <div
-                    className="message-text"
-                    onMouseEnter={() => setHovering(m.id)}
-                    onMouseLeave={() => setHovering(undefined)}
+          messages.length > 0 ?
+          messages.map((m, i) =>
+            <div key={`message-${i}`} className="message">
+              {
+                (
+                  i === 0 || // first message
+                  m.senderUid !== messages[i - 1].senderUid || // different sender
+                  m.timestamp - messages[i - 1].timestamp > timestampOffset // time since last sender
+                ) &&
+                <p className="message-header">
+                  <span className="sender-name">@{m.senderName}</span>
+                  <span className="timestamp">{getDateTimeString(m.timestamp.toDate())}</span>
+                </p>
+              }
+              <div
+                className="message-text"
+                onMouseEnter={() => setHovering(m.id)}
+                onMouseLeave={() => setHovering(undefined)}
+              >
+                {
+                  m.type === 'text' ?
+                  <>
+                    <ReactMarkdown className="markdown-text">
+                      {m.text}
+                    </ReactMarkdown>
+                    {
+                      m.edited &&
+                      <span className="edited-text">(edited)</span>
+                    }
+                  </> :
+                  <a href={m.url} target="_blank" rel="noreferrer">
+                    {
+                      m.type === 'image' ?
+                      <img
+                        src={m.url}
+                        className="message-image"
+                        alt=""
+                        onLoad={chatScroll}
+                      /> :
+                      <>{m.filename}</>
+                    }
+                  </a>
+                }
+                {
+                  m.senderUid === uid &&
+                  <Popup
+                    trigger={
+                      hovering === m.id &&
+                      <button className="edit-btn">
+                        <EditIcon />
+                      </button>
+                    }
+                    modal
+                    onOpen={() => {
+                      if (m.type === 'text') setNewText(m.text);
+                      setHovering(undefined);
+                    }}
                   >
                     {
-                      m.type === 'text' ?
-                      <>
-                        <ReactMarkdown className="markdown-text">
-                          {m.text}
-                        </ReactMarkdown>
-                        {
-                          m.edited &&
-                          <span className="edited-text">(edited)</span>
-                        }
-                      </> :
-                      <a href={m.url} target="_blank" rel="noreferrer">
-                        {
-                          m.type === 'image' ?
-                          <img
-                            src={m.url}
-                            className="message-image"
-                            alt=""
-                            onLoad={chatScroll}
-                          /> :
-                          <>{m.filename}</>
-                        }
-                      </a>
-                    }
-                    {
-                      m.senderUid === uid &&
-                      <Popup
-                        trigger={
-                          hovering === m.id &&
-                          <button className="edit-btn">
-                            <EditIcon />
-                          </button>
-                        }
-                        modal
-                        onOpen={() => {
-                          if (m.type === 'text') setNewText(m.text);
-                          setHovering(undefined);
-                        }}
-                      >
-                        {
-                          close => (
-                            <div className="modal">
-                              <button className="close" onClick={close}>&times;</button>
-                              <div className="header">Editing Message</div>
-                              <div className="content">
-                                {
-                                  m.type === 'text' ?
-                                  <form
-                                    onSubmit={e => {
-                                      updateMessage(e, m.id);
-                                      close();
-                                    }}
-                                    style={{
-                                      display: 'flex', alignItems: 'center',
-                                      marginBottom: '5px'
-                                    }}
-                                  >
-                                    <textarea
-                                      autoComplete="off"
-                                      spellCheck="false"
-                                      value={newText}
-                                      onChange={e => setNewText(e.target.value)}
-                                      style={{"marginRight": "10px"}}
-                                      required
-                                    />
-                                    <button type="submit">
-                                      <CheckIcon />
-                                    </button>
-                                  </form> :
-                                  <a href={m.url} target="_blank" rel="noreferrer">
-                                    {m.filename}
-                                  </a>
-                                }
-                              </div>
-                              {
-                                m.type !== 'text' &&
-                                <button
-                                  style={{margin: '0 0 10px 0'}}
-                                  onClick={() => downloadFile(m.url, m.filename)}
-                                >
-                                  <GetAppIcon />
+                      close => (
+                        <div className="modal">
+                          <button className="close" onClick={close}>&times;</button>
+                          <div className="header">Editing Message</div>
+                          <div className="content">
+                            {
+                              m.type === 'text' ?
+                              <form
+                                onSubmit={e => {
+                                  updateMessage(e, m.id);
+                                  close();
+                                }}
+                                style={{
+                                  display: 'flex', alignItems: 'center',
+                                  marginBottom: '5px'
+                                }}
+                              >
+                                <textarea
+                                  autoComplete="off"
+                                  spellCheck="false"
+                                  value={newText}
+                                  onChange={e => setNewText(e.target.value)}
+                                  style={{"marginRight": "10px"}}
+                                  required
+                                />
+                                <button type="submit">
+                                  <CheckIcon />
                                 </button>
-                              }
-                              <hr style={{margin: '0 0 10px 0'}} />
-                              {
-                                deleting ?
-                                <>
-                                  <p className="delete-text">Delete message?</p>
-                                  <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
-                                    cancel
-                                  </button>
-                                  <button onClick={() => {
-                                    deleteMessage(m.id);
-                                    close();
-                                    setDeleting(false);
-                                  }}>
-                                    delete
-                                  </button>
-                                </> :
-                                <button
-                                  className="button"
-                                  onClick={() => {
-                                    setDeleting(true);
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </button>
-                              }
-                            </div>
-                          )
-                        }
-                      </Popup>
+                              </form> :
+                              <a href={m.url} target="_blank" rel="noreferrer">
+                                {m.filename}
+                              </a>
+                            }
+                          </div>
+                          {
+                            m.type !== 'text' &&
+                            <button
+                              style={{margin: '0 0 10px 0'}}
+                              onClick={() => downloadFile(m.url, m.filename)}
+                            >
+                              <GetAppIcon />
+                            </button>
+                          }
+                          <hr style={{margin: '0 0 10px 0'}} />
+                          {
+                            deleting ?
+                            <>
+                              <p className="delete-text">Delete message?</p>
+                              <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
+                                cancel
+                              </button>
+                              <button onClick={() => {
+                                deleteMessage(m.id);
+                                close();
+                                setDeleting(false);
+                              }}>
+                                delete
+                              </button>
+                            </> :
+                            <button
+                              className="button"
+                              onClick={() => {
+                                setDeleting(true);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </button>
+                          }
+                        </div>
+                      )
                     }
-                  </div>
-                </div>
-              ) :
-              <p className="info-text">No messages yet. Send one below!</p>
-            }
-          </> :
-          <p className="info-text">Loading messages...</p>
+                  </Popup>
+                }
+              </div>
+            </div>
+          ) :
+          <p className="info-text">No messages yet. Send one below!</p>
         }
         <span ref={messagesEnd} />
       </div>

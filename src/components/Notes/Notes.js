@@ -37,19 +37,23 @@ function Notes(props) {
     getText();
   }, [noteData]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (!loaded) {
+    return (
+      <div className="Notes">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="Notes">
       <h1><DescriptionIcon /> Notes</h1>
-      {
-        loaded ?
-        <textarea
-          spellCheck="false"
-          value={text}
-          className="flex-grow"
-          onChange={e => updateText(e.target.value)}
-        /> :
-        <p>Loading notes...</p>
-      }
+      <textarea
+        spellCheck="false"
+        value={text}
+        className="flex-grow"
+        onChange={e => updateText(e.target.value)}
+      />
     </div>
   );
 }

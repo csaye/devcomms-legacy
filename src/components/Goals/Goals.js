@@ -37,6 +37,14 @@ function Goals(props) {
     });
   }
 
+  if (!goals) {
+    return (
+      <div className="Goals">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="Goals">
       <h1><LibraryAddCheckIcon /> Goals</h1>
@@ -73,17 +81,11 @@ function Goals(props) {
       </form>
       <div className="goal-list">
       {
-        goals ?
-        <>
-          {
-            goals.length > 0 ?
-            goals.map((g, i) =>
-              <Goal key={`goal-${i}`} data={g} group={props.group} />
-            ) :
-            <p>No goals yet.</p>
-          }
-        </> :
-        <p>Loading goals...</p>
+        goals.length > 0 ?
+        goals.map((g, i) =>
+          <Goal key={`goal-${i}`} data={g} group={props.group} />
+        ) :
+        <p>No goals yet.</p>
       }
       </div>
     </div>

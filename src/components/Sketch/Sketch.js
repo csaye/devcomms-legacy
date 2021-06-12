@@ -157,7 +157,7 @@ function Sketch(props) {
 
   return (
     <div className="Sketch">
-      <h1><BrushIcon /> Sketch</h1>
+      {loaded && <h1><BrushIcon /> Sketch</h1>}
       <canvas
         ref={canvasRef}
         width={width}
@@ -228,7 +228,7 @@ function Sketch(props) {
             <button className="canvas-button clean-btn var3" onClick={downloadCanvas}><GetAppIcon /></button>
           </div>
         </> :
-        <p>Loading sketch...</p>
+        <p>Loading...</p>
       }
     </div>
   );
