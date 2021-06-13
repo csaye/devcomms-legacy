@@ -185,6 +185,7 @@ function Sketch(props) {
               />
             </div>
             <input
+              className="width-slider"
               value={lineWidth}
               onChange={e => setLineWidth(e.target.value)}
               min="1"

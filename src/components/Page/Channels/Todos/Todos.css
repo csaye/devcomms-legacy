@@ -8,7 +8,7 @@
 .Todos > h1 {
   width: fit-content;
   margin: 10px auto;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid var(--gray0);
 }
 
 .Todos form {

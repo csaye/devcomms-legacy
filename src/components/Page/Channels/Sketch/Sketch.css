@@ -8,13 +8,13 @@
 .Sketch > h1 {
   width: fit-content;
   margin: 10px auto 0 auto;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid var(--gray0);
 }
 
 .Sketch canvas {
   background: #fff;
   margin-top: 10px;
-  border: 2px solid black;
+  border: 2px solid var(--dark0);
 }
 
 .Sketch .indicator-container {
@@ -35,6 +35,10 @@
   border: 1px solid black;
   max-height: 18px;
   max-width: 18px;
+}
+
+.Sketch .width-slider {
+  cursor: pointer;
 }
 
 .Sketch .sketch-settings {

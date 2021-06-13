@@ -9,14 +9,14 @@
 .Notes h1 {
   width: fit-content;
   margin: 10px auto;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid var(--gray0);
 }
 
 .Notes textarea {
   flex-grow: 1;
   min-height: 256px;
   margin: 0 20px 20px 20px;
-  border: 1px solid black;
+  border: 1px solid var(--dark0);
   border-radius: 5px;
   outline: none;
   padding: 5px;
