@@ -1,0 +1,12 @@
+.Video {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  overflow: auto;
+}
+
+.Video > h1 {
+  width: fit-content;
+  margin: 10px auto;
+  border-bottom: 1px solid var(--gray0);
+}
