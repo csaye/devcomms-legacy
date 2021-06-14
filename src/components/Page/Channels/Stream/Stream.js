@@ -6,7 +6,7 @@ import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 
 import firebase from 'firebase/app';
 
-import './Video.css';
+import './Stream.css';
 
 let localStream = null;
 let localVideo = null;
@@ -14,7 +14,7 @@ let localPeer = null;
 
 const calls = {};
 
-function Video(props) {
+function Stream(props) {
   const [streaming, setStreaming] = useState(false);
   const [calling, setCalling] = useState(false);
 
@@ -130,7 +130,7 @@ function Video(props) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="Video">
+    <div className="Stream">
       {
         props.useVideo ?
         <h1><VideocamIcon /> Video</h1> :
@@ -155,4 +155,4 @@ function Video(props) {
   );
 }
 
-export default Video;
+export default Stream;

@@ -1,22 +1,22 @@
-.Video {
+.Stream {
   height: 100%;
   width: 100%;
   text-align: center;
   overflow: auto;
 }
 
-.Video > h1 {
+.Stream > h1 {
   width: fit-content;
   margin: 10px auto;
   border-bottom: 1px solid var(--gray0);
 }
 
-.Video button {
+.Stream button {
   padding: 5px;
   margin: 5px;
 }
 
-.Video .video-grid video {
+.Stream .video-grid video {
   background: #fff;
   width: 200px;
   height: 150px;
@@ -24,7 +24,7 @@
   border-radius: 5px;
 }
 
-.Video .audio-grid video {
+.Stream .audio-grid video {
   background: #fff;
   width: 100px;
   height: 100px;
