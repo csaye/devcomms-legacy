@@ -10,3 +10,31 @@
   margin: 10px auto;
   border-bottom: 1px solid var(--gray0);
 }
+
+.Video .settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Video label {
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.Video input {
+  cursor: pointer;
+}
+
+.Video button {
+  padding: 5px;
+  margin: 5px;
+}
+
+.Video video {
+  background: #fff;
+  width: 200px;
+  height: 150px;
+  margin: 5px;
+  border-radius: 5px;
+}

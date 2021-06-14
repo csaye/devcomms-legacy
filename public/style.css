@@ -35,8 +35,8 @@ textarea {
 .clean-btn:hover { background: var(--dark2); }
 .clean-btn.var2 { background: var(--dark4); }
 .clean-btn.var2:hover { background: var(--dark3); }
-.clean-btn.var3 { background: var(--dark2); }
-.clean-btn.var3:hover { background: var(--dark1); }
+.clean-btn.var3 { background: var(--dark1); }
+.clean-btn.var3:hover { background: var(--dark0); }
 
 .edit-btn {
   position: absolute;

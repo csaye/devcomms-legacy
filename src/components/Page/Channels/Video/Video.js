@@ -136,20 +136,23 @@ function Video(props) {
       {
         !streaming ?
         <>
-          <p style={{display: 'inline-block'}}>Use Webcam</p>
-          <input
-            type="checkbox"
-            checked={useWebcam}
-            onChange={e => setUseWebcam(e.target.checked)}
-          />
-          <button onClick={startStream}>Start Stream</button>
+          <div className="settings">
+            <label htmlFor="video-usewebcam">Webcam</label>
+            <input
+              id="video-usewebcam"
+              type="checkbox"
+              checked={useWebcam}
+              onChange={e => setUseWebcam(e.target.checked)}
+            />
+          </div>
+          <button className="clean-btn var3" onClick={startStream}>Start Stream</button>
         </> :
         !calling ?
         <>
-          <button onClick={joinCall}>Join Call</button>
-          <button onClick={stopStream}>Stop Stream</button>
+          <button className="clean-btn var3" onClick={joinCall}>Join Call</button>
+          <button className="clean-btn var3" onClick={stopStream}>Stop Stream</button>
         </> :
-        <button onClick={leaveCall}>Leave Call</button>
+        <button className="clean-btn var3" onClick={leaveCall}>Leave Call</button>
       }
     </div>
   );
