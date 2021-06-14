@@ -1,21 +1,15 @@
 import React, { useRef, useState } from 'react';
+import Peer from 'peerjs';
 
 import VideocamIcon from '@material-ui/icons/Videocam';
 
+import firebase from 'firebase/app';
+
 import './Video.css';
 
-const servers = {
-  iceServers: [
-    {
-      urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']
-    }
-  ],
-  iceCandidatePoolSize: 10
-};
-
-let localConnection = null;
 let localStream = null;
 let localVideo = null;
+let localPeer = null;
 
 function Video(props) {
   const [streaming, setStreaming] = useState(false);
@@ -34,18 +28,23 @@ function Video(props) {
   }
 
   // starts local connection, stream, and video
-  async function startWebcam() {
-    // create local connection
-    localConnection = new RTCPeerConnection(servers);
+  async function startVideo() {
     // create local stream with video and audio
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    // add local stream to local connection
-    localStream.getTracks().forEach(track => {
-      localConnection.addTrack(track, localStream);
-    });
     // create local video with local stream
-    localVideo = addVideoStream(localStream);
-    setStreaming(true);
+    localVideo = document.createElement('video');
+    addVideoStream(localVideo, localStream);
+    // set up local peer
+    localPeer = new Peer();
+    localPeer.on('open', () => setStreaming(true));
+
+    localPeer.on('call', call => {
+      call.answer(localStream);
+      const video = document.createElement('video');
+      call.on('stream', remoteStream => {
+        addVideoStream(video, remoteStream);
+      });
+    })
   }
 
   // stops local connection, stream, and video
