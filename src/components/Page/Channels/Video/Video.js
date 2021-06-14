@@ -14,6 +14,7 @@ let localPeer = null;
 const calls = {};
 
 function Video(props) {
+  const [useWebcam, setUseWebcam] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [calling, setCalling] = useState(false);
 
@@ -34,9 +35,11 @@ function Video(props) {
   }
 
   // starts local connection, stream, and video
-  async function startVideo() {
+  async function startStream() {
     // create local stream with video and audio
-    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    localStream = await navigator.mediaDevices.getUserMedia(
+      { video: useWebcam, audio: true }
+    );
     // create local video with local stream
     localVideo = document.createElement('video');
     addVideoStream(localVideo, localStream);
@@ -55,7 +58,7 @@ function Video(props) {
   }
 
   // stops video streaming
-  function stopVideo() {
+  function stopStream() {
     // stop streaming tracks
     if (localStream) {
       localStream.getTracks().forEach(track => track.stop());
@@ -103,7 +106,7 @@ function Video(props) {
 
   // called when user exits page
   async function onExit() {
-    stopVideo();
+    stopStream();
     await leaveCall();
   }
 
@@ -132,11 +135,19 @@ function Video(props) {
       <div className="video-grid" ref={videoGridRef}></div>
       {
         !streaming ?
-        <button onClick={startVideo}>Start Video</button> :
+        <>
+          <p style={{display: 'inline-block'}}>Use Webcam</p>
+          <input
+            type="checkbox"
+            checked={useWebcam}
+            onChange={e => setUseWebcam(e.target.checked)}
+          />
+          <button onClick={startStream}>Start Stream</button>
+        </> :
         !calling ?
         <>
           <button onClick={joinCall}>Join Call</button>
-          <button onClick={stopVideo}>Stop Video</button>
+          <button onClick={stopStream}>Stop Stream</button>
         </> :
         <button onClick={leaveCall}>Leave Call</button>
       }
