@@ -11,6 +11,8 @@ let localStream = null;
 let localVideo = null;
 let localPeer = null;
 
+const calls = {};
+
 function Video(props) {
   const [streaming, setStreaming] = useState(false);
   const [calling, setCalling] = useState(false);
@@ -20,6 +22,7 @@ function Video(props) {
   // get channel doc reference
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const peersRef = channelDoc.collection('peers');
 
   // creates and returns a video object streaming from given stream
   function addVideoStream(video, stream) {
@@ -40,55 +43,65 @@ function Video(props) {
     // set up local peer
     localPeer = new Peer();
     localPeer.on('open', () => setStreaming(true));
-
     localPeer.on('call', call => {
       call.answer(localStream);
       const video = document.createElement('video');
       call.on('stream', remoteStream => {
         addVideoStream(video, remoteStream);
       });
+      call.on('close', () => video.remove());
+      calls[call.peer] = call;
     })
   }
 
+  // stops video streaming
   function stopVideo() {
-    // stop streaming each track
+    // stop streaming tracks
     if (localStream) {
       localStream.getTracks().forEach(track => track.stop());
     }
     // remove local video
     if (localVideo) localVideo.remove();
+    // stop streaming
     setStreaming(false);
   }
 
   // stops local connection, stream, and video
   async function leaveCall() {
+    // close each call
+    Object.values(calls).forEach(call => call.close());
     // remove peer id from firebase
     if (localPeer?.id) {
-      await channelDoc.update({
-        ids: firebase.firestore.FieldValue.arrayRemove(localPeer.id)
-      });
+      await peersRef.doc(localPeer.id).delete();
     }
+    // stop calling
     setCalling(false);
   }
 
-  function connectToPeer(peerId) {
+  // attempts to connect given peer
+  function connectPeer(peerId) {
     const call = localPeer.call(peerId, localStream);
     const video = document.createElement('video');
     call.on('stream', remoteStream => {
       addVideoStream(video, remoteStream);
     });
     call.on('close', () => video.remove());
+    calls[peerId] = call;
+  }
+
+  // attempts to disconnect given peer
+  function disconnectPeer(peerId) {
+    if (calls[peerId]) calls[peerId].close();
   }
 
   async function joinCall() {
-    const docData = (await channelDoc.get()).data();
-    docData.ids.forEach(peerId => connectToPeer(peerId));
-    await channelDoc.update({
-      ids: firebase.firestore.FieldValue.arrayUnion(localPeer.id)
-    });
+    const snapshot = await peersRef.get();
+    snapshot.docs.forEach(doc => connectPeer(doc.data().id));
+    await peersRef.doc(localPeer.id).set({ id: localPeer.id });
     setCalling(true);
   }
 
+  // called when user exits page
   async function onExit() {
     stopVideo();
     await leaveCall();
@@ -97,9 +110,19 @@ function Video(props) {
   // listen for unloading
   useEffect(() => {
     window.addEventListener('beforeunload', onExit);
+    const peersListener = peersRef.onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'removed') {
+          const data = change.doc.data();
+          const peerId = data.id;
+          disconnectPeer(peerId);
+        }
+      });
+    });
     return () => {
       onExit();
       window.removeEventListener('beforeunload', onExit);
+      peersListener();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
