@@ -15,6 +15,7 @@ import ListIcon from '@material-ui/icons/List';
 import BrushIcon from '@material-ui/icons/Brush';
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 import DescriptionIcon from '@material-ui/icons/Description';
+import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VideocamIcon from '@material-ui/icons/Videocam';
 
 import './Channels.css';
@@ -43,6 +44,7 @@ function Channels(props) {
       case 'notes': return <DescriptionIcon />;
       case 'todos': return <ListIcon />;
       case 'goals': return <LibraryAddCheckIcon />;
+      case 'audio': return <VolumeUpIcon />;
       case 'video': return <VideocamIcon />;
       default: return null;
     }
@@ -249,6 +251,7 @@ function Channels(props) {
                   <option value="notes">Notes</option>
                   <option value="todos">Todos</option>
                   <option value="goals">Goals</option>
+                  <option value="audio">Audio</option>
                   <option value="video">Video</option>
                 </select>
                 <br />

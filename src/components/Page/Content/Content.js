@@ -3,6 +3,7 @@ import Sketch from '../Channels/Sketch/Sketch.js';
 import Notes from '../Channels/Notes/Notes.js';
 import Todos from '../Channels/Todos/Todos.js';
 import Goals from '../Channels/Goals/Goals.js';
+import Audio from '../Channels/Audio/Audio.js';
 import Video from '../Channels/Video/Video.js';
 
 import './Content.css';
@@ -16,6 +17,7 @@ function Content(props) {
       case 'notes': return <Notes group={props.group} channel={channel.id} />;
       case 'todos': return <Todos group={props.group} channel={channel.id} />;
       case 'goals': return <Goals group={props.group} channel={channel.id} />;
+      case 'audio': return <Audio group={props.group} channel={channel.id} />;
       case 'video': return <Video group={props.group} channel={channel.id} />;
       default: return null;
     }
