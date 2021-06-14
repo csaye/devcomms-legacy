@@ -25,13 +25,40 @@ function Stream(props) {
   const channelDoc = groupDoc.collection('channels').doc(props.channel);
   const peersRef = channelDoc.collection('peers');
 
-  // creates and returns a video object streaming from given stream
-  function addVideoStream(video, stream) {
+  // creates a video object streaming from given stream
+  function addStream(container, username, stream) {
+    // create container title
+    const title = document.createElement('p');
+    title.textContent = username;
+    container.append(title);
+    // create container video
+    const video = document.createElement('video');
     video.srcObject = stream;
     video.autoplay = true;
     video.playsinline = true;
+    container.append(video);
+    // append container to grid
     const videoGrid = videoGridRef.current;
-    videoGrid.append(video);
+    videoGrid.append(container);
+  }
+
+  // answers given call
+  async function answerCall(call) {
+    // answer call with local stream
+    call.answer(localStream);
+    const peerId = call.peer;
+    // reigster remote stream
+    const video = document.createElement('div');
+    call.on('stream', remoteStream => {
+      // retrieve peer username
+      peersRef.doc(peerId).get().then(doc => {
+        const username = doc.data().username;
+        addStream(video, username, remoteStream);
+      });
+    });
+    call.on('close', () => video.remove());
+    // cache call
+    calls[peerId] = call;
   }
 
   // starts local connection, stream, and video
@@ -41,20 +68,12 @@ function Stream(props) {
       { video: props.useVideo, audio: true }
     );
     // create local video with local stream
-    localVideo = document.createElement('video');
-    addVideoStream(localVideo, localStream);
+    localVideo = document.createElement('div');
+    addStream(localVideo, props.username, localStream);
     // set up local peer
     localPeer = new Peer();
-    localPeer.on('open', () => setStreaming(true));
-    localPeer.on('call', call => {
-      call.answer(localStream);
-      const video = document.createElement('video');
-      call.on('stream', remoteStream => {
-        addVideoStream(video, remoteStream);
-      });
-      call.on('close', () => video.remove());
-      calls[call.peer] = call;
-    })
+    localPeer.on('open', () => setStreaming(true)); // start streaming on open
+    localPeer.on('call', call => answerCall(call)); // answer when peer called
   }
 
   // stops video streaming
@@ -82,14 +101,14 @@ function Stream(props) {
   }
 
   // attempts to connect given peer
-  function connectPeer(peerId) {
-    const call = localPeer.call(peerId, localStream);
-    const video = document.createElement('video');
+  function connectPeer(peer) {
+    const call = localPeer.call(peer.id, localStream);
+    const video = document.createElement('div');
     call.on('stream', remoteStream => {
-      addVideoStream(video, remoteStream);
+      addStream(video, peer.username, remoteStream);
     });
     call.on('close', () => video.remove());
-    calls[peerId] = call;
+    calls[peer.id] = call;
   }
 
   // attempts to disconnect given peer
@@ -99,8 +118,11 @@ function Stream(props) {
 
   async function joinCall() {
     const snapshot = await peersRef.get();
-    snapshot.docs.forEach(doc => connectPeer(doc.data().id));
-    await peersRef.doc(localPeer.id).set({ id: localPeer.id });
+    snapshot.docs.forEach(doc => connectPeer(doc.data()));
+    await peersRef.doc(localPeer.id).set({
+      id: localPeer.id,
+      username: props.username
+    });
     setCalling(true);
   }
 
