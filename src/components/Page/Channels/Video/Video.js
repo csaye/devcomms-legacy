@@ -13,6 +13,7 @@ let localPeer = null;
 
 function Video(props) {
   const [streaming, setStreaming] = useState(false);
+  const [calling, setCalling] = useState(false);
 
   const videoGridRef = useRef();
 
@@ -21,14 +22,12 @@ function Video(props) {
   const channelDoc = groupDoc.collection('channels').doc(props.channel);
 
   // creates and returns a video object streaming from given stream
-  function addVideoStream(stream) {
-    const video = document.createElement('video');
+  function addVideoStream(video, stream) {
     video.srcObject = stream;
     video.autoplay = true;
     video.playsinline = true;
     const videoGrid = videoGridRef.current;
     videoGrid.append(video);
-    return video;
   }
 
   // starts local connection, stream, and video
@@ -51,17 +50,25 @@ function Video(props) {
     })
   }
 
-  // stops local connection, stream, and video
-  function stopWebcam() {
-    // close local connection
-    localConnection.close();
+  function stopVideo() {
     // stop streaming each track
-    localStream.getTracks().forEach(track => {
-      track.stop();
-    });
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+    }
     // remove local video
-    localVideo.remove();
+    if (localVideo) localVideo.remove();
     setStreaming(false);
+  }
+
+  // stops local connection, stream, and video
+  async function leaveCall() {
+    // remove peer id from firebase
+    if (localPeer?.id) {
+      await channelDoc.update({
+        ids: firebase.firestore.FieldValue.arrayRemove(localPeer.id)
+      });
+    }
+    setCalling(false);
   }
 
   function connectToPeer(peerId) {
@@ -81,6 +88,20 @@ function Video(props) {
     });
     setCalling(true);
   }
+
+  async function onExit() {
+    stopVideo();
+    await leaveCall();
+  }
+
+  // listen for unloading
+  useEffect(() => {
+    window.addEventListener('beforeunload', onExit);
+    return () => {
+      onExit();
+      window.removeEventListener('beforeunload', onExit);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Video">
