@@ -109,29 +109,36 @@ function Auth() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
               required
             />
             <label htmlFor="signup-username">Username</label>
             <input
+              id="signup-username"
               placeholder="username"
               value={username}
               onChange={e => setUsername(e.target.value)}
+              autoComplete="username"
               required
             />
-            <label htmlFor="signup-username">Password</label>
+            <label htmlFor="signup-password">Password</label>
             <input
+              id="signup-password"
               placeholder="password"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              autoComplete="new-password"
               required
             />
             <input
+              id="signup-confirmpassword"
               placeholder="confirm password"
               style={{marginTop: '2px'}}
               type="password"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
+              autoComplete="new-password"
               required
             />
             <button className="clean-btn">Sign Up</button>
@@ -145,6 +152,7 @@ function Auth() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
               required
             />
             <label htmlFor="signin-password">Password</label>
@@ -154,6 +162,7 @@ function Auth() {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              autoComplete="current-password"
               required
             />
             <button className="clean-btn">Sign In</button>

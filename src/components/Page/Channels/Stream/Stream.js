@@ -48,8 +48,11 @@ function Stream(props) {
     call.answer(localStream);
     const peerId = call.peer;
     // reigster remote stream
+    let streamCreated = false;
     const video = document.createElement('div');
     call.on('stream', remoteStream => {
+      if (streamCreated) return;
+      streamCreated = true;
       // retrieve peer username
       peersRef.doc(peerId).get().then(doc => {
         const username = doc.data().username;
@@ -104,7 +107,10 @@ function Stream(props) {
   function connectPeer(peer) {
     const call = localPeer.call(peer.id, localStream);
     const video = document.createElement('div');
+    let streamCreated = false;
     call.on('stream', remoteStream => {
+      if (streamCreated) return;
+      streamCreated = true;
       addStream(video, peer.username, remoteStream);
     });
     call.on('close', () => video.remove());

@@ -39,7 +39,7 @@
 
 .Auth form input {
   display: block;
-  border: 0;
+  border: 1px solid var(--dark0);
   padding: 2px 3px;
   border-radius: 3px;
   outline: none;

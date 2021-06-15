@@ -15,7 +15,9 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import './App.css';
 
 // initialize firebase
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 function App() {
   useAuthState(firebase.auth());
