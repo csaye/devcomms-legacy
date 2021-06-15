@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 
 import './Groups.css';
@@ -15,6 +16,8 @@ import firebase from 'firebase/app';
 function Groups(props) {
   const [groupName, setGroupName] = useState('');
   const [newGroupName, setNewGroupName] = useState('');
+  const [member, setMember] = useState('');
+  const [addError, setAddError] = useState('');
 
   // get user doc
   const uid = firebase.auth().currentUser.uid;
@@ -24,6 +27,10 @@ function Groups(props) {
   const groupsRef = firebase.firestore().collection('groups');
   const groupsQuery = groupsRef.where('members', 'array-contains', uid).orderBy('name');
   const [groups] = useCollectionData(groupsQuery, { idField: 'id' });
+
+  // get usernames data
+  const usernamesRef = firebase.firestore().collection('usernames');
+  const [usernamesData] = useCollectionData(usernamesRef);
 
   // selects given group for current user
   async function selectGroup(group) {
@@ -84,6 +91,41 @@ function Groups(props) {
     const groupDoc = groupsRef.doc(group.id);
     await groupDoc.update({
       name: newGroupName
+    });
+  }
+
+  // gets a username from user id
+  function getUsername(userId) {
+    if (!usernamesData) return '...';
+    const matches = usernamesData.filter(user => user.uid === userId);
+    return matches.length === 0 ? null : matches[0].username;
+  }
+
+  // adds member to group
+  async function addMember(group) {
+    const newMember = member;
+    setMember('');
+    // retrieve new member uid
+    const matches = usernamesData.filter(user => user.username === newMember);
+    if (matches.length === 0) {
+      setAddError(`No user @${newMember} found`)
+      setTimeout(() => setAddError(''), 2000);
+      return;
+    }
+    const memberUid = matches[0].uid;
+    // update document in firebase
+    const groupDoc = groupsRef.doc(group.id);
+    await groupDoc.update({
+      members: firebase.firestore.FieldValue.arrayUnion(memberUid)
+    });
+  }
+
+  // removes given member
+  async function removeMember(group, member) {
+    // update document in firebase
+    const groupDoc = groupsRef.doc(group.id);
+    await groupDoc.update({
+      members: firebase.firestore.FieldValue.arrayRemove(member)
     });
   }
 
@@ -164,6 +206,68 @@ function Groups(props) {
                           <CheckIcon />
                         </button>
                       </form>
+                      <hr />
+                      <p style={{margin: '15px 0 5px 0'}}><u>Members</u></p>
+                      {
+                        group.members.sort().map((m, i) =>
+                          <div
+                            key={`groupmember-${i}`}
+                            style={{
+                              height: '30px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <PersonIcon/> {getUsername(m)}
+                            {
+                              m !== uid &&
+                              <button
+                                onClick={() => removeMember(group, m)}
+                                style={{
+                                  border: '0',
+                                  background: 'transparent',
+                                  margin: '0', padding: '0'
+                                }}
+                              >
+                                <DeleteIcon />
+                              </button>
+                            }
+                          </div>
+                        )
+                      }
+                      <hr />
+                      <p style={{margin: '15px 0 5px 0'}}><u>Add member</u></p>
+                      <form
+                        onSubmit={e => {
+                          e.preventDefault();
+                          addMember(group);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}
+                      >
+                        <input
+                          placeholder="username"
+                          value={member}
+                          onChange={e => setMember(e.target.value)}
+                          style={{
+                            marginRight: '5px'
+                          }}
+                          required
+                        />
+                        <button type="submit"><AddIcon /></button>
+                      </form>
+                      {
+                        addError &&
+                        <p
+                          className="error-text"
+                          style={{margin: '5px 0'}}
+                        >
+                          {addError}
+                        </p>
+                      }
                     </div>
                   </Popup>
                   <Popup
