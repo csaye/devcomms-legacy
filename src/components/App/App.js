@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import Background from '../Background/Background.js';
 import Auth from '../Auth/Auth.js';
@@ -24,7 +25,7 @@ function App() {
 
   const [loaded, setLoaded] = useState(false);
 
-  const currentUser = firebase.auth().currentUser;
+  const authed = firebase.auth().currentUser;
 
   // set loaded after auth initialization
   useEffect(() => {
@@ -38,13 +39,25 @@ function App() {
       <Background />
       {
         loaded ?
-        <>
-          {
-            currentUser ?
-            <Home /> :
-            <Auth />
-          }
-        </> :
+        <Router>
+          <Switch>
+            <Route path="/signin">
+              {authed ? <Redirect to="/" /> : <Auth signUp={false} />}
+            </Route>
+            <Route path="/signup">
+              {authed ? <Redirect to="/" /> : <Auth signUp={true} />}
+            </Route>
+            <Route path="/:groupId/:channelId">
+              {authed ? <Home /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/:groupId">
+              {authed ? <Home /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/">
+              {authed ? <Home /> : <Redirect to="/signin" />}
+            </Route>
+          </Switch>
+        </Router> :
         <Loading message="Loading auth..." />
       }
     </div>
