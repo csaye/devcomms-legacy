@@ -178,9 +178,9 @@ function Groups(props) {
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
                       <div className="header">
-                        Editing
+                        <span>Editing</span>
                         <GroupIcon style={{marginLeft: '5px'}} />
-                        {group.name}
+                        <span className="shrink">{group.name}</span>
                       </div>
                       <form
                         onSubmit={e => {
@@ -219,9 +219,9 @@ function Groups(props) {
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
                       <div className="header">
-                        Members of
+                        <span>Members of</span>
                         <GroupIcon style={{marginLeft: '5px'}} />
-                        {group.name}
+                        <span className="shrink">{group.name}</span>
                       </div>
                       <div style={{marginTop: '5px'}}>
                         {
@@ -298,9 +298,9 @@ function Groups(props) {
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
                       <div className="header">
-                        Delete
+                        <span>Delete</span>
                         <GroupIcon style={{marginLeft: '5px'}} />
-                        {group.name}?
+                        <span className="shrink">{group.name}</span>?
                       </div>
                       <button
                         onClick={close}

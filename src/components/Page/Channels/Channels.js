@@ -150,10 +150,10 @@ function Channels(props) {
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
                       <div className="header">
-                        Editing
+                        <span>Editing</span>
                         <span style={{marginLeft: '5px'}} />
                         {getIcon(channel.type)}
-                        {channel.name}
+                        <span className="shrink">{channel.name}</span>
                       </div>
                       <form onSubmit={e => {
                         e.preventDefault();
@@ -189,10 +189,10 @@ function Channels(props) {
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
                       <div className="header">
-                        Delete
+                        <span>Delete</span>
                         <span style={{marginLeft: '5px'}} />
                         {getIcon(channel.type)}
-                        {channel.name}?
+                        <span className="shrink">{channel.name}</span>?
                       </div>
                       <button
                         onClick={close}
