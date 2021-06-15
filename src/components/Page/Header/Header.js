@@ -27,6 +27,7 @@ function Header(props) {
 
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
+  const usernameDoc = firebase.firestore().collection('usernames').doc(uid);
 
   // get group data
   const groupDoc = firebase.firestore().collection('groups').doc(
@@ -36,9 +37,7 @@ function Header(props) {
 
   // get channel data
   const channelDoc = props.group ?
-  groupDoc.collection('channels').doc(
-    props.channel ? props.channel : 'null'
-  ) :
+  groupDoc.collection('channels').doc(props.channel ?? 'null') :
   groupDoc;
   const [channelData] = useDocumentData(channelDoc);
 
@@ -131,12 +130,8 @@ function Header(props) {
     }
 
     // update firebase documents
-    await userDoc.update({
-      username: username
-    });
-    await firebase.firestore().collection('usernames').doc(uid).update({
-      username: username
-    });
+    await userDoc.update({ username: username });
+    await usernameDoc.update({ username: username });
     return true;
   }
 
@@ -221,7 +216,6 @@ function Header(props) {
                     close();
                   }}
                 >
-                  <p style={{margin: '10px 0 0 0'}}><u>Group Name</u></p>
                   <input
                     placeholder="group name"
                     value={newGroupName}
@@ -230,13 +224,15 @@ function Header(props) {
                   />
                   <button
                     type="submit"
-                    style={{marginLeft: '5px', position: 'relative', top: '5px'}}
+                    style={{
+                      marginLeft: '5px', marginTop: '10px',
+                      position: 'relative', top: '5px'
+                    }}
                   >
                     <CheckIcon />
                   </button>
                 </form>
                 <hr />
-                <p style={{margin: '15px 0 5px 0'}}><u>Members</u></p>
                 {
                   groupData.members.sort().map((m, i) =>
                     <div
@@ -265,8 +261,6 @@ function Header(props) {
                     </div>
                   )
                 }
-                <hr />
-                <p style={{margin: '15px 0 5px 0'}}><u>Add member</u></p>
                 <form
                   onSubmit={e => {
                     e.preventDefault();
@@ -274,7 +268,8 @@ function Header(props) {
                   }}
                   style={{
                     display: 'flex',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   <input

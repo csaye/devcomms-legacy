@@ -19,6 +19,7 @@
   text-align: center;
   color: var(--gray0);
   overflow: hidden;
+  outline: none;
 }
 
 .Groups .group-btn:hover {

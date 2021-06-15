@@ -136,7 +136,12 @@ function Channels(props) {
                   >
                     <div className="modal">
                       <button className="close" onClick={close}>&times;</button>
-                      <div className="header">Editing {channel.name}</div>
+                      <div className="header">
+                        Editing
+                        <span style={{marginLeft: '5px'}} />
+                        {getIcon(channel.type)}
+                        {channel.name}
+                      </div>
                       <form onSubmit={e => {
                         e.preventDefault();
                         updateChannel(channel);
@@ -144,6 +149,7 @@ function Channels(props) {
                       }}>
                         <input
                           placeholder="channel name"
+                          spellCheck="false"
                           value={newName}
                           onChange={e => setNewName(e.target.value)}
                           required
@@ -257,6 +263,7 @@ function Channels(props) {
                 <br />
                 <input
                   placeholder="channel name"
+                  spellCheck="false"
                   value={name}
                   onChange={e => setName(e.target.value)}
                   required
