@@ -127,7 +127,7 @@ function Channels(props) {
                 }
                 onClick={() => selectChannel(channel)}
               >
-                {getIcon(channel.type)} {channel.name}
+                {getIcon(channel.type)} <span>{channel.name}</span>
               </button>
             }
             on={isOwner ? 'right-click' : ''}
@@ -222,78 +222,81 @@ function Channels(props) {
           </Popup>
         )
       }
-      <Popup
-        trigger={
-          <button className="add-button clean-btn var2">
-            <AddIcon />
-          </button>
-        }
-        onOpen={() => {
-          setType('text');
-          setName('');
-        }}
-        modal
-      >
-        {
-          close => (
-            <div className="modal">
-              <button className="close" onClick={close}>&times;</button>
-              <div className="header">
-                New Channel
-                <AddIcon />
-              </div>
-              <form onSubmit={e => {
-                e.preventDefault();
-                createChannel();
-                close();
-              }}>
-                <div
-                  style={{
-                    display: 'inline-block', position: 'relative',
-                    top: '7px', marginRight: '5px'
-                  }}
-                >
-                  {getIcon(type)}
-                </div>
-                <select
-                  value={type}
-                  onChange={e => setType(e.target.value)}
-                  style={{
-                    cursor: 'pointer', outline: 'none',
-                    margin: '10px auto 0 auto', background: 'var(--dark4)',
-                    border: '1px solid var(--dark3)', color: 'var(--gray0)'
-                  }}
-                  required
-                >
-                  <option value="text">Text</option>
-                  <option value="sketch">Sketch</option>
-                  <option value="notes">Notes</option>
-                  <option value="todos">Todos</option>
-                  <option value="goals">Goals</option>
-                  <option value="audio">Audio</option>
-                  <option value="video">Video</option>
-                </select>
-                <br />
-                <input
-                  placeholder="channel name"
-                  spellCheck="false"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  required
-                />
-                <button
-                  style={{
-                    marginLeft: '5px', marginTop: '2px',
-                    position: 'relative', top: '4px'
-                  }}
-                >
+      {
+        (channels && isOwner) &&
+        <Popup
+          trigger={
+            <button className="add-button clean-btn var2">
+              <AddIcon />
+            </button>
+          }
+          onOpen={() => {
+            setType('text');
+            setName('');
+          }}
+          modal
+        >
+          {
+            close => (
+              <div className="modal">
+                <button className="close" onClick={close}>&times;</button>
+                <div className="header">
+                  New Channel
                   <AddIcon />
-                </button>
-              </form>
-            </div>
-          )
-        }
-      </Popup>
+                </div>
+                <form onSubmit={e => {
+                  e.preventDefault();
+                  createChannel();
+                  close();
+                }}>
+                  <div
+                    style={{
+                      display: 'inline-block', position: 'relative',
+                      top: '7px', marginRight: '5px'
+                    }}
+                  >
+                    {getIcon(type)}
+                  </div>
+                  <select
+                    value={type}
+                    onChange={e => setType(e.target.value)}
+                    style={{
+                      cursor: 'pointer', outline: 'none',
+                      margin: '10px auto 0 auto', background: 'var(--dark4)',
+                      border: '1px solid var(--dark3)', color: 'var(--gray0)'
+                    }}
+                    required
+                  >
+                    <option value="text">Text</option>
+                    <option value="sketch">Sketch</option>
+                    <option value="notes">Notes</option>
+                    <option value="todos">Todos</option>
+                    <option value="goals">Goals</option>
+                    <option value="audio">Audio</option>
+                    <option value="video">Video</option>
+                  </select>
+                  <br />
+                  <input
+                    placeholder="channel name"
+                    spellCheck="false"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    required
+                  />
+                  <button
+                    style={{
+                      marginLeft: '5px', marginTop: '2px',
+                      position: 'relative', top: '4px'
+                    }}
+                  >
+                    <AddIcon />
+                  </button>
+                </form>
+              </div>
+            )
+          }
+        </Popup>
+      }
     </div>
   );
 }

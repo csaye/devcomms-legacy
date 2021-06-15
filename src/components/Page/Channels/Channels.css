@@ -12,7 +12,7 @@
 
 .Channels .channel-button {
   margin: 0;
-  padding: 5px 0;
+  padding: 5px;
   font-size: 16px;
   background: transparent;
   border: 0;
@@ -35,6 +35,12 @@
 
 .Channels .channel-button svg {
   margin-right: 5px;
+}
+
+.Channels .channel-button span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Channels .add-button {
