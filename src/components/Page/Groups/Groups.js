@@ -183,61 +183,76 @@ function Groups(props) {
                         {group.name}
                       </div>
                       <form
-                        style={{
-                          margin: '0 0 20px 0'
-                        }}
                         onSubmit={e => {
                           e.preventDefault();
                           updateGroup(group);
                           close();
                         }}
                       >
-                        <p style={{margin: '10px 0 0 0'}}><u>Group Name</u></p>
                         <input
                           placeholder="group name"
+                          spellCheck="false"
                           value={newGroupName}
                           onChange={e => setNewGroupName(e.target.value)}
                           required
                         />
                         <button
                           type="submit"
-                          style={{marginLeft: '5px', position: 'relative', top: '5px'}}
+                          style={{
+                            marginLeft: '5px', marginTop: '5px',
+                            position: 'relative', top: '4px'
+                          }}
                         >
                           <CheckIcon />
                         </button>
                       </form>
-                      <hr />
-                      <p style={{margin: '15px 0 5px 0'}}><u>Members</u></p>
-                      {
-                        group.members.sort().map((m, i) =>
-                          <div
-                            key={`groupmember-${i}`}
-                            style={{
-                              height: '30px',
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <PersonIcon/> {getUsername(m)}
-                            {
-                              m !== uid &&
-                              <button
-                                onClick={() => removeMember(group, m)}
-                                style={{
-                                  border: '0',
-                                  background: 'transparent',
-                                  margin: '0', padding: '0'
-                                }}
-                              >
-                                <DeleteIcon />
-                              </button>
-                            }
-                          </div>
-                        )
-                      }
-                      <hr />
-                      <p style={{margin: '15px 0 5px 0'}}><u>Add member</u></p>
+                    </div>
+                  </Popup>
+                  <Popup
+                    nested
+                    onClose={close}
+                    trigger={
+                      <GroupIcon style={{cursor: 'pointer'}} />
+                    }
+                    modal
+                  >
+                    <div className="modal">
+                      <button className="close" onClick={close}>&times;</button>
+                      <div className="header">
+                        Members of
+                        <GroupIcon style={{marginLeft: '5px'}} />
+                        {group.name}
+                      </div>
+                      <div style={{marginTop: '5px'}}>
+                        {
+                          group.members.sort().map((m, i) =>
+                            <div
+                              key={`groupmember-${i}`}
+                              style={{
+                                height: '30px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                              }}
+                            >
+                              <PersonIcon/> {getUsername(m)}
+                              {
+                                m !== uid &&
+                                <button
+                                  onClick={() => removeMember(group, m)}
+                                  style={{
+                                    border: '0',
+                                    background: 'transparent',
+                                    margin: '0', padding: '0'
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </button>
+                              }
+                            </div>
+                          )
+                        }
+                      </div>
                       <form
                         onSubmit={e => {
                           e.preventDefault();
@@ -245,11 +260,13 @@ function Groups(props) {
                         }}
                         style={{
                           display: 'flex',
-                          alignItems: 'center'
+                          alignItems: 'center',
+                          justifyContent: 'center'
                         }}
                       >
                         <input
                           placeholder="username"
+                          spellCheck="false"
                           value={member}
                           onChange={e => setMember(e.target.value)}
                           style={{
@@ -345,6 +362,7 @@ function Groups(props) {
               }}>
                 <input
                   placeholder="group name"
+                  spellCheck="false"
                   value={groupName}
                   onChange={e => setGroupName(e.target.value)}
                   required
