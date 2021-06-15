@@ -15,6 +15,7 @@ let localPeer = null;
 const calls = {};
 
 function Stream(props) {
+  const [loading, setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [calling, setCalling] = useState(false);
 
@@ -66,6 +67,7 @@ function Stream(props) {
 
   // starts local connection, stream, and video
   async function startStream() {
+    setLoading(true);
     // create local stream with video and audio
     localStream = await navigator.mediaDevices.getUserMedia(
       { video: props.useVideo, audio: true }
@@ -75,7 +77,10 @@ function Stream(props) {
     addStream(localVideo, props.username, localStream);
     // set up local peer
     localPeer = new Peer();
-    localPeer.on('open', () => setStreaming(true)); // start streaming on open
+    localPeer.on('open', () => {
+      setStreaming(true);
+      setLoading(false);
+    }); // start streaming on open
     localPeer.on('call', call => answerCall(call)); // answer when peer called
   }
 
@@ -93,6 +98,7 @@ function Stream(props) {
 
   // stops local connection, stream, and video
   async function leaveCall() {
+    setLoading(true);
     // close each call
     Object.values(calls).forEach(call => call.close());
     // remove peer id from firebase
@@ -101,6 +107,7 @@ function Stream(props) {
     }
     // stop calling
     setCalling(false);
+    setLoading(false);
   }
 
   // attempts to connect given peer
@@ -123,6 +130,7 @@ function Stream(props) {
   }
 
   async function joinCall() {
+    setLoading(true);
     const snapshot = await peersRef.get();
     snapshot.docs.forEach(doc => connectPeer(doc.data()));
     await peersRef.doc(localPeer.id).set({
@@ -130,6 +138,7 @@ function Stream(props) {
       username: props.username
     });
     setCalling(true);
+    setLoading(false);
   }
 
   // called when user exits page
@@ -170,6 +179,8 @@ function Stream(props) {
       >
       </div>
       {
+        loading ?
+        <p className="loading-text">Loading...</p> :
         !streaming ?
         <button className="clean-btn var3" onClick={startStream}>Start Stream</button> :
         !calling ?

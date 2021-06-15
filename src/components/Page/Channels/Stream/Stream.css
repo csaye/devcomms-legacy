@@ -16,6 +16,11 @@
   margin: 5px;
 }
 
+.Stream .loading-text {
+  margin: 5px;
+  color: var(--gray0);
+}
+
 .Stream .video-grid, .Stream .audio-grid {
   display: flex;
   flex-wrap: wrap;
