@@ -217,10 +217,11 @@ function Chat(props) {
     }
   }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // if no messages, load
   if (!messages) {
     return (
-      <div className="Chat">
-        <p>Loading...</p>
+      <div>
+        <p className="channel-info">Loading...</p>
       </div>
     );
   }

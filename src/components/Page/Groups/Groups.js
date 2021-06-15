@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { useHistory } from 'react-router-dom';
 
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
@@ -19,6 +20,8 @@ function Groups(props) {
   const [member, setMember] = useState('');
   const [addError, setAddError] = useState('');
 
+  const history = useHistory();
+
   // get user doc
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
@@ -34,42 +37,31 @@ function Groups(props) {
 
   // selects given group for current user
   async function selectGroup(group) {
-    await userDoc.update({
-      group: group.id
-    });
+    history.push(`/${group.id}`);
+    await userDoc.update({ group: group.id });
   }
 
   // creates a group with given name
   async function createGroup() {
-    // create group document
-    await groupsRef.add({
-      name: groupName,
-      owner: uid,
-      members: [uid]
-    }).then(doc => {
-      // get group id
-      const groupId = doc.id;
-      // set current user group to this
-      userDoc.update({
-        group: groupId
-      });
-    });
+    const docRef = await groupsRef.add({ name: groupName, owner: uid, members: [uid] });
+    history.push(`/${docRef.id}`);
+    userDoc.update({ group: docRef.id });
   }
 
   // checks whether user group valid
-  function checkUserGroup() {
+  async function checkUserGroup() {
     if (!groups) return;
     // if no group where id is group
     if (!groups.some(g => g.id === props.group)) {
       // clear current group
-      userDoc.update({
-        group: ''
-      });
+      history.push('/');
+      await userDoc.update({ group: '' });
     }
   }
 
   // deletes given group
   async function deleteGroup(group) {
+    if (props.group === group.id) history.push('/');
     // delete all channels
     const batch = firebase.firestore().batch();
     const groupDoc = groupsRef.doc(group.id);
@@ -89,9 +81,7 @@ function Groups(props) {
   // updates group document in firebase
   async function updateGroup(group) {
     const groupDoc = groupsRef.doc(group.id);
-    await groupDoc.update({
-      name: newGroupName
-    });
+    await groupDoc.update({ name: newGroupName });
   }
 
   // gets a username from user id

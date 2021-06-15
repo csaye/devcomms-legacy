@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
 import Popup from 'reactjs-popup';
+import { useHistory } from 'react-router-dom';
 
 import firebase from 'firebase/app';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -39,6 +39,8 @@ function Channels(props) {
   const [newName, setNewName] = useState('');
   const [isOwner, setIsOwner] = useState(undefined);
 
+  const history = useHistory();
+
   // get user doc
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
@@ -52,47 +54,27 @@ function Channels(props) {
 
   // creates a channel in firebase
   async function createChannel() {
-    await channelsRef.add({
-      name: name,
-      type: type
-    }).then(docRef => {
-      // select channel
-      const channelObj = {
-        id: docRef.id,
-        type: type
-      }
-      props.setChannel(channelObj);
-      userDoc.update({
-        [`channels.${props.group}`]: channelObj
-      });
-    });
+    const docRef = await channelsRef.add({ name: name, type: type });
+    history.push(`/${props.group}/${docRef.id}`);
+    await userDoc.update({ [`channels.${props.group}`]: docRef.id });
   }
 
   // deletes given channel
   async function deleteChannel(channel) {
-    const channelId = channel.id;
-    if (props.channel?.id === channelId) props.setChannel(null);
-    await channelsRef.doc(channelId).delete();
+    if (props.channel === channel.id) history.push(`/${props.group}`);
+    await channelsRef.doc(channel.id).delete();
   }
 
   // updates channel name
   async function updateChannel(channel) {
     const channelId = channel.id;
-    await channelsRef.doc(channelId).update({
-      name: newName
-    });
+    await channelsRef.doc(channelId).update({ name: newName });
   }
 
   // selects given channel
   async function selectChannel(channel) {
-    const channelObj = {
-      id: channel.id,
-      type: channel.type
-    };
-    props.setChannel(channelObj);
-    await userDoc.update({
-      [`channels.${props.group}`]: channelObj
-    });
+    history.push(`/${props.group}/${channel.id}`);
+    await userDoc.update({ [`channels.${props.group}`]: channel.id });
   }
 
   // retrieves whether user is owner
@@ -121,7 +103,7 @@ function Channels(props) {
             trigger={
               <button
                 className={
-                  props.channel?.id === channel.id ?
+                  props.channel === channel.id ?
                   'channel-button selected' :
                   'channel-button'
                 }

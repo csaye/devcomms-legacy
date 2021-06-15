@@ -43,8 +43,8 @@ function Todos(props) {
 
   if (!todos) {
     return (
-      <div className="Todos">
-        <p>Loading...</p>
+      <div>
+        <p className="channel-info">Loading...</p>
       </div>
     );
   }

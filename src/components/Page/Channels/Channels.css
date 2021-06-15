@@ -46,4 +46,5 @@
 .Channels .add-button {
   margin: 10px auto;
   padding: 3px 3px 0 3px;
+  outline: none;
 }

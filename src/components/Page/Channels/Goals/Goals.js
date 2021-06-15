@@ -39,8 +39,8 @@ function Goals(props) {
 
   if (!goals) {
     return (
-      <div className="Goals">
-        <p>Loading...</p>
+      <div>
+        <p className="channel-info">Loading...</p>
       </div>
     );
   }
