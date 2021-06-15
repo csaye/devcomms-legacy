@@ -2,29 +2,23 @@ import React, { useState } from 'react';
 
 import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
-import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
-import VerticalSplitIcon from '@material-ui/icons/VerticalSplit';
 
 import firebase from 'firebase/app';
 
 import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firestore';
+import { getIcon } from '../Channels/Channels.js';
 
 import logo from '../../../img/logo.png';
 import './Header.css';
 
 function Header(props) {
-  const [newGroupName, setNewGroupName] = useState('');
-  const [deleting, setDeleting] = useState(false);
-  const [addError, setAddError] = useState('');
-  const [member, setMember] = useState('');
-
   const [newUsername, setNewUsername] = useState(props.username);
   const [usernameError, setUsernameError] = useState('');
 
+  // get user data
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
   const usernameDoc = firebase.firestore().collection('usernames').doc(uid);
@@ -50,63 +44,6 @@ function Header(props) {
     await userDoc.update({
       group: ''
     });
-  }
-
-  // updates group document in firebase
-  async function updateGroup() {
-    await groupDoc.update({
-      name: newGroupName
-    });
-  }
-
-  // adds member to group
-  async function addMember() {
-    const newMember = member;
-    setMember('');
-    // retrieve new member uid
-    const matches = usernamesData.filter(user => user.username === newMember);
-    if (matches.length === 0) {
-      setAddError(`No user @${newMember} found`)
-      setTimeout(() => setAddError(''), 2000);
-      return;
-    }
-    const memberUid = matches[0].uid;
-    // update document in firebase
-    await groupDoc.update({
-      members: firebase.firestore.FieldValue.arrayUnion(memberUid)
-    });
-  }
-
-  // removes given member
-  async function removeMember(member) {
-    // update document in firebase
-    await groupDoc.update({
-      members: firebase.firestore.FieldValue.arrayRemove(member)
-    });
-  }
-
-  // deletes group
-  async function deleteGroup() {
-    // delete all channels
-    const batch = firebase.firestore().batch();
-    await groupDoc.collection('channels').get().then(docs => {
-      docs.forEach(doc => {
-        batch.delete(doc.ref);
-      });
-    });
-    batch.delete(groupDoc); // delete group document
-    batch.commit(); // commit batch
-    // delete channel cache
-    await userDoc.update({
-      [`channels.${props.group}`]: firebase.firestore.FieldValue.delete()
-    });
-  }
-
-  // gets a username from user id
-  function getUsername(userId) {
-    if (!usernamesData) return '...';
-    const matches = usernamesData.filter(user => user.uid === userId);
-    return matches.length === 0 ? null : matches[0].username;
   }
 
   // attempts to update username
@@ -185,168 +122,16 @@ function Header(props) {
         }
       </Popup>
       {
-        (groupData && groupData.owner === uid) &&
-        <Popup
-          trigger={
-            <div className="flex-item">
-              <GroupIcon />{groupData.name}
-            </div>
-          }
-          onOpen={() => {
-            setNewGroupName(groupData.name);
-          }}
-          modal
-        >
-          {
-            close => (
-              <div className="modal">
-                <button className="close" onClick={close}>&times;</button>
-                <div className="header">
-                  Editing
-                  <GroupIcon style={{marginLeft: '5px'}} />
-                  {groupData.name}
-                </div>
-                <form
-                  style={{
-                    margin: '0 0 20px 0'
-                  }}
-                  onSubmit={e => {
-                    e.preventDefault();
-                    updateGroup();
-                    close();
-                  }}
-                >
-                  <input
-                    placeholder="group name"
-                    value={newGroupName}
-                    onChange={e => setNewGroupName(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="submit"
-                    style={{
-                      marginLeft: '5px', marginTop: '10px',
-                      position: 'relative', top: '5px'
-                    }}
-                  >
-                    <CheckIcon />
-                  </button>
-                </form>
-                <hr />
-                {
-                  groupData.members.sort().map((m, i) =>
-                    <div
-                      key={`groupmember-${i}`}
-                      style={{
-                        height: '30px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <PersonIcon/> {getUsername(m)}
-                      {
-                        m !== uid &&
-                        <button
-                          onClick={() => removeMember(m)}
-                          style={{
-                            border: '0',
-                            background: 'transparent',
-                            margin: '0', padding: '0'
-                          }}
-                        >
-                          <DeleteIcon />
-                        </button>
-                      }
-                    </div>
-                  )
-                }
-                <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                    addMember();
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <input
-                    placeholder="username"
-                    value={member}
-                    onChange={e => setMember(e.target.value)}
-                    style={{
-                      marginRight: '5px'
-                    }}
-                    required
-                  />
-                  <button type="submit"><AddIcon /></button>
-                </form>
-                {
-                  addError && <p
-                    className="error-text"
-                    style={{margin: '5px 0'}}
-                    >
-                      {addError}
-                    </p>
-                }
-                <hr style={{marginBottom: '0'}} />
-                {
-                  deleting ?
-                  <>
-                    <p className="delete-text">Delete group?</p>
-                    <button onClick={() => setDeleting(false)} style={{"marginRight": "5px"}}>
-                      cancel
-                    </button>
-                    <button onClick={() => {
-                      deleteGroup();
-                      close();
-                      setDeleting(false);
-                    }}>
-                      delete
-                    </button>
-                  </> :
-                  <button
-                    className="button"
-                    onClick={() => {
-                      setDeleting(true);
-                    }}
-                    style={{
-                      marginTop: '10px'
-                    }}
-                  >
-                    <DeleteIcon />
-                  </button>
-                }
-              </div>
-            )
-          }
-        </Popup>
+        groupData &&
+        <div className="flex-item">
+          <GroupIcon />{groupData.name}
+        </div>
       }
       {
         channelData &&
-        <Popup
-          trigger={
-            <div className="flex-item">
-              <VerticalSplitIcon />{channelData.name}
-            </div>
-          }
-          modal
-        >
-          {
-            close => (
-              <div className="modal">
-                <button className="close" onClick={close}>&times;</button>
-                <div className="header">
-                  Editing
-                  <VerticalSplitIcon style={{marginLeft: '5px'}} />
-                  {channelData.name}
-                </div>
-              </div>
-            )
-          }
-        </Popup>
+        <div className="flex-item">
+          {getIcon(channelData.type)}{channelData.name}
+        </div>
       }
       <button onClick={() => firebase.auth().signOut()} className="sign-out-button clean-btn">
         <ExitToAppIcon />

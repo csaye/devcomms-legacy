@@ -96,7 +96,7 @@ function Groups(props) {
 
   // gets a username from user id
   function getUsername(userId) {
-    if (!usernamesData) return '...';
+    if (!usernamesData) return null;
     const matches = usernamesData.filter(user => user.uid === userId);
     return matches.length === 0 ? null : matches[0].username;
   }

@@ -5,7 +5,6 @@ import Popup from 'reactjs-popup';
 import firebase from 'firebase/app';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-import VerticalSplitIcon from '@material-ui/icons/VerticalSplit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -19,6 +18,20 @@ import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VideocamIcon from '@material-ui/icons/Videocam';
 
 import './Channels.css';
+
+// returns icon for requested channel type
+export function getIcon(type) {
+  switch (type) {
+    case 'text': return <ChatIcon />;
+    case 'sketch': return <BrushIcon />;
+    case 'notes': return <DescriptionIcon />;
+    case 'todos': return <ListIcon />;
+    case 'goals': return <LibraryAddCheckIcon />;
+    case 'audio': return <VolumeUpIcon />;
+    case 'video': return <VideocamIcon />;
+    default: return null;
+  }
+}
 
 function Channels(props) {
   const [name, setName] = useState('');
@@ -36,20 +49,6 @@ function Channels(props) {
   const [channels] = useCollectionData(
     channelsRef.orderBy('name'), { idField: 'id' }
   );
-
-  // returns icon for requested channel type
-  function getIcon(type) {
-    switch (type) {
-      case 'text': return <ChatIcon />;
-      case 'sketch': return <BrushIcon />;
-      case 'notes': return <DescriptionIcon />;
-      case 'todos': return <ListIcon />;
-      case 'goals': return <LibraryAddCheckIcon />;
-      case 'audio': return <VolumeUpIcon />;
-      case 'video': return <VideocamIcon />;
-      default: return null;
-    }
-  }
 
   // creates a channel in firebase
   async function createChannel() {
@@ -241,7 +240,7 @@ function Channels(props) {
               <button className="close" onClick={close}>&times;</button>
               <div className="header">
                 New Channel
-                <VerticalSplitIcon style={{marginLeft: '5px'}} />
+                <AddIcon />
               </div>
               <form onSubmit={e => {
                 e.preventDefault();
