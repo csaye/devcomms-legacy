@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Popup from 'reactjs-popup';
 
@@ -24,6 +24,7 @@ function Channels(props) {
   const [name, setName] = useState('');
   const [type, setType] = useState('text');
   const [newName, setNewName] = useState('');
+  const [isOwner, setIsOwner] = useState(undefined);
 
   // get user doc
   const uid = firebase.auth().currentUser.uid;
@@ -95,10 +96,23 @@ function Channels(props) {
     });
   }
 
+  // retrieves whether user is owner
+  async function getIsOwner() {
+    const doc = await groupDoc.get();
+    const owner = doc.data().owner;
+    setIsOwner(uid === owner);
+  }
+
+  // retrieve whether user is owner on group change
+  useEffect(() => {
+    setIsOwner(undefined);
+    getIsOwner();
+  }, [props.group]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="Channels">
       {
-        !channels ?
+        (!channels || isOwner === undefined) ?
         <p className="placeholder-text">Loading channels...</p> :
         channels.length === 0 ?
         <p className="placeholder-text">No channels yet</p> :
@@ -117,7 +131,7 @@ function Channels(props) {
                 {getIcon(channel.type)} {channel.name}
               </button>
             }
-            on="right-click"
+            on={isOwner ? 'right-click' : ''}
             position="right center"
             arrow={false}
             nested

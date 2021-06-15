@@ -156,7 +156,7 @@ function Groups(props) {
                 {group.name}
               </button>
             }
-            on="right-click"
+            on={group.owner === uid ? 'right-click' : ''}
             position="right center"
             arrow={false}
             nested
