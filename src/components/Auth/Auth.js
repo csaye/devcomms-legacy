@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
@@ -6,13 +7,15 @@ import firebase from 'firebase/app';
 import logo from '../../img/logo.png';
 import './Auth.css';
 
-function Auth() {
+function Auth(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
-  const [signingUp, setSigningUp] = useState(false);
+  const [signingUp, setSigningUp] = useState(props.signUp);
+
+  const history = useHistory();
 
   const usernamesRef = firebase.firestore().collection('usernames');
   const [usernamesData] = useCollectionData(usernamesRef);
@@ -175,10 +178,12 @@ function Auth() {
           <button className="switch-button clean-btn" onClick={() => {
             setError('');
             setSigningUp(false);
+            history.push('/signin');
           }}>Have an account? Sign in</button> :
           <button className="switch-button clean-btn" onClick={() => {
             setError('');
             setSigningUp(true);
+            history.push('/signup');
           }}>No account? Sign up</button>
         }
       </div>

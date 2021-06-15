@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import Page from '../Page/Page.js';
 import Loading from '../Loading/Loading.js';
@@ -13,26 +13,14 @@ function Home() {
   const userDoc = firebase.firestore().collection('users').doc(uid);
   const [userData] = useDocumentData(userDoc);
 
-  const [group, setGroup] = useState(undefined);
-
-  // retrieves current user group id
-  async function getGroup() {
-    if (!userData) return;
-    const groupId = userData.group;
-    setGroup(groupId);
-  }
-
-  // get group when user data changes
-  useEffect(() => {
-    getGroup();
-  }, [userData]); // eslint-disable-line react-hooks/exhaustive-deps
+  const { groupId, channelId } = useParams();
 
   return (
     <div className="Home">
       {
-        group !== undefined ?
-        <Page group={group} username={userData.username} /> :
-        <Loading message="Loading groups..." />
+        userData ?
+        <Page group={groupId} channel={channelId} username={userData.username} /> :
+        <Loading message="Loading user..." />
       }
     </div>
   );
