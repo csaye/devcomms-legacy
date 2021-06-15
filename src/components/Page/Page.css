@@ -1,14 +1,16 @@
 .Page {
   height: 100%;
+  position: relative;
   min-width: 100%;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: fit-content;
   color: var(--gray0);
 }
 
 .Page .page-content {
+  margin-top: 60px;
   min-height: 0;
   display: flex;
   flex-grow: 1;

@@ -1,20 +1,31 @@
 .Header {
-  min-height: 60px;
-  max-height: 60px;
+  height: 60px;
   border-bottom: 1px solid var(--dark4);
   background: var(--dark0);
   display: flex;
   align-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
 }
 
 .Header .flex-item {
   margin-left: 10px;
   display: flex;
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.Header .flex-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Header h1 {
-  margin: 0 10px;
+  margin: 0 0 0 10px;
+  white-space: nowrap;
 }
 
 .Header .logo-img {
@@ -52,6 +63,6 @@
 .Header .sign-out-button {
   margin: 0 10px 0 15px;
   padding: 3px 0 0 0;
-  width: 34px;
+  min-width: 34px;
   height: 34px;
 }

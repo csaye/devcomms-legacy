@@ -86,7 +86,7 @@ function Header(props) {
       <Popup
         trigger={
           <div className="flex-item">
-            <PersonIcon />@{props.username}
+            <PersonIcon /><span>@{props.username}</span>
           </div>
         }
         onOpen={() => {
@@ -124,13 +124,13 @@ function Header(props) {
       {
         groupData &&
         <div className="flex-item">
-          <GroupIcon />{groupData.name}
+          <GroupIcon /><span>{groupData.name}</span>
         </div>
       }
       {
         channelData &&
         <div className="flex-item">
-          {getIcon(channelData.type)}{channelData.name}
+          {getIcon(channelData.type)}<span>{channelData.name}</span>
         </div>
       }
       <button onClick={() => firebase.auth().signOut()} className="sign-out-button clean-btn">
