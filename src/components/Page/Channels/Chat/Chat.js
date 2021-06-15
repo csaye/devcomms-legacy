@@ -12,7 +12,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import firebase from 'firebase/app';
 
-// import logo from '../../img/logo.png';
+import logo from '../../../../img/logo.png';
 
 import './Chat.css';
 
@@ -26,9 +26,9 @@ const nowYear = now.getFullYear();
 const today = new Date(nowYear, nowMonth, nowDay).setHours(0, 0, 0, 0);
 const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
 
-// let pageHidden = false; // whether page is hidden
+let pageHidden = false; // whether page is hidden
 let shiftDown = false; // whether shift key is down
-// let firstQuery = true; // if first query to messages
+let firstQuery = true; // if first query to messages
 
 function Chat(props) {
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
@@ -139,32 +139,44 @@ function Chat(props) {
     else return dateTime.toLocaleDateString();
   }
 
+  // returns whether given text is url
+  function isURL(text) {
+    if (text.includes(' ')) return false;
+    let url;
+    try {
+      url = new URL(text);
+    } catch {
+      return false;
+    }
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  }
+
   // scroll to end of messages
   function chatScroll() {
     if (!messagesEnd.current) return;
     messagesEnd.current.scrollIntoView();
   }
 
-  // // send a message notification to the user
-  // function sendNotification(data) {
-  //   // return if browser does not support notifications
-  //   if (!('Notification' in window)) return;
-  //   // return if permissions not granted
-  //   if (!Notification.permission === 'granted') return;
-  //   // send notification
-  //   if (data) {
-  //     const titleText = `New message from @${data.senderName}`;
-  //     const bodyText = data.text ?? data.filename;
-  //     new Notification(titleText, { body: bodyText, icon: logo });
-  //   }
-  // }
+  // send a message notification to the user
+  function sendNotification(data) {
+    // return if browser does not support notifications
+    if (!('Notification' in window)) return;
+    // return if permissions not granted
+    if (!Notification.permission === 'granted') return;
+    // send notification
+    if (data) {
+      const titleText = `New message from @${data.senderName}`;
+      const bodyText = data.text ?? data.filename;
+      new Notification(titleText, { body: bodyText, icon: logo });
+    }
+  }
 
-  // // called when page visibility changes
-  // function onVisChange() {
-  //   pageHidden = document.hidden;
-  //   // if page not hidden, reset title
-  //   if (!pageHidden) document.title = 'Devcomms';
-  // }
+  // called when page visibility changes
+  function onVisChange() {
+    pageHidden = document.hidden;
+    // if page not hidden, reset title
+    if (!pageHidden) document.title = 'Devcomms';
+  }
 
   // when messages update
   useEffect(() => {
@@ -173,37 +185,37 @@ function Chat(props) {
 
   // on start
   useEffect(() => {
-    // // ask for notification permissions
-    // if (Notification.permission === 'default') Notification.requestPermission();
+    // ask for notification permissions
+    if (Notification.permission === 'default') Notification.requestPermission();
 
-    // // create visibility listener on start
-    // document.addEventListener("visibilitychange", onVisChange);
+    // create visibility listener on start
+    document.addEventListener("visibilitychange", onVisChange);
 
-    // // listen for message creation
-    // const messagesListener = messagesQuery.onSnapshot(snapshot => {
-    //   // skip initial state of database
-    //   if (firstQuery) {
-    //     firstQuery = false;
-    //     return;
-    //   }
-    //   // return if page not hidden
-    //   if (!pageHidden) return;
-    //   // for each new message
-    //   snapshot.docChanges().forEach(change => {
-    //     if (change.type === 'added') {
-    //       const data = change.doc.data();
-    //       sendNotification(data);
-    //       document.title = 'Devcomms (new)';
-    //     }
-    //   });
-    // });
+    // listen for message creation
+    const messagesListener = messagesQuery.onSnapshot(snapshot => {
+      // skip initial state of database
+      if (firstQuery) {
+        firstQuery = false;
+        return;
+      }
+      // return if page not hidden
+      if (!pageHidden) return;
+      // for each new message
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          const data = change.doc.data();
+          sendNotification(data);
+          document.title = 'Devcomms (new)';
+        }
+      });
+    });
 
     // clear listeners on return
-    // return () => {
-    //   document.removeEventListener("visibilitychange", onVisChange);
-    //   messagesListener();
-    // }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {
+      document.removeEventListener("visibilitychange", onVisChange);
+      messagesListener();
+    }
+  }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!messages) {
     return (
@@ -239,15 +251,21 @@ function Chat(props) {
                 {
                   m.type === 'text' ?
                   <>
-                    <ReactMarkdown className="markdown-text">
-                      {m.text}
-                    </ReactMarkdown>
+                    {
+                      isURL(m.text) ?
+                      <a href={m.text} target="_blank" rel="noreferrer noopener">
+                        {m.text}
+                      </a> :
+                      <ReactMarkdown className="markdown-text">
+                        {m.text}
+                      </ReactMarkdown>
+                    }
                     {
                       m.edited &&
                       <span className="edited-text">(edited)</span>
                     }
                   </> :
-                  <a href={m.url} target="_blank" rel="noreferrer">
+                  <a href={m.url} target="_blank" rel="noreferrer noopener">
                     {
                       m.type === 'image' ?
                       <img
@@ -305,7 +323,7 @@ function Chat(props) {
                                   <CheckIcon />
                                 </button>
                               </form> :
-                              <a href={m.url} target="_blank" rel="noreferrer">
+                              <a href={m.url} target="_blank" rel="noreferrer noopener">
                                 {m.filename}
                               </a>
                             }
