@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import Popup from 'reactjs-popup';
+
 import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupIcon from '@material-ui/icons/Group';
 
@@ -12,6 +14,7 @@ import firebase from 'firebase/app';
 
 function Groups(props) {
   const [groupName, setGroupName] = useState('');
+  const [newGroupName, setNewGroupName] = useState('');
 
   // get user doc
   const uid = firebase.auth().currentUser.uid;
@@ -76,6 +79,14 @@ function Groups(props) {
     });
   }
 
+  // updates group document in firebase
+  async function updateGroup(group) {
+    const groupDoc = groupsRef.doc(group.id);
+    await groupDoc.update({
+      name: newGroupName
+    });
+  }
+
   // check user group when groups change
   useEffect(() => {
     checkUserGroup();
@@ -111,6 +122,50 @@ function Groups(props) {
             {
               close => (
                 <>
+                  <Popup
+                    nested
+                    onClose={close}
+                    trigger={
+                      <EditIcon style={{cursor: 'pointer'}} />
+                    }
+                    onOpen={() => {
+                      setNewGroupName(group.name);
+                    }}
+                    modal
+                  >
+                    <div className="modal">
+                      <button className="close" onClick={close}>&times;</button>
+                      <div className="header">
+                        Editing
+                        <GroupIcon style={{marginLeft: '5px'}} />
+                        {group.name}
+                      </div>
+                      <form
+                        style={{
+                          margin: '0 0 20px 0'
+                        }}
+                        onSubmit={e => {
+                          e.preventDefault();
+                          updateGroup(group);
+                          close();
+                        }}
+                      >
+                        <p style={{margin: '10px 0 0 0'}}><u>Group Name</u></p>
+                        <input
+                          placeholder="group name"
+                          value={newGroupName}
+                          onChange={e => setNewGroupName(e.target.value)}
+                          required
+                        />
+                        <button
+                          type="submit"
+                          style={{marginLeft: '5px', position: 'relative', top: '5px'}}
+                        >
+                          <CheckIcon />
+                        </button>
+                      </form>
+                    </div>
+                  </Popup>
                   <Popup
                     nested
                     onClose={close}
