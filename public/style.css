@@ -18,6 +18,14 @@ textarea {
   resize: none;
 }
 
+a {
+  color: var(--blue0);
+}
+
+a:hover {
+  color: var(--blue1);
+}
+
 .flex-grow {
   flex-grow: 1;
 }

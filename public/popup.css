@@ -85,9 +85,6 @@
 .modal button svg {
   margin-bottom: -3px;
 }
-.modal a {
-  color: var(--blue0);
-}
 .modal .delete-btn {
   background: var(--red0);
   color: var(--dark0);

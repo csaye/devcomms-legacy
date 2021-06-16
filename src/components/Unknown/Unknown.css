@@ -1,0 +1,23 @@
+.Unknown {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray0);
+}
+
+.Unknown .center-box {
+  background: var(--dark1);
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 3px #333;
+  text-align: center;
+}
+
+.Unknown .center-box h1 {
+  margin: 0;
+}
+
+.Unknown .center-box p {
+  margin: 5px 0 10px 0;
+}
