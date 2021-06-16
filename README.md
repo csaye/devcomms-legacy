@@ -1,10 +1,12 @@
 # Devcomms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9c26b18d-f6fd-4970-9bd5-f1f7885f7b7d/deploy-status)](https://app.netlify.com/sites/heuristic-heyrovsky-7af78f/deploys)
+
 Team communication and coordination all in one place.
 
-Try it here: [csaye.com/devcomms](https://csaye.com/devcomms)
+Try it here: [devcomms.io](https://devcomms.io)
 
-<a href="https://csaye.com/devcomms">
+<a href="https://devcomms.io">
   <img width="512px" src="https://user-images.githubusercontent.com/27871609/120959421-8fbe1200-c70e-11eb-8e02-473575f4502c.png">
 </a>
 
