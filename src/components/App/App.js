@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import Background from '../Background/Background.js';
 import Auth from '../Auth/Auth.js';
 import Home from '../Home/Home.js';
+import Unknown from '../Unknown/Unknown.js';
 import Loading from '../Loading/Loading.js';
 
 import firebase from 'firebase/app';
@@ -47,14 +48,20 @@ function App() {
             <Route path="/signup">
               {authed ? <Redirect to="/" /> : <Auth signUp={true} />}
             </Route>
-            <Route path="/:groupId/:channelId">
+            <Route path="/home/:groupId/:channelId">
               {authed ? <Home /> : <Redirect to="/signin" />}
             </Route>
-            <Route path="/:groupId">
+            <Route path="/home/:groupId">
               {authed ? <Home /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/home">
+              {authed ? <Home /> : <Redirect to="/signin" />}
+            </Route>
+            <Route path="/" exact>
+              {authed ? <Redirect to="/home" /> : <Redirect to="/signin" />}
             </Route>
             <Route path="/">
-              {authed ? <Home /> : <Redirect to="/signin" />}
+              <Unknown />
             </Route>
           </Switch>
         </Router> :

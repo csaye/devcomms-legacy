@@ -55,13 +55,13 @@ function Channels(props) {
   // creates a channel in firebase
   async function createChannel() {
     const docRef = await channelsRef.add({ name: name, type: type });
-    history.push(`/${props.group}/${docRef.id}`);
+    history.push(`/home/${props.group}/${docRef.id}`);
     await userDoc.update({ [`channels.${props.group}`]: docRef.id });
   }
 
   // deletes given channel
   async function deleteChannel(channel) {
-    if (props.channel === channel.id) history.push(`/${props.group}`);
+    if (props.channel === channel.id) history.push(`/home/${props.group}`);
     await channelsRef.doc(channel.id).delete();
   }
 
@@ -73,7 +73,7 @@ function Channels(props) {
 
   // selects given channel
   async function selectChannel(channel) {
-    history.push(`/${props.group}/${channel.id}`);
+    history.push(`/home/${props.group}/${channel.id}`);
     await userDoc.update({ [`channels.${props.group}`]: channel.id });
   }
 

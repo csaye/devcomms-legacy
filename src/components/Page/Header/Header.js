@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Popup from 'reactjs-popup';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -18,6 +19,8 @@ function Header(props) {
   const [newUsername, setNewUsername] = useState(props.username);
   const [usernameError, setUsernameError] = useState('');
 
+  const history = useHistory();
+
   // get user data
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
@@ -25,14 +28,13 @@ function Header(props) {
 
   // get group data
   const groupDoc = firebase.firestore().collection('groups').doc(
-    props.group ? props.group : 'null'
+    props.group ?? 'null'
   );
   const [groupData] = useDocumentData(groupDoc);
 
   // get channel data
   const channelDoc = props.group ?
-  groupDoc.collection('channels').doc(props.channel ?? 'null') :
-  groupDoc;
+  groupDoc.collection('channels').doc(props.channel ?? 'null') : groupDoc;
   const [channelData] = useDocumentData(channelDoc);
 
   // get usernames data
@@ -41,9 +43,8 @@ function Header(props) {
 
   // clears selected group of current user
   async function leaveGroup() {
-    await userDoc.update({
-      group: ''
-    });
+    history.push('/home');
+    await userDoc.update({ group: '' });
   }
 
   // attempts to update username

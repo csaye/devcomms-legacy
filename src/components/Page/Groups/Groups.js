@@ -37,14 +37,14 @@ function Groups(props) {
 
   // selects given group for current user
   async function selectGroup(group) {
-    history.push(`/${group.id}`);
+    history.push(`/home/${group.id}`);
     await userDoc.update({ group: group.id });
   }
 
   // creates a group with given name
   async function createGroup() {
     const docRef = await groupsRef.add({ name: groupName, owner: uid, members: [uid] });
-    history.push(`/${docRef.id}`);
+    history.push(`/home/${docRef.id}`);
     userDoc.update({ group: docRef.id });
   }
 
@@ -54,14 +54,14 @@ function Groups(props) {
     // if no group where id is group
     if (!groups.some(g => g.id === props.group)) {
       // clear current group
-      history.push('/');
+      history.push('/home');
       await userDoc.update({ group: '' });
     }
   }
 
   // deletes given group
   async function deleteGroup(group) {
-    if (props.group === group.id) history.push('/');
+    if (props.group === group.id) history.push('/home');
     // delete all channels
     const batch = firebase.firestore().batch();
     const groupDoc = groupsRef.doc(group.id);
