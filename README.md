@@ -1,18 +1,14 @@
-# Devcomms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
+<p align="center">
+  <a href="https://devcomms.io">
+    <img width="400px" style="margin:100px" src="https://user-images.githubusercontent.com/27871609/122192524-96543400-ce48-11eb-9384-1e7c7ae24a80.png">
+  </a>
+</p>
+<p align="center"><i>Team communication and coordination all in one place.</i></p>
+<p align="center">
+  <a href="https://app.netlify.com/sites/heuristic-heyrovsky-7af78f/deploys"><img src="https://api.netlify.com/api/v1/badges/9c26b18d-f6fd-4970-9bd5-f1f7885f7b7d/deploy-status"></a>
+</p>
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/9c26b18d-f6fd-4970-9bd5-f1f7885f7b7d/deploy-status)](https://app.netlify.com/sites/heuristic-heyrovsky-7af78f/deploys)
-
-Team communication and coordination all in one place.
-
-Try it here: [devcomms.io](https://devcomms.io)
-
-<a href="https://devcomms.io">
-  <img width="512px" src="https://user-images.githubusercontent.com/27871609/120959421-8fbe1200-c70e-11eb-8e02-473575f4502c.png">
-</a>
-
-## About
-
-Devcomms aims to simplify and streamline team development. With a collection of helpful, synchronized widgets, your team can chat, arrange notes, set goals, and more all in one place.
+**Devcomms aims to simplify and streamline team development.** Instead of having one tool for chatting and calling, one tool for arranging notes, and one tool for setting goals and todos, you can do all of that and more with Devcomms. Try it here: [devcomms.io](https://devcomms.io)
 
 ### Features
 
