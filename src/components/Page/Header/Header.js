@@ -13,6 +13,7 @@ import { useCollectionData, useDocumentData } from 'react-firebase-hooks/firesto
 import { getIcon } from '../Channels/Channels.js';
 
 import logo from '../../../img/logo.png';
+import banner from '../../../img/banner.png';
 import './Header.css';
 
 function Header(props) {
@@ -82,7 +83,7 @@ function Header(props) {
         alt="logo"
       />
       <span className="divider" />
-      <h1>Devcomms</h1>
+      <img src={banner} className="banner" />
       <span className="flex-grow" />
       <Popup
         trigger={

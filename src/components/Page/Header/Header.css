@@ -10,6 +10,10 @@
   top: 0;
 }
 
+.Header img.banner {
+  height: 58px;
+}
+
 .Header .flex-item {
   margin-left: 10px;
   display: flex;
