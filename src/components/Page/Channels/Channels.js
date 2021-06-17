@@ -57,7 +57,7 @@ function Channels(props) {
   // update channels when source changes
   useEffect(() => {
     if (channelsSrc) setChannels(channelsSrc);
-  }, [channelsSrc])
+  }, [channelsSrc]);
 
   // creates a channel in firebase
   async function createChannel() {
@@ -70,6 +70,8 @@ function Channels(props) {
   // deletes given channel
   async function deleteChannel(channel) {
     if (props.channel === channel.id) history.push(`/home/${props.group}`);
+    channels.splice(channel.order, 1);
+    await updateChannelOrder();
     await channelsRef.doc(channel.id).delete();
   }
 
@@ -93,17 +95,23 @@ function Channels(props) {
     setIsOwner(uid === owner);
   }
 
-  // swaps channel orders
-  async function reorderChannels(indexA, indexB) {
-    const [removed] = channels.splice(indexA, 1);
-    channels.splice(indexB, 0, removed);
-    // update channel orders in firebase
-    const batch = firebase.firestore().batch();
+  // updates channel orders in firebase
+  async function updateChannelOrder() {
+    const batch = firebase.firestore().batch(); // create batch
+    // for each channel
     await channels.forEach((channel, i) => {
+      // update channel doc at id with order
       const channelDoc = channelsRef.doc(channel.id);
       batch.update(channelDoc, { order: i });
     });
-    batch.commit();
+    batch.commit(); // commit batch
+  }
+
+  // swaps channel orders
+  function reorderChannels(indexA, indexB) {
+    const [removed] = channels.splice(indexA, 1);
+    channels.splice(indexB, 0, removed);
+    updateChannelOrder();
   }
 
   // called after drag ends
@@ -114,6 +122,7 @@ function Channels(props) {
 
   // retrieve whether user is owner on group change
   useEffect(() => {
+    setChannels(undefined);
     setIsOwner(undefined);
     getIsOwner();
   }, [props.group]); // eslint-disable-line react-hooks/exhaustive-deps
