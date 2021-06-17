@@ -20,6 +20,7 @@
   color: var(--gray0);
   overflow: hidden;
   outline: none;
+  font-size: 24px;
 }
 
 .Groups .group-btn:hover {
@@ -28,5 +29,5 @@
 }
 
 .Groups .group-btn.selected {
-  border: 3px solid var(--gray0);
+  border: 2px solid var(--gray0);
 }

@@ -119,6 +119,13 @@ function Groups(props) {
     });
   }
 
+  // returns abbreviated version of given name
+  function abbreviateName(name) {
+    const words = name.split(' ').filter(w => w); // split name by spaces
+    const letters = words.map(word => word[0]); // get word letters
+    return letters.join('').toUpperCase(); // return letters to uppercase
+  }
+
   // check user group when groups change
   useEffect(() => {
     checkUserGroup();
@@ -143,7 +150,7 @@ function Groups(props) {
                 }
                 onClick={() => selectGroup(group)}
               >
-                {group.name}
+                {abbreviateName(group.name)}
               </button>
             }
             on={group.owner === uid ? 'right-click' : ''}
