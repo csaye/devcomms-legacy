@@ -49,9 +49,15 @@ function Channels(props) {
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelsRef = groupDoc.collection('channels');
-  const [channels] = useCollectionData(
+  const [channelsSrc] = useCollectionData(
     channelsRef.orderBy('order'), { idField: 'id' }
   );
+  const [channels, setChannels] = useState(undefined);
+
+  // update channels when source changes
+  useEffect(() => {
+    if (channelsSrc) setChannels(channelsSrc);
+  }, [channelsSrc])
 
   // creates a channel in firebase
   async function createChannel() {
@@ -87,6 +93,25 @@ function Channels(props) {
     setIsOwner(uid === owner);
   }
 
+  // swaps channel orders
+  async function reorderChannels(indexA, indexB) {
+    const [removed] = channels.splice(indexA, 1);
+    channels.splice(indexB, 0, removed);
+    // update channel orders in firebase
+    const batch = firebase.firestore().batch();
+    await channels.forEach((channel, i) => {
+      const channelDoc = channelsRef.doc(channel.id);
+      batch.update(channelDoc, { order: i });
+    });
+    batch.commit();
+  }
+
+  // called after drag ends
+  function onChannelDrag(result) {
+    if (!result.destination) return;
+    reorderChannels(result.source.index, result.destination.index);
+  }
+
   // retrieve whether user is owner on group change
   useEffect(() => {
     setIsOwner(undefined);
@@ -100,7 +125,7 @@ function Channels(props) {
         <p className="placeholder-text">Loading channels...</p> :
         channels.length === 0 ?
         <p className="placeholder-text">No channels yet</p> :
-        <DragDropContext>
+        <DragDropContext onDragEnd={onChannelDrag}>
           <Droppable droppableId="droppable-channels">
           {
             (provided, snapshot) =>
@@ -108,7 +133,7 @@ function Channels(props) {
             {
               channels.map((channel, i) =>
               <Draggable
-                key={`channels-draggable-${i}`}
+                key={`channels-draggable-${channel.id}`}
                 draggableId={channel.id}
                 index={i}
               >
