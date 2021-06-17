@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -126,6 +127,18 @@ function Groups(props) {
     return letters.join('').toUpperCase(); // return letters to uppercase
   }
 
+  // swaps group orders
+  function reorderGroups(indexA, indexB) {
+    const [removed] = groups.splice(indexA, 1);
+    groups.splice(indexB, 0, removed);
+  }
+
+  // called after drag ends
+  function onGroupDrag(result) {
+    if (!result.destination) return;
+    reorderGroups(result.source.index, result.destination.index);
+  }
+
   // check user group when groups change
   useEffect(() => {
     checkUserGroup();
@@ -142,197 +155,222 @@ function Groups(props) {
 
   return (
     <div className="Groups">
-      {
-        groups.map((group, i) =>
-          <Popup
-            key={`groups-button-${i}`}
-            trigger={
-              <button
-                className={
-                  props.group === group.id ? 'group-btn selected' : 'group-btn'
-                }
-                onClick={() => selectGroup(group)}
-              >
-                {abbreviateName(group.name)}
-              </button>
-            }
-            on={group.owner === uid ? 'right-click' : ''}
-            position="right center"
-            arrow={false}
-            nested
-          >
+      <DragDropContext onDragEnd={onGroupDrag}>
+        <Droppable droppableId="droppable-channels">
+        {
+          (provided, snapshot) =>
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+          {
+            groups.map((group, i) =>
+            <Draggable
+              key={`groups-draggable-${group.id}`}
+              draggableId={group.id}
+              index={i}
+            >
             {
-              close => (
-                <>
-                  <Popup
-                    nested
-                    onClose={close}
-                    trigger={
-                      <EditIcon style={{cursor: 'pointer'}} />
-                    }
-                    onOpen={() => {
-                      setNewGroupName(group.name);
-                    }}
-                    modal
-                  >
-                    <div className="modal">
-                      <button className="close" onClick={close}>&times;</button>
-                      <div className="header">
-                        <span>Editing</span>
-                        <GroupIcon style={{marginLeft: '5px'}} />
-                        <span className="shrink">{group.name}</span>
-                      </div>
-                      <form
-                        onSubmit={e => {
-                          e.preventDefault();
-                          updateGroup(group);
-                          close();
-                        }}
-                      >
-                        <input
-                          placeholder="group name"
-                          spellCheck="false"
-                          value={newGroupName}
-                          onChange={e => setNewGroupName(e.target.value)}
-                          required
-                        />
-                        <button
-                          type="submit"
-                          style={{
-                            marginLeft: '5px', marginTop: '5px',
-                            position: 'relative', top: '4px'
+              (provided, snapshot) =>
+              <div
+                className="draggable-div"
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <Popup
+                  key={`groups-button-${i}`}
+                  trigger={
+                    <button
+                      className={
+                        props.group === group.id ? 'group-btn selected' : 'group-btn'
+                      }
+                      onClick={() => selectGroup(group)}
+                    >
+                      {abbreviateName(group.name)}
+                    </button>
+                  }
+                  on={group.owner === uid ? 'right-click' : ''}
+                  position="right center"
+                  arrow={false}
+                  nested
+                >
+                  {
+                    close => (
+                      <>
+                        <Popup
+                          nested
+                          onClose={close}
+                          trigger={
+                            <EditIcon style={{cursor: 'pointer'}} />
+                          }
+                          onOpen={() => {
+                            setNewGroupName(group.name);
                           }}
+                          modal
                         >
-                          <CheckIcon />
-                        </button>
-                      </form>
-                    </div>
-                  </Popup>
-                  <Popup
-                    nested
-                    onClose={close}
-                    trigger={
-                      <GroupIcon style={{cursor: 'pointer'}} />
-                    }
-                    modal
-                  >
-                    <div className="modal">
-                      <button className="close" onClick={close}>&times;</button>
-                      <div className="header">
-                        <span>Members of</span>
-                        <GroupIcon style={{marginLeft: '5px'}} />
-                        <span className="shrink">{group.name}</span>
-                      </div>
-                      <div style={{marginTop: '5px'}}>
-                        {
-                          group.members.sort().map((m, i) =>
-                            <div
-                              key={`groupmember-${i}`}
-                              style={{
-                                height: '30px',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
+                          <div className="modal">
+                            <button className="close" onClick={close}>&times;</button>
+                            <div className="header">
+                              <span>Editing</span>
+                              <GroupIcon style={{marginLeft: '5px'}} />
+                              <span className="shrink">{group.name}</span>
+                            </div>
+                            <form
+                              onSubmit={e => {
+                                e.preventDefault();
+                                updateGroup(group);
+                                close();
                               }}
                             >
-                              <PersonIcon/> {getUsername(m)}
+                              <input
+                                placeholder="group name"
+                                spellCheck="false"
+                                value={newGroupName}
+                                onChange={e => setNewGroupName(e.target.value)}
+                                required
+                              />
+                              <button
+                                type="submit"
+                                style={{
+                                  marginLeft: '5px', marginTop: '5px',
+                                  position: 'relative', top: '4px'
+                                }}
+                              >
+                                <CheckIcon />
+                              </button>
+                            </form>
+                          </div>
+                        </Popup>
+                        <Popup
+                          nested
+                          onClose={close}
+                          trigger={
+                            <GroupIcon style={{cursor: 'pointer'}} />
+                          }
+                          modal
+                        >
+                          <div className="modal">
+                            <button className="close" onClick={close}>&times;</button>
+                            <div className="header">
+                              <span>Members of</span>
+                              <GroupIcon style={{marginLeft: '5px'}} />
+                              <span className="shrink">{group.name}</span>
+                            </div>
+                            <div style={{marginTop: '5px'}}>
                               {
-                                m !== uid &&
-                                <button
-                                  onClick={() => removeMember(group, m)}
-                                  style={{
-                                    border: '0',
-                                    background: 'transparent',
-                                    margin: '0', padding: '0'
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </button>
+                                group.members.sort().map((m, i) =>
+                                  <div
+                                    key={`groupmember-${i}`}
+                                    style={{
+                                      height: '30px',
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center'
+                                    }}
+                                  >
+                                    <PersonIcon/> {getUsername(m)}
+                                    {
+                                      m !== uid &&
+                                      <button
+                                        onClick={() => removeMember(group, m)}
+                                        style={{
+                                          border: '0',
+                                          background: 'transparent',
+                                          margin: '0', padding: '0'
+                                        }}
+                                      >
+                                        <DeleteIcon />
+                                      </button>
+                                    }
+                                  </div>
+                                )
                               }
                             </div>
-                          )
-                        }
-                      </div>
-                      <form
-                        onSubmit={e => {
-                          e.preventDefault();
-                          addMember(group);
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}
-                      >
-                        <input
-                          placeholder="username"
-                          spellCheck="false"
-                          value={member}
-                          onChange={e => setMember(e.target.value)}
-                          style={{
-                            marginRight: '5px'
-                          }}
-                          required
-                        />
-                        <button type="submit"><AddIcon /></button>
-                      </form>
-                      {
-                        addError &&
-                        <p
-                          className="error-text"
-                          style={{margin: '5px 0'}}
+                            <form
+                              onSubmit={e => {
+                                e.preventDefault();
+                                addMember(group);
+                              }}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}
+                            >
+                              <input
+                                placeholder="username"
+                                spellCheck="false"
+                                value={member}
+                                onChange={e => setMember(e.target.value)}
+                                style={{
+                                  marginRight: '5px'
+                                }}
+                                required
+                              />
+                              <button type="submit"><AddIcon /></button>
+                            </form>
+                            {
+                              addError &&
+                              <p
+                                className="error-text"
+                                style={{margin: '5px 0'}}
+                              >
+                                {addError}
+                              </p>
+                            }
+                          </div>
+                        </Popup>
+                        <Popup
+                          nested
+                          onClose={close}
+                          trigger={
+                            <DeleteIcon style={{cursor: 'pointer'}} />
+                          }
+                          modal
                         >
-                          {addError}
-                        </p>
-                      }
-                    </div>
-                  </Popup>
-                  <Popup
-                    nested
-                    onClose={close}
-                    trigger={
-                      <DeleteIcon style={{cursor: 'pointer'}} />
-                    }
-                    modal
-                  >
-                    <div className="modal">
-                      <button className="close" onClick={close}>&times;</button>
-                      <div className="header">
-                        <span>Delete</span>
-                        <GroupIcon style={{marginLeft: '5px'}} />
-                        <span className="shrink">{group.name}</span>?
-                      </div>
-                      <button
-                        onClick={close}
-                        style={{
-                          padding: '5px 10px', marginTop: '10px'
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => {
-                          deleteGroup(group);
-                          close();
-                        }}
-                        style={{
-                          padding: '5px 10px', marginTop: '10px', marginLeft: '10px'
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </Popup>
-                </>
-              )
+                          <div className="modal">
+                            <button className="close" onClick={close}>&times;</button>
+                            <div className="header">
+                              <span>Delete</span>
+                              <GroupIcon style={{marginLeft: '5px'}} />
+                              <span className="shrink">{group.name}</span>?
+                            </div>
+                            <button
+                              onClick={close}
+                              style={{
+                                padding: '5px 10px', marginTop: '10px'
+                              }}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="delete-btn"
+                              onClick={() => {
+                                deleteGroup(group);
+                                close();
+                              }}
+                              style={{
+                                padding: '5px 10px', marginTop: '10px', marginLeft: '10px'
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </Popup>
+                      </>
+                    )
+                  }
+                </Popup>
+              </div>
             }
-          </Popup>
-        )
-      }
+            </Draggable>
+          )}
+          {provided.placeholder}
+          </div>
+        }
+        </Droppable>
+      </DragDropContext>
       <Popup
         trigger={
-          <button className="group-btn">
+          <button className="group-btn add-btn">
             <AddIcon />
           </button>
         }
