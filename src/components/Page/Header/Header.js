@@ -83,7 +83,7 @@ function Header(props) {
         alt="logo"
       />
       <span className="divider" />
-      <img src={banner} className="banner" />
+      <img src={banner} className="banner" alt="banner" />
       <span className="flex-grow" />
       <Popup
         trigger={

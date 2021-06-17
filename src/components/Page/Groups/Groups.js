@@ -131,9 +131,12 @@ function Groups(props) {
     checkUserGroup();
   }, [groups]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // if no groups, load
   if (!groups) {
     return (
-      <div className="Groups" />
+      <div className="Groups">
+        <p className="loading-text">Loading...</p>
+      </div>
     );
   }
 

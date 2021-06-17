@@ -272,7 +272,7 @@ function Chat(props) {
                       <img
                         src={m.url}
                         className="message-image"
-                        alt=""
+                        alt={m.filename}
                         onLoad={chatScroll}
                       /> :
                       <>{m.filename}</>

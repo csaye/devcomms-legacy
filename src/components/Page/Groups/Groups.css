@@ -6,6 +6,10 @@
   overflow: auto;
 }
 
+.Groups .loading-text {
+  margin: 4px;
+}
+
 .Groups .group-btn {
   margin: 10px auto;
   width: 60px;

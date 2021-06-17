@@ -149,13 +149,14 @@ function Channels(props) {
               {
                 (provided, snapshot) =>
                 <div
+                  className="draggable-div"
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                 >
                   <Popup
                     trigger={
-                      <button
+                      <div
                         className={
                           props.channel === channel.id ?
                           'channel-button selected' :
@@ -164,7 +165,7 @@ function Channels(props) {
                         onClick={() => selectChannel(channel)}
                       >
                         {getIcon(channel.type)} <span>{channel.name}</span>
-                      </button>
+                      </div>
                     }
                     on={isOwner ? 'right-click' : ''}
                     position="right center"
