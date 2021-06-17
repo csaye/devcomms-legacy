@@ -16,19 +16,19 @@ function Todo(props) {
   const [newTitle, setNewTitle] = useState(title);
   const [newPriority, setNewPriority] = useState(priority);
 
-  // get reference to todos collection
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const todosRef = groupRef.collection('todos');
-  const todoRef = todosRef.doc(id);
+  // get reference to todo
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const todoDoc = channelDoc.collection('todos').doc(id);
 
   // deletes todo from firebase
   async function deleteTodo() {
-    await todoRef.delete();
+    await todoDoc.delete();
   }
 
   // updates todo with new values
   async function updateTodo() {
-    await todoRef.update({
+    await todoDoc.update({
       title: newTitle,
       priority: parseFloat(newPriority)
     });

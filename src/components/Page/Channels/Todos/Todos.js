@@ -80,7 +80,12 @@ function Todos(props) {
         {
           todos.length > 0 ?
           todos.map((t, i) =>
-            <Todo key={`todo-${i}`} data={t} group={props.group} />
+            <Todo
+              key={`todo-${i}`}
+              data={t}
+              group={props.group}
+              channel={props.channel}
+            />
           ) :
           <p>No todos yet.</p>
         }

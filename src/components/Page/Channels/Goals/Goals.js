@@ -83,7 +83,12 @@ function Goals(props) {
       {
         goals.length > 0 ?
         goals.map((g, i) =>
-          <Goal key={`goal-${i}`} data={g} group={props.group} />
+          <Goal
+            key={`goal-${i}`}
+            data={g}
+            group={props.group}
+            channel={props.channel}
+          />
         ) :
         <p>No goals yet.</p>
       }

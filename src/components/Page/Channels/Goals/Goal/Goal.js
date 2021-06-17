@@ -46,13 +46,14 @@ function Goal(props) {
 
   const [timeLeft, setTimeLeft] = useState(endDate - new Date());
 
-  const groupRef = firebase.firestore().collection('groups').doc(props.group);
-  const goalsRef = groupRef.collection('goals');
-  const goalRef = goalsRef.doc(id);
+  // get reference to todo
+  const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+  const channelDoc = groupDoc.collection('channels').doc(props.channel);
+  const goalDoc = channelDoc.collection('goals').doc(id);
 
   // deletes goal document from firebase
   async function deleteGoal() {
-    await goalRef.delete();
+    await goalDoc.delete();
   }
 
   // creates a goal document in firebase
@@ -60,10 +61,7 @@ function Goal(props) {
     const endDateTime = new Date(`${newEndDate} ${newEndTime}`);
 
     // add document to firebase
-    goalRef.update({
-      endAt: endDateTime,
-      title: newTitle
-    });
+    goalDoc.update({ endAt: endDateTime, title: newTitle });
   }
 
   useEffect(() => {
