@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useHistory } from 'react-router-dom';
 
 import firebase from 'firebase/app';
@@ -49,12 +50,13 @@ function Channels(props) {
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelsRef = groupDoc.collection('channels');
   const [channels] = useCollectionData(
-    channelsRef.orderBy('name'), { idField: 'id' }
+    channelsRef.orderBy('order'), { idField: 'id' }
   );
 
   // creates a channel in firebase
   async function createChannel() {
-    const docRef = await channelsRef.add({ name: name, type: type });
+    const order = channels.length;
+    const docRef = await channelsRef.add({ name, type, order });
     history.push(`/home/${props.group}/${docRef.id}`);
     await userDoc.update({ [`channels.${props.group}`]: docRef.id });
   }
@@ -80,6 +82,7 @@ function Channels(props) {
   // retrieves whether user is owner
   async function getIsOwner() {
     const doc = await groupDoc.get();
+    if (!doc.exists) return;
     const owner = doc.data().owner;
     setIsOwner(uid === owner);
   }
@@ -97,112 +100,137 @@ function Channels(props) {
         <p className="placeholder-text">Loading channels...</p> :
         channels.length === 0 ?
         <p className="placeholder-text">No channels yet</p> :
-        channels.map((channel, i) =>
-          <Popup
-            key={`channels-button-${i}`}
-            trigger={
-              <button
-                className={
-                  props.channel === channel.id ?
-                  'channel-button selected' :
-                  'channel-button'
-                }
-                onClick={() => selectChannel(channel)}
-              >
-                {getIcon(channel.type)} <span>{channel.name}</span>
-              </button>
-            }
-            on={isOwner ? 'right-click' : ''}
-            position="right center"
-            arrow={false}
-            nested
-          >
+        <DragDropContext>
+          <Droppable droppableId="droppable-channels">
+          {
+            (provided, snapshot) =>
+            <div ref={provided.innerRef} {...provided.droppableProps}>
             {
-              close => (
-                <>
+              channels.map((channel, i) =>
+              <Draggable
+                key={`channels-draggable-${i}`}
+                draggableId={channel.id}
+                index={i}
+              >
+              {
+                (provided, snapshot) =>
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                >
                   <Popup
-                    nested
-                    onClose={close}
                     trigger={
-                      <EditIcon style={{cursor: 'pointer'}} />
+                      <button
+                        className={
+                          props.channel === channel.id ?
+                          'channel-button selected' :
+                          'channel-button'
+                        }
+                        onClick={() => selectChannel(channel)}
+                      >
+                        {getIcon(channel.type)} <span>{channel.name}</span>
+                      </button>
                     }
-                    onOpen={() => setNewName(channel.name)}
-                    modal
-                  >
-                    <div className="modal">
-                      <button className="close" onClick={close}>&times;</button>
-                      <div className="header">
-                        <span>Editing</span>
-                        <span style={{marginLeft: '5px'}} />
-                        {getIcon(channel.type)}
-                        <span className="shrink">{channel.name}</span>
-                      </div>
-                      <form onSubmit={e => {
-                        e.preventDefault();
-                        updateChannel(channel);
-                        close();
-                      }}>
-                        <input
-                          placeholder="channel name"
-                          spellCheck="false"
-                          value={newName}
-                          onChange={e => setNewName(e.target.value)}
-                          required
-                        />
-                        <button
-                          style={{
-                            marginLeft: '5px', marginTop: '5px',
-                            position: 'relative', top: '4px'
-                          }}
-                        >
-                          <CheckIcon />
-                        </button>
-                      </form>
-                    </div>
-                  </Popup>
-                  <Popup
+                    on={isOwner ? 'right-click' : ''}
+                    position="right center"
+                    arrow={false}
                     nested
-                    onClose={close}
-                    trigger={
-                      <DeleteIcon style={{cursor: 'pointer'}} />
-                    }
-                    modal
                   >
-                    <div className="modal">
-                      <button className="close" onClick={close}>&times;</button>
-                      <div className="header">
-                        <span>Delete</span>
-                        <span style={{marginLeft: '5px'}} />
-                        {getIcon(channel.type)}
-                        <span className="shrink">{channel.name}</span>?
-                      </div>
-                      <button
-                        onClick={close}
-                        style={{
-                          padding: '5px 10px', marginTop: '10px'
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => {
-                          deleteChannel(channel);
-                          close();
-                        }}
-                        style={{
-                          padding: '5px 10px', marginTop: '10px', marginLeft: '10px'
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    {
+                      close => (
+                        <>
+                          <Popup
+                            nested
+                            onClose={close}
+                            trigger={
+                              <EditIcon style={{cursor: 'pointer'}} />
+                            }
+                            onOpen={() => setNewName(channel.name)}
+                            modal
+                          >
+                            <div className="modal">
+                              <button className="close" onClick={close}>&times;</button>
+                              <div className="header">
+                                <span>Editing</span>
+                                <span style={{marginLeft: '5px'}} />
+                                {getIcon(channel.type)}
+                                <span className="shrink">{channel.name}</span>
+                              </div>
+                              <form onSubmit={e => {
+                                e.preventDefault();
+                                updateChannel(channel);
+                                close();
+                              }}>
+                                <input
+                                  placeholder="channel name"
+                                  spellCheck="false"
+                                  value={newName}
+                                  onChange={e => setNewName(e.target.value)}
+                                  required
+                                />
+                                <button
+                                  style={{
+                                    marginLeft: '5px', marginTop: '5px',
+                                    position: 'relative', top: '4px'
+                                  }}
+                                >
+                                  <CheckIcon />
+                                </button>
+                              </form>
+                            </div>
+                          </Popup>
+                          <Popup
+                            nested
+                            onClose={close}
+                            trigger={
+                              <DeleteIcon style={{cursor: 'pointer'}} />
+                            }
+                            modal
+                          >
+                            <div className="modal">
+                              <button className="close" onClick={close}>&times;</button>
+                              <div className="header">
+                                <span>Delete</span>
+                                <span style={{marginLeft: '5px'}} />
+                                {getIcon(channel.type)}
+                                <span className="shrink">{channel.name}</span>?
+                              </div>
+                              <button
+                                onClick={close}
+                                style={{
+                                  padding: '5px 10px', marginTop: '10px'
+                                }}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                className="delete-btn"
+                                onClick={() => {
+                                  deleteChannel(channel);
+                                  close();
+                                }}
+                                style={{
+                                  padding: '5px 10px', marginTop: '10px', marginLeft: '10px'
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </Popup>
+                        </>
+                      )
+                    }
                   </Popup>
-                </>
-              )
-            }
-          </Popup>
-        )
+                </div>
+              }
+              </Draggable>
+            )}
+            {provided.placeholder}
+            </div>
+          }
+          </Droppable>
+        </DragDropContext>
       }
       {
         (channels && isOwner) &&
