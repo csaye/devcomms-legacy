@@ -1,3 +1,5 @@
+# Devcomms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
+
 <p align="center">
   <a href="https://devcomms.io">
     <img width="400px" style="margin:100px" src="https://user-images.githubusercontent.com/27871609/122192524-96543400-ce48-11eb-9384-1e7c7ae24a80.png">
@@ -12,7 +14,7 @@
 
 <p align="center">
   <a href="https://devcomms.io">
-    <img width="512px" src="https://user-images.githubusercontent.com/27871609/120959421-8fbe1200-c70e-11eb-8e02-473575f4502c.png">
+    <img width="512px" src="https://user-images.githubusercontent.com/27871609/122329934-1f21ad00-cee7-11eb-8a58-63e4ef6caaba.png">
   </a>
 </p>
 
