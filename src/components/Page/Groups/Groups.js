@@ -220,14 +220,14 @@ function Groups(props) {
                 <Popup
                   key={`groups-button-${i}`}
                   trigger={
-                    <button
+                    <div
                       className={
                         props.group === group.id ? 'group-btn selected' : 'group-btn'
                       }
-                      onClick={() => selectGroup(group)}
+                      onClick={() => selectGroup(group.id)}
                     >
                       {abbreviateName(group.name)}
-                    </button>
+                    </div>
                   }
                   on={group.owner === uid ? 'right-click' : ''}
                   position="right center"

@@ -4,14 +4,20 @@
   background: var(--dark0);
   border-right: 1px solid var(--dark4);
   overflow: auto;
+  padding: 5px 0;
 }
 
 .Groups .loading-text {
   margin: 4px;
 }
 
+.Groups .draggable-div {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
 .Groups .group-btn {
-  margin: 10px auto;
+  margin: 0 auto;
   width: 60px;
   height: 60px;
   background: var(--dark4);
@@ -34,4 +40,9 @@
 
 .Groups .group-btn.selected {
   border: 2px solid var(--gray0);
+}
+
+.Groups .add-btn {
+  background: var(--dark2);
+  margin: 5px auto;
 }

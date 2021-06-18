@@ -8,9 +8,16 @@ import './Page.css';
 function Page(props) {
   return (
     <div className="Page">
-      <Header group={props.group} channel={props.channel} username={props.username} />
+      <Header
+        group={props.group}
+        channel={props.channel}
+        username={props.userData.username}
+      />
       <div className="page-content">
-        <Groups group={props.group} />
+        <Groups
+          group={props.group}
+          userData={props.userData}
+        />
         {
           props.group ?
           <>
@@ -19,7 +26,7 @@ function Page(props) {
               channel={props.channel}
             />
             <Content
-              username={props.username}
+              username={props.userData.username}
               group={props.group}
               channel={props.channel}
             />
