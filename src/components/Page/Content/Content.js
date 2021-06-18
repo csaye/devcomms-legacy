@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import Filler from '../../Filler/Filler.js';
 import Chat from '../Channels/Chat/Chat.js';
 import Sketch from '../Channels/Sketch/Sketch.js';
 import Notes from '../Channels/Notes/Notes.js';
@@ -24,7 +25,7 @@ function Content(props) {
       case 'goals': return <Goals group={props.group} channel={props.channel} />;
       case 'audio': return <Stream username={props.username} useVideo={false} group={props.group} channel={props.channel} />;
       case 'video': return <Stream username={props.username} useVideo={true} group={props.group} channel={props.channel} />;
-      default: return <p className="channel-info">No channel selected</p>;
+      default: return <Filler message="No channel selected" />;
     }
   }
 

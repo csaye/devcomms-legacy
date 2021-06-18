@@ -2,6 +2,7 @@ import Groups from './Groups/Groups.js';
 import Header from './Header/Header.js';
 import Channels from './Channels/Channels.js';
 import Content from './Content/Content.js';
+import Filler from '../Filler/Filler.js';
 
 import './Page.css';
 
@@ -32,7 +33,7 @@ function Page(props) {
             />
           </> :
           <div className="nogroup">
-            <p>No group selected</p>
+            <Filler message="No group selected" />
           </div>
         }
       </div>
