@@ -43,6 +43,13 @@ function Groups(props) {
     groupsSorted.sort((a, b) => {
       const valA = props.userData.groups[a.id];
       const valB = props.userData.groups[b.id]
+      if (valA === undefined && valB !== undefined) return 1;
+      if (valA !== undefined && valB === undefined) return -1;
+      if (valA === undefined && valB === undefined) {
+        if (a.created < b.created) return -1;
+        if (a.created > b.created) return 1;
+        return 0;
+      }
       if (valA < valB) return -1;
       if (valA > valB) return 1;
       return 0;
@@ -55,16 +62,20 @@ function Groups(props) {
   const [usernamesData] = useCollectionData(usernamesRef);
 
   // selects given group for current user
-  async function selectGroup(group) {
-    history.push(`/home/${group.id}`);
-    await userDoc.update({ group: group.id });
+  async function selectGroup(groupId) {
+    history.push(`/home/${groupId}`);
+    await userDoc.update({ group: groupId });
   }
 
   // creates a group with given name
   async function createGroup() {
-    const docRef = await groupsRef.add({ name: groupName, owner: uid, members: [uid] });
-    history.push(`/home/${docRef.id}`);
-    userDoc.update({ group: docRef.id });
+    const docRef = await groupsRef.add({
+      name: groupName,
+      owner: uid,
+      members: [uid],
+      created: new Date()
+    });
+    await selectGroup(docRef.id);
   }
 
   // checks whether user group valid
