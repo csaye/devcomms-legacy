@@ -29,8 +29,26 @@ function Groups(props) {
 
   // get user groups
   const groupsRef = firebase.firestore().collection('groups');
-  const groupsQuery = groupsRef.where('members', 'array-contains', uid).orderBy('name');
-  const [groups] = useCollectionData(groupsQuery, { idField: 'id' });
+  const groupsQuery = groupsRef.where('members', 'array-contains', uid);
+  const [groupsSrc] = useCollectionData(groupsQuery, { idField: 'id' });
+  const [groups, setGroups] = useState(undefined);
+
+  // sort groups when source changed
+  useEffect(() => {
+    if (!groupsSrc) {
+      setGroups(undefined);
+      return;
+    }
+    const groupsSorted = groupsSrc.slice();
+    groupsSorted.sort((a, b) => {
+      const valA = props.userData.groups[a.id];
+      const valB = props.userData.groups[b.id]
+      if (valA < valB) return -1;
+      if (valA > valB) return 1;
+      return 0;
+    });
+    setGroups(groupsSorted);
+  }, [groupsSrc, props.userData.groups]);
 
   // get usernames data
   const usernamesRef = firebase.firestore().collection('usernames');
@@ -75,7 +93,8 @@ function Groups(props) {
     batch.commit(); // commit batch
     // delete channel cache
     await userDoc.update({
-      [`channels.${group.id}`]: firebase.firestore.FieldValue.delete()
+      [`channels.${group.id}`]: firebase.firestore.FieldValue.delete(),
+      [`groups.${group.id}`]: firebase.firestore.FieldValue.delete()
     });
   }
 
@@ -127,10 +146,22 @@ function Groups(props) {
     return letters.join('').toUpperCase(); // return letters to uppercase
   }
 
+  // updates group orders in firebase
+  async function updateGroupOrder() {
+    const batch = firebase.firestore().batch(); // create batch
+    // for each group
+    await groups.forEach((group, i) => {
+      // update group at id with order
+      batch.update(userDoc, { [`groups.${group.id}`]: i });
+    });
+    batch.commit(); // commit batch
+  }
+
   // swaps group orders
   function reorderGroups(indexA, indexB) {
     const [removed] = groups.splice(indexA, 1);
     groups.splice(indexB, 0, removed);
+    updateGroupOrder();
   }
 
   // called after drag ends
