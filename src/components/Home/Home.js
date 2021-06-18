@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Page from '../Page/Page.js';
@@ -10,40 +10,58 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import './Home.css';
 
 function Home() {
+  const [groupId, setGroupId] = useState(undefined);
+
   // retrieve user data
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
   const [userData] = useDocumentData(userDoc);
 
-  const { groupId, channelId } = useParams();
+  const groupsRef = firebase.firestore().collection('groups');
+  const groupDocs = groupsRef.where('members', 'array-contains', uid);
+
+  const { groupParam, channelParam } = useParams();
   const history = useHistory();
 
-  // pulls cached group and channel data
-  function pullCached() {
-    if (!userData) return;
-    // if no group id, pull from firebase
-    if (!groupId) {
-      if (userData.group) {
-        history.push(`/home/${userData.group}`);
-      }
-    // if group id, pull channel from firebase
+  // attempts to get group id when parameter changes
+  async function getGroupId() {
+    // if group parameter given
+    if (groupParam) {
+      // if invalid parameter, go home
+      const groups = await groupDocs.get();
+      if (!groups.docs.some(group => group.id === groupParam)) {
+        history.push('/home');
+      // if valid parameter, set group id
+      } else setGroupId(groupParam);
+    // if no group parameter given
     } else {
-      if (userData.channels[groupId]) {
-        history.push(`/home/${groupId}/${userData.channels[groupId]}`);
+      // get group cache
+      const user = await userDoc.get();
+      const groupCache = user.data().group;
+      // set undefined and return if no cache
+      if (!groupCache) {
+        setGroupId(undefined);
+        return;
       }
+      // if invalid cache, clear it
+      const groups = await groupDocs.get();
+      if (!groups.docs.some(group => group.id === groupCache)) {
+        await userDoc.update({ group: '' });
+      // if valid cache, set group id
+      } else setGroupId(groupCache);
     }
   }
 
-  // pull cached group and channel data on start
+  // get group id when group param changes
   useEffect(() => {
-    pullCached();
-  }, [userData, groupId]); // eslint-disable-line react-hooks/exhaustive-deps
+    getGroupId();
+  }, [groupParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Home">
       {
         userData ?
-        <Page group={groupId} channel={channelId} username={userData.username} /> :
+        <Page group={groupId} channel={channelParam} userData={userData} /> :
         <Loading message="Loading user..." />
       }
     </div>

@@ -48,10 +48,10 @@ function App() {
             <Route path="/signup">
               {authed ? <Redirect to="/" /> : <Auth signUp={true} />}
             </Route>
-            <Route path="/home/:groupId/:channelId">
+            <Route path="/home/:groupParam/:channelParam">
               {authed ? <Home /> : <Redirect to="/signin" />}
             </Route>
-            <Route path="/home/:groupId">
+            <Route path="/home/:groupParam">
               {authed ? <Home /> : <Redirect to="/signin" />}
             </Route>
             <Route path="/home">
