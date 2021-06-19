@@ -24,7 +24,7 @@ function Home() {
   const history = useHistory();
 
   // attempts to get group id when parameter changes
-  async function getGroupId() {
+  async function getGroup() {
     // if group parameter given
     if (groupParam) {
       // if invalid parameter, go home
@@ -36,8 +36,8 @@ function Home() {
     // if no group parameter given
     } else {
       // get group cache
-      const user = await userDoc.get();
-      const groupCache = user.data().group;
+      const groupCache = userData ? userData.group :
+      (await userDoc.get()).data().group;
       // set undefined and return if no cache
       if (!groupCache) {
         setGroupId(undefined);
@@ -54,8 +54,26 @@ function Home() {
 
   // get group id when group param changes
   useEffect(() => {
-    getGroupId();
+    getGroup();
   }, [groupParam]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // gets cached channel when group id changes
+  async function getChannel() {
+    // return if no group id or channel param already set
+    if (!groupId || channelParam) return;
+    // get channel cache
+    const channelCache = userData ? userData.channels[groupId] :
+    (await userDoc.get()).data().channels[groupId];
+    // return if no channel cache
+    if (!channelCache) return;
+    // select channel cache
+    history.push(`/home/${groupId}/${channelCache}`);
+  }
+
+  // check for channel cache when group id changes
+  useEffect(() => {
+    getChannel();
+  }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Home">
