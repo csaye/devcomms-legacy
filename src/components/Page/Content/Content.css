@@ -1,8 +1,5 @@
 .Content {
   background: var(--dark3);
   flex-grow: 1;
-}
-
-.Content .channel-info {
-  margin: 10px;
+  overflow: auto;
 }

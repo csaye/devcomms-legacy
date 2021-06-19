@@ -33,7 +33,7 @@ function Page(props) {
             />
           </> :
           <div className="nogroup">
-            <Filler message="No group selected" />
+            <Filler type="nodata" message="No group selected" />
           </div>
         }
       </div>

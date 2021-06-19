@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import Filler from '../../../Filler/Filler.js';
+
 import DescriptionIcon from '@material-ui/icons/Description';
 
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -39,9 +41,7 @@ function Notes(props) {
 
   if (!loaded) {
     return (
-      <div className="Notes">
-        <p>Loading...</p>
-      </div>
+      <Filler type="loading" message="Loading notes..." />
     );
   }
 

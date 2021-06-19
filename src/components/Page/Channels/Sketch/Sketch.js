@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 
+import Filler from '../../../Filler/Filler.js';
+
 import BrushIcon from '@material-ui/icons/Brush';
 import UndoIcon from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -231,7 +233,7 @@ function Sketch(props) {
             <button className="canvas-button clean-btn var3" onClick={downloadCanvas}><GetAppIcon /></button>
           </div>
         </> :
-        <p>Loading...</p>
+        <Filler type="loading" message="Loading sketch..." />
       }
     </div>
   );

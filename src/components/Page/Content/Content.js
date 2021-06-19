@@ -25,7 +25,7 @@ function Content(props) {
       case 'goals': return <Goals group={props.group} channel={props.channel} />;
       case 'audio': return <Stream username={props.username} useVideo={false} group={props.group} channel={props.channel} />;
       case 'video': return <Stream username={props.username} useVideo={true} group={props.group} channel={props.channel} />;
-      default: return <Filler message="No channel selected" />;
+      default: return <Filler type="nodata" message="No channel selected" />;
     }
   }
 
@@ -49,7 +49,7 @@ function Content(props) {
   return (
     <div className="Content">
       {
-        channelComponent ?? <p className="channel-info">Loading...</p>
+        channelComponent ?? <Filler type="loading" message="Loading channel..." />
       }
     </div>
   );

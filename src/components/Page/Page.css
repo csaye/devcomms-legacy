@@ -20,7 +20,3 @@
   flex-grow: 1;
   background: var(--dark3);
 }
-
-.Page .nogroup > p {
-  margin: 10px;
-}

@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Popup from 'reactjs-popup';
 
+import Filler from '../../../Filler/Filler.js';
+
 import EditIcon from '@material-ui/icons/Edit';
 import SendIcon from '@material-ui/icons/Send';
 import PublishIcon from '@material-ui/icons/Publish';
@@ -220,9 +222,7 @@ function Chat(props) {
   // if no messages, load
   if (!messages) {
     return (
-      <div>
-        <p className="channel-info">Loading...</p>
-      </div>
+      <Filler type="loading" message="Loading messages..." />
     );
   }
 

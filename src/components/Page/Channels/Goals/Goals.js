@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
+import Filler from '../../../Filler/Filler.js';
 import Goal from './Goal/Goal.js';
+
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -39,9 +41,7 @@ function Goals(props) {
 
   if (!goals) {
     return (
-      <div>
-        <p className="channel-info">Loading...</p>
-      </div>
+      <Filler type="loading" message="Loading goals..." />
     );
   }
 

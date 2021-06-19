@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Filler from '../../../Filler/Filler.js';
 import Todo from './Todo/Todo.js';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -43,9 +44,7 @@ function Todos(props) {
 
   if (!todos) {
     return (
-      <div>
-        <p className="channel-info">Loading...</p>
-      </div>
+      <Filler type="loading" message="Loading todos..." />
     );
   }
 
