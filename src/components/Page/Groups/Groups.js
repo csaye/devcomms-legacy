@@ -55,7 +55,7 @@ function Groups(props) {
       return 0;
     });
     setGroups(groupsSorted);
-  }, [groupsSrc, props.userData.groups]);
+  }, [groupsSrc]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // get usernames data
   const usernamesRef = firebase.firestore().collection('usernames');
@@ -78,19 +78,15 @@ function Groups(props) {
     await selectGroup(docRef.id);
   }
 
-  // checks whether user group valid
-  async function checkUserGroup() {
-    if (!groups) return;
-    // if no group where id is group
-    if (!groups.some(g => g.id === props.group)) {
-      // clear current group
-      history.push('/home');
-      await userDoc.update({ group: '' });
-    }
-  }
-
   // deletes given group
   async function deleteGroup(group) {
+    // delete group cache
+    const updateObj = {
+      [`channels.${group.id}`]: firebase.firestore.FieldValue.delete(),
+      [`groups.${group.id}`]: firebase.firestore.FieldValue.delete()
+    };
+    if (props.group === group.id) updateObj.group = '';
+    await userDoc.update(updateObj);
     if (props.group === group.id) history.push('/home');
     // delete all channels
     const batch = firebase.firestore().batch();
@@ -102,11 +98,6 @@ function Groups(props) {
     });
     batch.delete(groupDoc); // delete group document
     batch.commit(); // commit batch
-    // delete channel cache
-    await userDoc.update({
-      [`channels.${group.id}`]: firebase.firestore.FieldValue.delete(),
-      [`groups.${group.id}`]: firebase.firestore.FieldValue.delete()
-    });
   }
 
   // updates group document in firebase
@@ -159,13 +150,9 @@ function Groups(props) {
 
   // updates group orders in firebase
   async function updateGroupOrder() {
-    const batch = firebase.firestore().batch(); // create batch
-    // for each group
-    await groups.forEach((group, i) => {
-      // update group at id with order
-      batch.update(userDoc, { [`groups.${group.id}`]: i });
-    });
-    batch.commit(); // commit batch
+    const groupIndexes = {};
+    groups.forEach((group, i) => groupIndexes[group.id] = i);
+    await userDoc.update({ groups: groupIndexes });
   }
 
   // swaps group orders
@@ -180,11 +167,6 @@ function Groups(props) {
     if (!result.destination) return;
     reorderGroups(result.source.index, result.destination.index);
   }
-
-  // check user group when groups change
-  useEffect(() => {
-    checkUserGroup();
-  }, [groups]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // if no groups, load
   if (!groups) {
