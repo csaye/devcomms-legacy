@@ -1,10 +1,13 @@
+import logo from '../../img/logo.png';
 import './Unknown.css';
 
 function Unknown() {
   return (
     <div className="Unknown">
       <div className="center-box">
-        <h1>404</h1>
+        <img src={logo} alt="logo" />
+        <h1>404 Error</h1>
+        <hr />
         <p>Page Not Found</p>
         <button
           className="clean-btn"

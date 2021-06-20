@@ -81,3 +81,25 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gray1);
 }
+
+.center-box {
+  background: var(--dark1);
+  border-radius: 10px;
+  padding: 20px 40px;
+  box-shadow: 0 0 3px #333;
+  text-align: center;
+  margin: 40px 0;
+}
+
+.center-box img {
+  height: 60px;
+  margin: -5px 0;
+}
+
+.center-box h1 {
+  margin: 0;
+}
+
+.center-box hr {
+  margin: 5px 0 10px 0;
+}

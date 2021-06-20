@@ -1,30 +1,9 @@
 .Auth {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--gray0);
-}
-
-.Auth .center-box {
-  background: var(--dark1);
-  border-radius: 5px;
-  padding: 20px 40px;
-  box-shadow: 0 0 3px #333;
-  text-align: center;
-}
-
-.Auth img {
-  height: 60px;
-  margin: -5px 0;
-}
-
-.Auth h1 {
-  margin: 0;
-}
-
-.Auth hr {
-  margin: 5px 0 10px 0;
 }
 
 .Auth h2 {
