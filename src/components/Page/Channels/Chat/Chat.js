@@ -31,6 +31,7 @@ const yesterday = new Date(nowYear, nowMonth, nowDay - 1).setHours(0, 0, 0, 0);
 let pageHidden = false; // whether page is hidden
 let shiftDown = false; // whether shift key is down
 let firstQuery = true; // if first query to messages
+let firstScroll = true; // if page needs to be scrolled
 
 function Chat(props) {
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
@@ -61,8 +62,8 @@ function Chat(props) {
   const messagesEnd = useRef();
 
   // sends current message to firebase
-  async function addMessage(e) {
-    if (e) e.preventDefault();
+  async function addMessage() {
+    if (!text) return;
     const messageText = text;
     setText('');
 
@@ -192,11 +193,19 @@ function Chat(props) {
 
   // when messages update
   useEffect(() => {
-    chatScroll(); // scroll chat
+    // scroll if first scroll
+    if (firstScroll && messages) {
+      firstScroll = false;
+      chatScroll(); // scroll chat
+    }
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // on start
   useEffect(() => {
+    // reset first scroll and query
+    firstScroll = true;
+    firstQuery = true;
+
     // ask for notification permissions
     if (Notification.permission === 'default') Notification.requestPermission();
 
@@ -204,7 +213,9 @@ function Chat(props) {
     document.addEventListener("visibilitychange", onVisChange);
 
     // listen for message creation
-    const messagesListener = messagesQuery.onSnapshot(snapshot => {
+    const messagesListener = chatsRef.onSnapshot(snapshot => {
+      // scroll chat
+      chatScroll();
       // skip initial state of database
       if (firstQuery) {
         firstQuery = false;
@@ -394,7 +405,10 @@ function Chat(props) {
         }
         <span ref={messagesEnd} />
       </div>
-      <form onSubmit={addMessage}>
+      <form onSubmit={e => {
+        e.preventDefault();
+        addMessage();
+      }}>
         <label htmlFor="chat-fileinput" className="upload-button clean-btn">
           <PublishIcon />
         </label>
