@@ -49,22 +49,43 @@ function Channels(props) {
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
   const channelsRef = groupDoc.collection('channels');
-  const [channelsSrc] = useCollectionData(
+  const [channels] = useCollectionData(
     channelsRef.orderBy('order'), { idField: 'id' }
   );
-  const [channels, setChannels] = useState(undefined);
 
-  // update channels when source changes
+  // validates currently selected channel
+  async function validateChannel() {
+    // return if no channels or none selected
+    if (!channels || !props.channel) return;
+    // if current channel invalid, push empty
+    if (!channels.some(channel => props.channel === channel.id)) {
+      // clear channel cache and return to group page
+      await cacheChannel('');
+      history.push(`/home/${props.group}`);
+    }
+  }
+
+  // validate channel when channels update
   useEffect(() => {
-    if (channelsSrc) setChannels(channelsSrc);
-  }, [channelsSrc]);
+    validateChannel();
+  }, [channels]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // caches given channel in firestore
+  async function cacheChannel(channelId) {
+    await userDoc.update({ [`channels.${props.group}`]: channelId });
+  }
+
+  // when selected channel changes
+  useEffect(() => {
+    // update channel cache if valid
+    if (props.channel) cacheChannel(props.channel);
+  }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // creates a channel in firebase
   async function createChannel() {
     const order = channels.length;
     const docRef = await channelsRef.add({ name, type, order });
     history.push(`/home/${props.group}/${docRef.id}`);
-    await userDoc.update({ [`channels.${props.group}`]: docRef.id });
   }
 
   // deletes given channel
@@ -84,7 +105,6 @@ function Channels(props) {
   // selects given channel
   async function selectChannel(channel) {
     history.push(`/home/${props.group}/${channel.id}`);
-    await userDoc.update({ [`channels.${props.group}`]: channel.id });
   }
 
   // retrieves whether user is owner
@@ -122,7 +142,6 @@ function Channels(props) {
 
   // retrieve whether user is owner on group change
   useEffect(() => {
-    setChannels(undefined);
     setIsOwner(undefined);
     getIsOwner();
   }, [props.group]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -145,6 +164,7 @@ function Channels(props) {
                 key={`channels-draggable-${channel.id}`}
                 draggableId={channel.id}
                 index={i}
+                isDragDisabled={!isOwner}
               >
               {
                 (provided, snapshot) =>
