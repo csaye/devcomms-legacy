@@ -47,6 +47,7 @@ function Home() {
       const groups = await groupDocs.get();
       if (!groups.docs.some(group => group.id === groupCache)) {
         await userDoc.update({ group: '' });
+        setGroupId(undefined);
       // if valid cache, set group id
       } else setGroupId(groupCache);
     }

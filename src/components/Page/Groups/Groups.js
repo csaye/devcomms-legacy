@@ -33,6 +33,24 @@ function Groups(props) {
   const [groupsSrc] = useCollectionData(groupsQuery, { idField: 'id' });
   const [groups, setGroups] = useState(undefined);
 
+  // caches given group id
+  async function cacheGroup(groupId) {
+    await userDoc.update({ group: groupId });
+  }
+
+  // validates selected group
+  async function validateGroup() {
+    // if current group invalid, push empty
+    if (groupsSrc && !groupsSrc.some(group => props.group === group.id)) {
+      history.push('/home');
+    }
+  }
+
+  // validate group when groups update
+  useEffect(() => {
+    validateGroup();
+  }, [groupsSrc]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // sort groups when source changed
   useEffect(() => {
     if (!groupsSrc) {
@@ -64,7 +82,7 @@ function Groups(props) {
   // selects given group for current user
   async function selectGroup(groupId) {
     history.push(`/home/${groupId}`);
-    await userDoc.update({ group: groupId });
+    await cacheGroup(groupId);
   }
 
   // creates a group with given name
@@ -87,7 +105,6 @@ function Groups(props) {
     };
     if (props.group === group.id) updateObj.group = '';
     await userDoc.update(updateObj);
-    if (props.group === group.id) history.push('/home');
     // delete all channels
     const batch = firebase.firestore().batch();
     const groupDoc = groupsRef.doc(group.id);
