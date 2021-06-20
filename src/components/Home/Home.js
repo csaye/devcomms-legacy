@@ -49,7 +49,10 @@ function Home() {
         await userDoc.update({ group: '' });
         setGroupId(undefined);
       // if valid cache, set group id
-      } else setGroupId(groupCache);
+      } else {
+        setGroupId(groupCache);
+        history.push(`/home/${groupCache}`);
+      }
     }
   }
 
@@ -80,7 +83,12 @@ function Home() {
     <div className="Home">
       {
         userData ?
-        <Page group={groupId} channel={channelParam} userData={userData} /> :
+        <Page
+          group={groupId}
+          setGroup={setGroupId}
+          channel={channelParam}
+          userData={userData}
+        /> :
         <Loading message="Loading user..." />
       }
     </div>

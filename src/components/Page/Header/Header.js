@@ -44,8 +44,9 @@ function Header(props) {
 
   // clears selected group of current user
   async function leaveGroup() {
-    history.push('/home');
+    props.setGroup(undefined);
     await userDoc.update({ group: '' });
+    history.push('/home');
   }
 
   // attempts to update username

@@ -11,6 +11,7 @@ function Page(props) {
     <div className="Page">
       <Header
         group={props.group}
+        setGroup={props.setGroup}
         channel={props.channel}
         username={props.userData.username}
       />

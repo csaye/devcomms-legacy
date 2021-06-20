@@ -12,6 +12,8 @@ import firebase from 'firebase/app';
 
 import './Content.css';
 
+let isMounted = true;
+
 function Content(props) {
   const [channelComponent, setChannelComponent] = useState(undefined);
 
@@ -39,11 +41,13 @@ function Content(props) {
     const type = doc.exists ? doc.data().type : undefined;
     // set corresponding component
     const component = getChannelComponent(type);
-    setChannelComponent(component);
+    if (isMounted) setChannelComponent(component);
   }
 
   useEffect(() => {
+    isMounted = true;
     getChannel();
+    return () => isMounted = false;
   }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
