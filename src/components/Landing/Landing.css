@@ -1,7 +1,43 @@
 .Landing {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--gray0);
+}
+
+.Landing hr {
+  border: 1px solid var(--dark4);
+  margin: 10px 0;
+}
+
+.Landing .center-box {
+  width: 500px;
+  border-radius: 20px;
+}
+
+.Landing .description {
+  line-height: 20px;
+}
+
+.Landing .icon-list svg {
+  margin: 0 2px;
+}
+
+.Landing .line-margin {
+  margin: 8px 0 5px 0;
+}
+
+.Landing .flex-align {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Landing .github-icon {
+  margin-right: 5px;
+}
+
+.Landing .links {
+  font-size: 24px;
 }
