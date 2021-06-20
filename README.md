@@ -20,6 +20,14 @@
 
 Devcomms is formatted in a group/channel structure. Create a group, set up some channels, and invite your teammates. Choose from a variety of channel types and have all of your group information synchronized and updated automatically in one place.
 
+## Features
+
+**Groups and channels.** Create and edit groups, manage group members, and organize your team with channels.<br />
+**Feature-rich chat.** Send messages, files, and links through text channels. Customize your messages with markdown.<br />
+**Voice and video calls.** Use the audio and video channels to join voice and video calls of unlimited bandwidth or size.<br />
+**Sketching and notes.** Plan and express ideas to your team with real-time synchronized sketch and note channels.<br />
+**Goals and to-dos.** Keep your team on track with scheduled goals and prioritized to-dos in their respective channels.<br />
+
 ## Contributing
 
 Devcomms is open source and open to contributions. The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).<br />
