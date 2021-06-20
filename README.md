@@ -10,23 +10,25 @@
   <a href="https://app.netlify.com/sites/heuristic-heyrovsky-7af78f/deploys"><img src="https://api.netlify.com/api/v1/badges/9c26b18d-f6fd-4970-9bd5-f1f7885f7b7d/deploy-status"></a>
 </p>
 
-**Devcomms aims to simplify and streamline team development.** Instead of having one tool for chatting and calling, one tool for arranging notes, and one tool for setting goals and todos, you can do all of that and more with Devcomms. Try it here: [devcomms.io](https://devcomms.io)
+**Devcomms is an open source, developer-focused team communication and coordination tool aiming to simplify and streamline development.** Instead of having one tool for chatting and calling, one tool for arranging notes, and one tool for setting goals and to-dos, you can do all of that and more with Devcomms. **Try it here: [devcomms.io](https://devcomms.io)**
 
 <p align="center">
   <a href="https://devcomms.io">
-    <img width="512px" src="https://user-images.githubusercontent.com/27871609/122329934-1f21ad00-cee7-11eb-8a58-63e4ef6caaba.png">
+    <img width="768px" src="https://user-images.githubusercontent.com/27871609/122329934-1f21ad00-cee7-11eb-8a58-63e4ef6caaba.png">
   </a>
 </p>
 
-Devcomms is formatted in a group/channel structure. Create a group, set up some channels, and invite your teammates. Choose from a variety of channel types and have all of your group information synchronized and updated automatically in one place.
+Devcomms is formatted in a group/channel structure. Create a group, set up some channels, and invite your teammates. Choose from a variety of channel types and have all of your team's information synchronized and updated automatically in one place. No longer will you have to struggle to coordinate across several apps.
 
 ## Features
 
 **Groups and channels.** Create and edit groups, manage group members, and organize your team with channels.<br />
-**Feature-rich chat.** Send messages, files, and links through text channels. Customize your messages with markdown.<br />
-**Voice and video calls.** Use the audio and video channels to join voice and video calls of unlimited bandwidth or size.<br />
+**Feature-rich chat.** Send messages, files, and links through text channels. Customize messages with markdown.<br />
+**Voice and video calls.** Use the audio and video channels to join team voice and video calls of unlimited size.<br />
 **Sketching and notes.** Plan and express ideas to your team with real-time synchronized sketch and note channels.<br />
-**Goals and to-dos.** Keep your team on track with scheduled goals and prioritized to-dos in their respective channels.<br />
+**Goals and to-dos.** Keep your team on track with scheduled goals and prioritized to-dos in respective channels.<br />
+
+**+ more coming soon!**
 
 ## Contributing
 
