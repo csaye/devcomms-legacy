@@ -6,6 +6,7 @@ import Auth from '../Auth/Auth.js';
 import Home from '../Home/Home.js';
 import Unknown from '../Unknown/Unknown.js';
 import Loading from '../Loading/Loading.js';
+import Landing from '../Landing/Landing.js';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -43,10 +44,10 @@ function App() {
         <Router>
           <Switch>
             <Route path="/signin">
-              {authed ? <Redirect to="/" /> : <Auth signUp={false} />}
+              {authed ? <Redirect to="/home" /> : <Auth signUp={false} />}
             </Route>
             <Route path="/signup">
-              {authed ? <Redirect to="/" /> : <Auth signUp={true} />}
+              {authed ? <Redirect to="/home" /> : <Auth signUp={true} />}
             </Route>
             <Route path="/home/:groupParam/:channelParam">
               {authed ? <Home /> : <Redirect to="/signin" />}
@@ -58,7 +59,7 @@ function App() {
               {authed ? <Home /> : <Redirect to="/signin" />}
             </Route>
             <Route path="/" exact>
-              {authed ? <Redirect to="/home" /> : <Redirect to="/signin" />}
+              <Landing />
             </Route>
             <Route path="/">
               <Unknown />
