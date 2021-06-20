@@ -19,7 +19,7 @@ import logo from '../../../../img/logo.png';
 import './Chat.css';
 
 const timestampOffset = 60 * 5; // delay in seconds before a new header
-const maxMessages = 64; // maximum messages shown at one time
+const messageChunk = 50; // maximum messages shown at one time
 
 const now = new Date();
 const nowDay = now.getDate();
@@ -38,6 +38,7 @@ function Chat(props) {
   const chatsRef = channelDoc.collection('chats');
   const uid = firebase.auth().currentUser.uid;
 
+  const [messageCount, setMessageCount] = useState(messageChunk);
   const [text, setText] = useState('');
   const [file, setFile] = useState(undefined);
   const [newText, setNewText] = useState('');
@@ -45,8 +46,17 @@ function Chat(props) {
   const [deleting, setDeleting] = useState(false);
 
   // get messages
-  const messagesQuery = chatsRef.orderBy('timestamp').limitToLast(maxMessages);
-  const [messages] = useCollectionData(messagesQuery, { idField: 'id' });
+  const [messagesSrc] = useCollectionData(
+    chatsRef.orderBy('timestamp').limitToLast(messageCount), { idField: 'id' }
+  );
+  const [messages, setMessages] = useState(undefined);
+
+  // update messages if source valid
+  useEffect(() => {
+    if (messagesSrc) {
+      setMessages(messagesSrc);
+    }
+  }, [messagesSrc]);
 
   const messagesEnd = useRef();
 
@@ -230,7 +240,16 @@ function Chat(props) {
     <div className="Chat">
       <div className="message-list">
         {
-          messages.length > 0 ?
+          (messages.length >= messageCount) &&
+          <button
+            onClick={() => setMessageCount(messageCount + messageChunk)}
+            className="load-more-btn"
+          >
+            load more
+          </button>
+        }
+        {
+          messages.length ?
           messages.map((m, i) =>
             <div key={`message-${i}`} className="message">
               {
