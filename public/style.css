@@ -94,6 +94,12 @@ a:hover {
 .center-box img {
   height: 60px;
   margin: -5px 0;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.center-box img:hover {
+  transform: scale(1.1) rotate(-10deg);
 }
 
 .center-box h1 {

@@ -22,6 +22,11 @@
 
 .Landing .icon-list svg {
   margin: 0 2px;
+  cursor: pointer;
+}
+
+.Landing .icon-list svg:hover {
+  transform: scale(1.1);
 }
 
 .Landing .line-margin {
@@ -39,5 +44,19 @@
 }
 
 .Landing .links {
+  margin-top: 15px;
+}
+
+.Landing .links a {
+  margin: 0 5px;
   font-size: 24px;
+  text-decoration: none;
+  padding: 5px;
+  border-radius: 10px;
+  background: var(--blue0);
+  color: var(--dark0);
+}
+
+.Landing .links a:hover {
+  background: var(--blue1);
 }
