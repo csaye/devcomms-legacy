@@ -27,7 +27,8 @@ function Content(props) {
       case 'goals': return <Goals group={props.group} channel={props.channel} />;
       case 'audio': return <Stream username={props.username} useVideo={false} group={props.group} channel={props.channel} />;
       case 'video': return <Stream username={props.username} useVideo={true} group={props.group} channel={props.channel} />;
-      default: return <Filler type="nodata" message="No channel selected" />;
+      case 'none': return <Filler type="nodata" message="No channel selected" />;
+      default: return <Filler type="error" message="Invalid channel" />;
     }
   }
 
@@ -35,10 +36,13 @@ function Content(props) {
   async function getChannel() {
     setChannelComponent(undefined);
     // retrieve channel type
-    const groupDoc = firebase.firestore().collection('groups').doc(props.group);
-    const channelDoc = groupDoc.collection('channels').doc(props.channel);
-    const doc = await channelDoc.get();
-    const type = doc.exists ? doc.data().type : undefined;
+    let type = 'none';
+    if (props.channel) {
+      const groupDoc = firebase.firestore().collection('groups').doc(props.group);
+      const channelDoc = groupDoc.collection('channels').doc(props.channel);
+      const doc = await channelDoc.get();
+      type = doc.exists ? doc.data().type : undefined;
+    }
     // set corresponding component
     const component = getChannelComponent(type);
     if (isMounted) setChannelComponent(component);
@@ -53,7 +57,9 @@ function Content(props) {
   return (
     <div className="Content">
       {
-        channelComponent ?? <Filler type="loading" message="Loading channel..." />
+        (!channelComponent || props.channel === undefined) ?
+        <Filler type="loading" message="Loading channel..." /> :
+        channelComponent
       }
     </div>
   );

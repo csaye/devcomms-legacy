@@ -11,6 +11,7 @@ import './Home.css';
 
 function Home() {
   const [groupId, setGroupId] = useState(undefined);
+  const [channelId, setChannelId] = useState(undefined);
 
   // retrieve user data
   const uid = firebase.auth().currentUser.uid;
@@ -63,21 +64,31 @@ function Home() {
 
   // gets cached channel when group id changes
   async function getChannel() {
-    // return if no group id or channel param already set
-    if (!groupId || channelParam) return;
-    // get channel cache
+    // if no group id, clear channel and return
+    if (!groupId) {
+      setChannelId(undefined);
+      return;
+    }
+    // if channel param already set, return
+    if (channelParam) return;
+    // if group id given, get channel cache
     const channelCache = userData ? userData.channels[groupId] :
     (await userDoc.get()).data().channels[groupId];
-    // return if no channel cache
-    if (!channelCache) return;
-    // select channel cache
-    history.push(`/home/${groupId}/${channelCache}`);
+    // if channel cached, select cache
+    if (channelCache) history.push(`/home/${groupId}/${channelCache}`);
+    // if channel not cached, set to no channel
+    else setChannelId('');
   }
 
   // check for channel cache when group id changes
   useEffect(() => {
     getChannel();
   }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // change channel id when param changes
+  useEffect(() => {
+    if (channelParam) setChannelId(channelParam);
+  }, [channelParam]);
 
   return (
     <div className="Home">
@@ -86,7 +97,7 @@ function Home() {
         <Page
           group={groupId}
           setGroup={setGroupId}
-          channel={channelParam}
+          channel={channelId}
           userData={userData}
         /> :
         <Loading message="Loading user..." />
