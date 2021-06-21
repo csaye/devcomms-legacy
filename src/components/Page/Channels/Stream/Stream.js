@@ -27,7 +27,7 @@ function Stream(props) {
   const peersRef = channelDoc.collection('peers');
 
   // creates a video object streaming from given stream
-  function addStream(container, username, stream) {
+  function addStream(container, username, stream, local) {
     // create container title
     const title = document.createElement('p');
     title.textContent = username;
@@ -37,6 +37,7 @@ function Stream(props) {
     video.srcObject = stream;
     video.autoplay = true;
     video.playsinline = true;
+    video.muted = local;
     container.append(video);
     // append container to grid
     const videoGrid = videoGridRef.current;
@@ -57,7 +58,7 @@ function Stream(props) {
       // retrieve peer username
       peersRef.doc(peerId).get().then(doc => {
         const username = doc.data().username;
-        addStream(video, username, remoteStream);
+        addStream(video, username, remoteStream, false);
       });
     });
     call.on('close', () => video.remove());
@@ -74,7 +75,7 @@ function Stream(props) {
     );
     // create local video with local stream
     localVideo = document.createElement('div');
-    addStream(localVideo, props.username, localStream);
+    addStream(localVideo, props.username, localStream, true);
     // set up local peer
     localPeer = new Peer();
     localPeer.on('open', () => {
@@ -118,7 +119,7 @@ function Stream(props) {
     call.on('stream', remoteStream => {
       if (streamCreated) return;
       streamCreated = true;
-      addStream(video, peer.username, remoteStream);
+      addStream(video, peer.username, remoteStream, false);
     });
     call.on('close', () => video.remove());
     calls[peer.id] = call;
