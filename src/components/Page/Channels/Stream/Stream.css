@@ -29,20 +29,20 @@
 }
 
 .Stream .video-grid > div {
-  margin: 5px;
+  margin: 0 10px;
 }
 
 .Stream .video-grid video {
   background: black;
-  width: 200px;
-  height: 150px;
+  height: 200px;
   display: block;
-  border-radius: 5px;
+  border-radius: 10px;
+  border: 2px solid var(--dark0);
 }
 
 .Stream .video-grid p {
   font-size: 24px;
-  margin: 0;
+  margin: 0 0 2px 0;
   color: var(--gray0);
 }
 
@@ -59,6 +59,7 @@
   height: 50px;
   display: block;
   border-radius: 50%;
+  border: 2px solid var(--dark1);
 }
 
 .Stream .audio-grid p {
@@ -69,4 +70,8 @@
   top: 50%;
   transform: translate(-50%, -50%);
   color: var(--gray0);
+}
+
+.Stream video.active {
+  border: 2px solid var(--blue0);
 }

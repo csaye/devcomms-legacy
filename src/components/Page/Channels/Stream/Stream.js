@@ -5,6 +5,7 @@ import VideocamIcon from '@material-ui/icons/Videocam';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 
 import firebase from 'firebase/app';
+import hark from 'hark';
 
 import './Stream.css';
 
@@ -39,6 +40,10 @@ function Stream(props) {
     video.playsinline = true;
     video.muted = local;
     container.append(video);
+    // listen for speech on video
+    const speech = hark(stream);
+    speech.on('speaking', () => video.className = 'active');
+    speech.on('stopped_speaking', () => video.className = '');
     // append container to grid
     const videoGrid = videoGridRef.current;
     videoGrid.append(container);
