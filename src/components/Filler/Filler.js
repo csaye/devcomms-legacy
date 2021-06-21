@@ -1,5 +1,6 @@
 import nodata from '../../img/nodata.svg';
 import loading from '../../img/loading.svg';
+import error from '../../img/error.svg';
 import './Filler.css';
 
 function Filler(props) {
@@ -8,6 +9,7 @@ function Filler(props) {
     switch (type) {
       case 'nodata': return nodata;
       case 'loading': return loading;
+      case 'error': return error;
       default: return null;
     }
   }
