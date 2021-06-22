@@ -35,7 +35,9 @@ function Header(props) {
 
   // get channel data
   const channelDoc = props.group ?
-  groupDoc.collection('channels').doc(props.channel ?? 'null') : groupDoc;
+  groupDoc.collection('channels').doc(
+    props.channel ? props.channel : 'null'
+  ) : groupDoc;
   const [channelData] = useDocumentData(channelDoc);
 
   // get usernames data

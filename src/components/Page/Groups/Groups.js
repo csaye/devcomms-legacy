@@ -81,6 +81,7 @@ function Groups(props) {
 
   // selects given group for current user
   async function selectGroup(groupId) {
+    props.setGroup(groupId);
     history.push(`/home/${groupId}`);
     await cacheGroup(groupId);
   }

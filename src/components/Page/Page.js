@@ -18,6 +18,7 @@ function Page(props) {
       <div className="page-content">
         <Groups
           group={props.group}
+          setGroup={props.setGroup}
           userData={props.userData}
         />
         {
@@ -26,6 +27,7 @@ function Page(props) {
             <Channels
               group={props.group}
               channel={props.channel}
+              setChannel={props.setChannel}
             />
             <Content
               username={props.userData.username}

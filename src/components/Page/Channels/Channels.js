@@ -53,23 +53,6 @@ function Channels(props) {
     channelsRef.orderBy('order'), { idField: 'id' }
   );
 
-  // validates currently selected channel
-  async function validateChannel() {
-    // return if no channels or none selected
-    if (!channels || !props.channel) return;
-    // if current channel invalid, push empty
-    if (!channels.some(channel => props.channel === channel.id)) {
-      // clear channel cache and return to group page
-      await cacheChannel('');
-      history.push(`/home/${props.group}`);
-    }
-  }
-
-  // validate channel when channels update
-  useEffect(() => {
-    validateChannel();
-  }, [channels]); // eslint-disable-line react-hooks/exhaustive-deps
-
   // caches given channel in firestore
   async function cacheChannel(channelId) {
     await userDoc.update({ [`channels.${props.group}`]: channelId });
@@ -90,7 +73,14 @@ function Channels(props) {
 
   // deletes given channel
   async function deleteChannel(channel) {
-    if (props.channel === channel.id) history.push(`/home/${props.group}`);
+    if (props.channel === channel.id) {
+      history.push(`/home/${props.group}`);
+      props.setChannel('');
+      // clear channel cache
+      await userDoc.update({
+        [`channels.${props.group}`]: firebase.firestore.FieldValue.delete()
+      });
+    }
     channels.splice(channel.order, 1);
     await updateChannelOrder();
     await channelsRef.doc(channel.id).delete();
