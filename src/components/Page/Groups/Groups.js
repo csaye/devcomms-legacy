@@ -438,7 +438,8 @@ function Groups(props) {
               </div>
               <form onSubmit={e => {
                 e.preventDefault();
-                createGroup().then(close);
+                createGroup();
+                close();
               }}>
                 <input
                   placeholder="group name"

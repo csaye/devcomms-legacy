@@ -93,7 +93,7 @@ a:hover {
 
 .center-box img {
   height: 60px;
-  margin: -5px 0;
+  margin: -10px 0;
   cursor: pointer;
   transition: 0.25s;
 }

@@ -32,8 +32,10 @@ function Home() {
   async function getGroup() {
     // if group parameter given
     if (groupParam) {
+      // if preverified, return
+      if (groupParam === groupId) return;
       // if invalid parameter, go home
-      const groups = await groupDocs.get();
+      const groups = groupsCollection ?? await groupsQuery.get();
       if (!groups.docs.some(group => group.id === groupParam)) {
         history.push('/home');
       // if valid parameter, set group id
@@ -49,7 +51,7 @@ function Home() {
         return;
       }
       // if invalid cache, clear it
-      const groups = await groupDocs.get();
+      const groups = groupsCollection ?? await groupsQuery.get();
       if (!groups.docs.some(group => group.id === groupCache)) {
         await userDoc.update({ group: '' });
         setGroupId(undefined);
@@ -112,6 +114,7 @@ function Home() {
           group={groupId}
           setGroup={setGroupId}
           channel={channelId}
+          setChannel={setChannelId}
           userData={userData}
         /> :
         <Loading message="Loading user..." />

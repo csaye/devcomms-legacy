@@ -54,6 +54,11 @@ function Content(props) {
     return () => isMounted = false;
   }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // clear channel component when group changes
+  useEffect(() => {
+    setChannelComponent(undefined);
+  }, [props.group]);
+
   return (
     <div className="Content">
       {
