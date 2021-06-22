@@ -5,7 +5,7 @@ import Page from '../Page/Page.js';
 import Loading from '../Loading/Loading.js';
 
 import firebase from 'firebase/app';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocumentData, useCollection } from 'react-firebase-hooks/firestore';
 
 import './Home.css';
 
@@ -19,7 +19,11 @@ function Home() {
   const [userData] = useDocumentData(userDoc);
 
   const groupsRef = firebase.firestore().collection('groups');
-  const groupDocs = groupsRef.where('members', 'array-contains', uid);
+  const groupsQuery = groupsRef.where('members', 'array-contains', uid);
+  const [groupsCollection] = useCollection(groupsQuery);
+
+  const channelsRef = groupsRef.doc(groupId ?? 'null').collection('channels');
+  const [channelsCollection] = useCollection(channelsRef);
 
   const { groupParam, channelParam } = useParams();
   const history = useHistory();
@@ -62,15 +66,13 @@ function Home() {
     getGroup();
   }, [groupParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // gets cached channel when group id changes
+  // retrieves cached channel
   async function getChannel() {
     // if no group id, clear channel and return
     if (!groupId) {
       setChannelId(undefined);
       return;
     }
-    // if channel param already set, return
-    if (channelParam) return;
     // if group id given, get channel cache
     const channelCache = userData ? userData.channels[groupId] :
     (await userDoc.get()).data().channels[groupId];
@@ -80,15 +82,27 @@ function Home() {
     else setChannelId('');
   }
 
-  // check for channel cache when group id changes
+  // check for channel cache if no channel param
   useEffect(() => {
-    getChannel();
+    if (!channelParam) getChannel();
   }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // change channel id when param changes
+  async function setChannel() {
+    // if empty parameter, return
+    if (!channelParam || !groupId) return;
+    // if invalid channel, clear selection and get new channel
+    const channels = channelsCollection ?? await channelsRef.get();
+    if (!channels.docs.some(channel => channel.id === channelParam)) {
+      history.push(`/home/${groupId}`);
+      getChannel();
+    // if valid channel, set id
+    } else setChannelId(channelParam);
+  }
+
+  // validate channel id when param or group changes
   useEffect(() => {
-    if (channelParam) setChannelId(channelParam);
-  }, [channelParam]);
+    setChannel();
+  }, [channelParam, groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Home">
