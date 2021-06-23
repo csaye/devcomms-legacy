@@ -42,9 +42,7 @@ function Channels(props) {
 
   const history = useHistory();
 
-  // get user doc
   const uid = firebase.auth().currentUser.uid;
-  const userDoc = firebase.firestore().collection('users').doc(uid);
 
   // get group channels
   const groupDoc = firebase.firestore().collection('groups').doc(props.group);
@@ -52,17 +50,6 @@ function Channels(props) {
   const [channels] = useCollectionData(
     channelsRef.orderBy('order'), { idField: 'id' }
   );
-
-  // caches given channel in firestore
-  async function cacheChannel(channelId) {
-    await userDoc.update({ [`channels.${props.group}`]: channelId });
-  }
-
-  // when selected channel changes
-  useEffect(() => {
-    // update channel cache if valid
-    if (props.channel) cacheChannel(props.channel);
-  }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // creates a channel in firebase
   async function createChannel() {
@@ -76,10 +63,6 @@ function Channels(props) {
     if (props.channel === channel.id) {
       history.push(`/home/${props.group}`);
       props.setChannel('');
-      // clear channel cache
-      await userDoc.update({
-        [`channels.${props.group}`]: firebase.firestore.FieldValue.delete()
-      });
     }
     channels.splice(channel.order, 1);
     await updateChannelOrder();

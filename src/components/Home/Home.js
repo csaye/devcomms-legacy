@@ -116,6 +116,18 @@ function Home() {
     cacheGroup();
   }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // caches current channel in firestore
+  async function cacheChannel() {
+    const channelCache = channelId ? channelId :
+    firebase.firestore.FieldValue.delete();
+    await userDoc.update({ [`channels.${groupId}`]: channelCache });
+  }
+
+  // cache channel on change
+  useEffect(() => {
+    cacheChannel();
+  }, [channelId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="Home">
       {
