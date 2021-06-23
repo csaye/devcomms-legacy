@@ -106,6 +106,16 @@ function Home() {
     setChannel();
   }, [channelParam, groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // caches current group in firestore
+  async function cacheGroup() {
+    if (groupId !== undefined) await userDoc.update({ group: groupId });
+  }
+
+  // cache group on change
+  useEffect(() => {
+    cacheGroup();
+  }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="Home">
       {

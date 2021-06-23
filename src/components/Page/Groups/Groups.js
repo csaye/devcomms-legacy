@@ -33,11 +33,6 @@ function Groups(props) {
   const [groupsSrc] = useCollectionData(groupsQuery, { idField: 'id' });
   const [groups, setGroups] = useState(undefined);
 
-  // caches given group id
-  async function cacheGroup(groupId) {
-    await userDoc.update({ group: groupId });
-  }
-
   // validates selected group
   async function validateGroup() {
     // if current group invalid, push empty
@@ -83,7 +78,6 @@ function Groups(props) {
   async function selectGroup(groupId) {
     props.setGroup(groupId);
     history.push(`/home/${groupId}`);
-    await cacheGroup(groupId);
   }
 
   // creates a group with given name
