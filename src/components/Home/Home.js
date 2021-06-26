@@ -60,6 +60,14 @@ function Home() {
         setGroupId(groupCache);
         history.push(`/home/${groupCache}`);
       }
+  // returns whether id is one of a valid group
+  async function isValidGroup(id) {
+    // get groups
+    const groups = groupsCol ?? await groupsQuery.get();
+    // return whether any group where id matches
+    return groups.docs.some(g => g.id === id);
+  }
+
     }
   }
 
@@ -99,12 +107,18 @@ function Home() {
       getChannel();
     // if valid channel, set id
     } else setChannelId(channelParam);
+  // validates current group
+  async function validateGroup() {
+    // if no group selected, return
+    if (!groupId) return;
+    // if invalid group selected, select none
+    if (!(await isValidGroup(groupId))) setGroupId(null);
   }
 
-  // validate channel id when param or group changes
+  // when groups change, validate group
   useEffect(() => {
-    setChannel();
-  }, [channelParam, groupId]); // eslint-disable-line react-hooks/exhaustive-deps
+    validateGroup();
+  }, [groupsCol]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // caches current group in firestore
   async function cacheGroup() {

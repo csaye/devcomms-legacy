@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useHistory } from 'react-router-dom';
 
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
@@ -21,8 +20,6 @@ function Groups(props) {
   const [member, setMember] = useState('');
   const [addError, setAddError] = useState('');
 
-  const history = useHistory();
-
   // get user doc
   const uid = firebase.auth().currentUser.uid;
   const userDoc = firebase.firestore().collection('users').doc(uid);
@@ -32,19 +29,6 @@ function Groups(props) {
   const groupsQuery = groupsRef.where('members', 'array-contains', uid);
   const [groupsSrc] = useCollectionData(groupsQuery, { idField: 'id' });
   const [groups, setGroups] = useState(undefined);
-
-  // validates selected group
-  async function validateGroup() {
-    // if current group invalid, push empty
-    if (groupsSrc && !groupsSrc.some(group => props.group === group.id)) {
-      history.push('/home');
-    }
-  }
-
-  // validate group when groups update
-  useEffect(() => {
-    validateGroup();
-  }, [groupsSrc]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // sort groups when source changed
   useEffect(() => {
