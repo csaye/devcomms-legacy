@@ -31,7 +31,7 @@ function Home() {
   // returns whether id is one of a valid group
   async function isValidGroup(id) {
     // get groups
-    const groups = groupsCol ?? await groupsQuery.get();
+    const groups = await groupsQuery.get();
     // return whether any group where id matches
     return groups.docs.some(g => g.id === id);
   }
@@ -77,7 +77,7 @@ function Home() {
 
   // returns whether id is one of a valid channel
   async function isValidChannel(id) {
-    const channels = channelsCol ?? await channelsRef.get();
+    const channels = await channelsRef.get();
     return channels.docs.some(c => c.id === id);
   }
 
@@ -108,20 +108,24 @@ function Home() {
 
   // attempts to get channel id when group id or channel param changes
   async function getChannel() {
-    // if group id loading, set channel to loading
-    if (groupId === undefined) setChannelId(undefined);
-    // if no group, set no channel
-    else if (groupId === null) setChannelId(null);
+    // if no group id, set channel to loading
+    if (!groupId) setChannelId(undefined);
     // if group id and channel, get from param
     else if (channelParam) getChannelFromParam();
     // if group id but no channel, get from cache
     else getChannelFromCache();
   }
 
-  // get channel id when group id or channel param changes
+  // get channel id when param changes
   useEffect(() => {
     getChannel();
-  }, [groupId, channelParam]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [channelParam]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // clear channel and get new when group changes
+  useEffect(() => {
+    setChannelId(undefined)
+    getChannel();
+  }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // validates current group
   async function validateGroup() {
@@ -153,8 +157,10 @@ function Home() {
   async function onGroupChange() {
     // cache group
     await userDoc.update({ group: groupId });
-    // navigate to group on router
-    history.push(groupId ? `/home/${groupId}` : '/home');
+    // navigate to group on router if changed
+    if (groupParam !== groupId) {
+      history.push(groupId ? `/home/${groupId}` : '/home');
+    }
   }
 
   // on group change
