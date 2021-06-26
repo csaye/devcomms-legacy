@@ -139,23 +139,40 @@ function Home() {
     validateChannel();
   }, [channelsCol]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // called when group changes
+  async function onGroupChange() {
+    // cache group
+    await userDoc.update({ group: groupId });
+    // navigate to group on router
+    history.push(groupId ? `/home/${groupId}` : '/home');
   }
 
-  // cache group on change
+  // on group change
   useEffect(() => {
-    cacheGroup();
+    // update if not loading group
+    if (groupId !== undefined) onGroupChange();
   }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // caches current channel in firestore
-  async function cacheChannel() {
+  // called when channel changes
+  async function onChannelChange() {
+    // cache channel
     const channelCache = channelId ? channelId :
     firebase.firestore.FieldValue.delete();
     await userDoc.update({ [`channels.${groupId}`]: channelCache });
+    // navigate to channel on router
+    history.push(
+      groupId ?
+      channelId ?
+      `/home/${groupId}/${channelId}` :
+      `/home/${groupId}` :
+      '/home'
+    );
   }
 
-  // cache channel on change
+  // on channel change
   useEffect(() => {
-    cacheChannel();
+    // update if not loading channel
+    if (channelId !== undefined) onChannelChange();
   }, [channelId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
