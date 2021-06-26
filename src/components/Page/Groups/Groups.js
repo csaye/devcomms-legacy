@@ -58,12 +58,6 @@ function Groups(props) {
   const usernamesRef = firebase.firestore().collection('usernames');
   const [usernamesData] = useCollectionData(usernamesRef);
 
-  // selects given group for current user
-  async function selectGroup(groupId) {
-    props.setGroup(groupId);
-    history.push(`/home/${groupId}`);
-  }
-
   // creates a group with given name
   async function createGroup() {
     const docRef = await groupsRef.add({
@@ -72,7 +66,7 @@ function Groups(props) {
       members: [uid],
       created: new Date()
     });
-    await selectGroup(docRef.id);
+    await props.setGroup(docRef.id);
   }
 
   // deletes given group
@@ -202,7 +196,7 @@ function Groups(props) {
                       className={
                         props.group === group.id ? 'group-btn selected' : 'group-btn'
                       }
-                      onClick={() => selectGroup(group.id)}
+                      onClick={() => props.setGroup(group.id)}
                     >
                       {abbreviateName(group.name)}
                     </div>

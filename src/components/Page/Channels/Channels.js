@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useHistory } from 'react-router-dom';
 
 import firebase from 'firebase/app';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -40,8 +39,6 @@ function Channels(props) {
   const [newName, setNewName] = useState('');
   const [isOwner, setIsOwner] = useState(undefined);
 
-  const history = useHistory();
-
   const uid = firebase.auth().currentUser.uid;
 
   // get group channels
@@ -55,15 +52,12 @@ function Channels(props) {
   async function createChannel() {
     const order = channels.length;
     const docRef = await channelsRef.add({ name, type, order });
-    history.push(`/home/${props.group}/${docRef.id}`);
+    props.setChannel(docRef.id);
   }
 
   // deletes given channel
   async function deleteChannel(channel) {
-    if (props.channel === channel.id) {
-      history.push(`/home/${props.group}`);
-      props.setChannel('');
-    }
+    if (props.channel === channel.id) props.setChannel(null);
     channels.splice(channel.order, 1);
     await updateChannelOrder();
     await channelsRef.doc(channel.id).delete();
@@ -73,11 +67,6 @@ function Channels(props) {
   async function updateChannel(channel) {
     const channelId = channel.id;
     await channelsRef.doc(channelId).update({ name: newName });
-  }
-
-  // selects given channel
-  async function selectChannel(channel) {
-    history.push(`/home/${props.group}/${channel.id}`);
   }
 
   // retrieves whether user is owner
@@ -155,7 +144,7 @@ function Channels(props) {
                           'channel-button selected' :
                           'channel-button'
                         }
-                        onClick={() => selectChannel(channel)}
+                        onClick={() => props.setChannel(channel.id)}
                       >
                         {getIcon(channel.type)} <span>{channel.name}</span>
                       </div>

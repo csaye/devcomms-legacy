@@ -36,7 +36,11 @@ function Page(props) {
             />
           </> :
           <div className="nogroup">
-            <Filler type="nodata" message="No group selected" />
+            {
+              props.group === null ?
+              <Filler type="nodata" message="No group selected" /> :
+              <Filler type="loading" message="Loading group..." />
+            }
           </div>
         }
       </div>
