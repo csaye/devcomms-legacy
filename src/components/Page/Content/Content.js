@@ -12,8 +12,6 @@ import firebase from 'firebase/app';
 
 import './Content.css';
 
-let isMounted = true;
-
 function Content(props) {
   const [channelComponent, setChannelComponent] = useState(undefined);
 
@@ -34,32 +32,32 @@ function Content(props) {
 
   // gets channel component
   async function getChannel() {
-    setChannelComponent(undefined);
-    // retrieve channel type
-    let type = 'none';
-    if (props.channel) {
+    // if channel loading, set channel component loading
+    if (props.channel === undefined) setChannelComponent(undefined);
+    // if channel null, set channel component to none
+    else if (!props.channel) setChannelComponent(getChannelComponent('none'));
+    // if channel, get and set channel type
+    else {
+      // retrieve channel type
       const groupDoc = firebase.firestore().collection('groups').doc(props.group);
       const channelDoc = groupDoc.collection('channels').doc(props.channel);
       const doc = await channelDoc.get();
-      type = doc.exists ? doc.data().type : undefined;
+      const type = doc.exists ? doc.data().type : undefined;
+      // set channel type
+      setChannelComponent(getChannelComponent(type));
     }
-    // set corresponding component
-    const component = getChannelComponent(type);
-    if (isMounted) setChannelComponent(component);
   }
 
+  // get channel component when channel changes
   useEffect(() => {
-    isMounted = true;
     getChannel();
-    return () => isMounted = false;
   }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="Content">
       {
-        (!channelComponent || props.channel === undefined) ?
-        <Filler type="loading" message="Loading channel..." /> :
-        channelComponent
+        channelComponent ??
+        <Filler type="loading" message="Loading channel..." />
       }
     </div>
   );
