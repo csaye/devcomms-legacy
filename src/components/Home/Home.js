@@ -23,7 +23,7 @@ function Home() {
   const [groupsCol] = useCollection(groupsQuery);
 
   const channelsRef = groupsRef.doc(groupId ?? 'null').collection('channels');
-  const [channelsCollection] = useCollection(channelsRef);
+  const [channelsCol] = useCollection(channelsRef);
 
   const { groupParam, channelParam } = useParams();
   const history = useHistory();
@@ -75,43 +75,54 @@ function Home() {
     getGroup();
   }, [groupParam]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // retrieves cached channel
-  async function getChannel() {
-    // if no group id, clear channel and return
-    if (!groupId) {
-      setChannelId(undefined);
-      return;
-    }
-    // if group id given, get channel cache
   // returns whether id is one of a valid channel
   async function isValidChannel(id) {
     const channels = channelsCol ?? await channelsRef.get();
     return channels.docs.some(c => c.id === id);
   }
 
-    const channelCache = userData ? userData.channels[groupId] :
-    (await userDoc.get()).data().channels[groupId];
-    // if channel cached, select cache
-    if (channelCache) history.push(`/home/${groupId}/${channelCache}`);
-    // if channel not cached, set to no channel
-    else setChannelId('');
+  // sets channel id from current channel param
+  async function getChannelFromParam() {
+    // if already set, return
+    if (channelParam === channelId) return;
+    // if valid parameter, set channel id
+    if (await isValidChannel(channelParam)) setChannelId(channelParam);
+    // if invalid parameter, go to group page
+    else history.push(`/home/${groupId}`);
   }
 
-  // check for channel cache if no channel param
-  useEffect(() => {
-    if (!channelParam) getChannel();
-  }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
+  // gets channel id from current channel cache
+  async function getChannelFromCache() {
+    // get channel cache
+    const channelCache = userData ? userData.channels[groupId] :
+    (await userDoc.get()).data().channels[groupId];
+    // if channel cache
+    if (channelCache) {
+      // if valid cache, set cache
+      if (await isValidChannel(channelCache)) setChannelId(channelCache);
+      // if invalid cache, clear cache
+      else setChannelId(null);
+    // if no channel cache, clear channel id
+    } else setChannelId(null);
+  }
 
-  async function setChannel() {
-    // if empty parameter, return
-    if (!channelParam || !groupId) return;
-    // if invalid channel, clear selection and get new channel
-    const channels = channelsCollection ?? await channelsRef.get();
-    if (!channels.docs.some(channel => channel.id === channelParam)) {
-      history.push(`/home/${groupId}`);
-      getChannel();
-    // if valid channel, set id
-    } else setChannelId(channelParam);
+  // attempts to get channel id when group id or channel param changes
+  async function getChannel() {
+    // if group id loading, set channel to loading
+    if (groupId === undefined) setChannelId(undefined);
+    // if no group, set no channel
+    else if (groupId === null) setChannelId(null);
+    // if group id and channel, get from param
+    else if (channelParam) getChannelFromParam();
+    // if group id but no channel, get from cache
+    else getChannelFromCache();
+  }
+
+  // get channel id when group id or channel param changes
+  useEffect(() => {
+    getChannel();
+  }, [groupId, channelParam]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // validates current group
   async function validateGroup() {
     // if no group selected, return
