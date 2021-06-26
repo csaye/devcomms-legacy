@@ -20,7 +20,7 @@ function Home() {
 
   const groupsRef = firebase.firestore().collection('groups');
   const groupsQuery = groupsRef.where('members', 'array-contains', uid);
-  const [groupsCollection] = useCollection(groupsQuery);
+  const [groupsCol] = useCollection(groupsQuery);
 
   const channelsRef = groupsRef.doc(groupId ?? 'null').collection('channels');
   const [channelsCollection] = useCollection(channelsRef);
@@ -28,38 +28,6 @@ function Home() {
   const { groupParam, channelParam } = useParams();
   const history = useHistory();
 
-  // attempts to get group id when parameter changes
-  async function getGroup() {
-    // if group parameter given
-    if (groupParam) {
-      // if preverified, return
-      if (groupParam === groupId) return;
-      // if invalid parameter, go home
-      const groups = groupsCollection ?? await groupsQuery.get();
-      if (!groups.docs.some(group => group.id === groupParam)) {
-        history.push('/home');
-      // if valid parameter, set group id
-      } else setGroupId(groupParam);
-    // if no group parameter given
-    } else {
-      // get group cache
-      const groupCache = userData ? userData.group :
-      (await userDoc.get()).data().group;
-      // set undefined and return if no cache
-      if (!groupCache) {
-        setGroupId(undefined);
-        return;
-      }
-      // if invalid cache, clear it
-      const groups = groupsCollection ?? await groupsQuery.get();
-      if (!groups.docs.some(group => group.id === groupCache)) {
-        await userDoc.update({ group: '' });
-        setGroupId(undefined);
-      // if valid cache, set group id
-      } else {
-        setGroupId(groupCache);
-        history.push(`/home/${groupCache}`);
-      }
   // returns whether id is one of a valid group
   async function isValidGroup(id) {
     // get groups
@@ -68,7 +36,38 @@ function Home() {
     return groups.docs.some(g => g.id === id);
   }
 
+  // sets group id from current group param
+  async function getGroupFromParam() {
+    // if already set, return
+    if (groupParam === groupId) return;
+    // if valid parameter, set group id
+    if (await isValidGroup(groupParam)) setGroupId(groupParam);
+    // if invalid parameter, go home
+    else history.push('/home');
+  }
+
+  // gets group id from current group cache
+  async function getGroupFromCache() {
+    // get group cache
+    const groupCache = userData ? userData.group :
+    (await userDoc.get()).data().group;
+    // if group cache
+    if (groupCache) {
+      // if valid cache, set cache
+      if (await isValidGroup(groupCache)) setGroupId(groupCache);
+      // if invalid cache, clear cache
+      else setGroupId(null);
     }
+    // if no group cache, clear group id
+    else setGroupId(null);
+  }
+
+  // attempts to get group id when parameter changes
+  function getGroup() {
+    // if group parameter given, pull from param
+    if (groupParam) getGroupFromParam();
+    // if no group parameter given, pull from cache
+    else getGroupFromCache();
   }
 
   // get group id when group param changes
