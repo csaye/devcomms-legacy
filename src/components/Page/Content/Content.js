@@ -50,6 +50,7 @@ function Content(props) {
 
   // get channel component when channel changes
   useEffect(() => {
+    setChannelComponent(undefined);
     getChannel();
   }, [props.channel]); // eslint-disable-line react-hooks/exhaustive-deps
 

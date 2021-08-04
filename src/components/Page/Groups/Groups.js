@@ -81,11 +81,8 @@ function Groups(props) {
     // delete all channels
     const batch = firebase.firestore().batch();
     const groupDoc = groupsRef.doc(group.id);
-    await groupDoc.collection('channels').get().then(docs => {
-      docs.forEach(doc => {
-        batch.delete(doc.ref);
-      });
-    });
+    const docs = await groupDoc.collection('channels').get();
+    docs.forEach(doc => batch.delete(doc.ref));
     batch.delete(groupDoc); // delete group document
     batch.commit(); // commit batch
   }

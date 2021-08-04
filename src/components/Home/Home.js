@@ -31,7 +31,7 @@ function Home() {
   // returns whether id is one of a valid group
   async function isValidGroup(id) {
     // get groups
-    const groups = await groupsQuery.get();
+    const groups = groupsCol ?? await groupsQuery.get();
     // return whether any group where id matches
     return groups.docs.some(g => g.id === id);
   }
@@ -119,13 +119,7 @@ function Home() {
   // get channel id when param changes
   useEffect(() => {
     getChannel();
-  }, [channelParam]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // clear channel and get new when group changes
-  useEffect(() => {
-    setChannelId(undefined)
-    getChannel();
-  }, [groupId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [channelParam, groupId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // validates current group
   async function validateGroup() {

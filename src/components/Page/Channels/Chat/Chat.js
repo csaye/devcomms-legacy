@@ -104,21 +104,20 @@ function Chat(props) {
     const isImage = file.type.startsWith('image/');
 
     // put file in storage
-    await firebase.storage().ref('chat-files/' + file.name).put(file).then(snapshot => {
+    const fileRef = firebase.storage().ref(`chat-files/${file.name}`);
+    const snapshot = await fileRef.put(file);
 
-      // get file url
-      snapshot.ref.getDownloadURL().then(url => {
+    // get file url
+    const url = await snapshot.ref.getDownloadURL();
 
-        // add image message
-        chatsRef.add({
-          url: url,
-          type: isImage ? 'image' : 'file',
-          filename: file.name,
-          timestamp: new Date(),
-          senderName: props.username,
-          senderUid: uid
-        });
-      });
+    // add image message
+    await chatsRef.add({
+      url: url,
+      type: isImage ? 'image' : 'file',
+      filename: file.name,
+      timestamp: new Date(),
+      senderName: props.username,
+      senderUid: uid
     });
   }
 
