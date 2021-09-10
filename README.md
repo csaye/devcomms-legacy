@@ -1,5 +1,7 @@
 # Devcomms <img height="32px" src="https://user-images.githubusercontent.com/27871609/120125756-e22b8b80-c16e-11eb-9c1d-4a9cceaa0e6e.png">
 
+***Please note: this repository is no longer being maintained. For the new version, see [codeconvoy/devcomms](https://github.com/codeconvoy/devcomms).***
+
 <p align="center">
   <a href="https://devcomms.io">
     <img width="400px" style="margin:100px" src="https://user-images.githubusercontent.com/27871609/122192524-96543400-ce48-11eb-9384-1e7c7ae24a80.png">
